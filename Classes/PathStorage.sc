@@ -46,7 +46,7 @@ PathStorage {
 
 	*prSetStoragePath {
 		storagePath = storagePath ?? {
-			Main.packages.asDict.at('FileManagement')
+			Main.packages.asDict.at('CodexIan')
 			+/+ "StoredPaths.YAML"
 		};
 	}
