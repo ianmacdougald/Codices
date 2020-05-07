@@ -1,0 +1,27 @@
+TITLE:: PathStorage
+summary:: configures default folder paths via persistent storage.
+categories:: Libraries>CodexIan>File Management
+related:: Classes/IanAudioPath, Classes/FileIncrementer
+DESCRIPTION::
+
+This class is used for creating files that point to other files
+such that we can have persistent storage of...well storage.
+
+strong::Do not call any methods from this class directly.:: Rather, use it as a base for custom subclasses that configure their own default paths. See link::Classes/IanAudioPath:: for an example.
+
+CLASSMETHODS::
+
+method::path
+Get and set an entry for a subclass of PathStorage.
+
+This writes to the master file maintained by PathStorage, and so changes here will persist across sessions of the link::Classes/Interpreter::.
+
+private::defaultPath
+private::id
+private::prConfigure
+private::prSetID
+private::prWriteToYAML
+private::prParseYAMLFile
+private::prSetDefaultPath
+private::prCheckDictionary
+private::prSetStoragePath
