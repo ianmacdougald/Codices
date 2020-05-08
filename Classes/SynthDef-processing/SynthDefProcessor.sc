@@ -1,7 +1,8 @@
-SynthDef_Mover {
+SynthDefProcessor_Base {
 	var <server;
 	var <synthDescLib;
 	var routine, <synthDefList;
+	var onLoader, offLoader ;
 
 	*new { |server|
 		^super.new
@@ -92,7 +93,7 @@ SynthDef_Mover {
 
 }
 
-SynthDef_OnLoader : SynthDef_Mover {
+SynthDefAdder : SynthDefProcessor_Base {
 
 	*new{ |server| ^super.new(server); }
 
@@ -108,17 +109,7 @@ SynthDef_OnLoader : SynthDef_Mover {
 
 }
 
-/*
-TO DO
-SynthDef_OnLoaderSender : SynthDef_OnLoader {
-
-	*new { |server| ^super.new(server); }
-
-	action { |synthDef| synthDef.send(server); }
-
-}*/
-
-SynthDef_OffLoader : SynthDef_Mover {
+SynthDefRemover : SynthDefProcessor_Base {
 
 	*new {|server| ^super.new(server); }
 
@@ -133,6 +124,35 @@ SynthDef_OffLoader : SynthDef_Mover {
 			this.action(def);
 		};
 		^bool.not;
+	}
+}
+
+SynthDefProcessor {
+	var adder, remover;
+	var lastProcessed;
+
+	*new{
+		^super.new.prInit;
+	}
+
+	prInit {
+		adder = SynthDefAdder.new;
+		remover = SynthDefRemover.new;
+	}
+
+	add { |synthDefs|
+		adder.process(synthDefs);
+		lastProcessed = synthDefs;
+	}
+
+	remove { |synthDefs|
+		remover.process(synthDefs);
+	}
+
+	removeLast {
+		if(lastProcessed.isNil.not){
+			this.remove(lastProcessed);
+		};
 	}
 
 }
