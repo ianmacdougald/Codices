@@ -1,5 +1,5 @@
 SynthDef_Mover {
-	var <>server;
+	var <server;
 	var <synthDescLib;
 	var routine, <synthDefList;
 
@@ -39,19 +39,17 @@ SynthDef_Mover {
 		^routine.isPlaying;
 	}
 
-	prWarnNotSet {|method, input|
-		^format("Warning: % not set. Must supply %. ",
-			method, input
-		);
+	server_{|newServer|
+		server = server ? Server.default;
 	}
 
 	prLoadSynthDefCollection { |collection|
 		collection.do{
-			|item| this.prLoadSynthDef(item)
+			|item| this.prAddSynthDef(item)
 		};
 	}
 
-	prLoadSynthDef {|synthDef|
+	prAddSynthDef {|synthDef|
 		synthDefList.add(synthDef);
 	}
 
@@ -63,20 +61,28 @@ SynthDef_Mover {
 		^input;
 	}
 
-	prPopAction {
+	prPop{
 		^synthDefList.removeAt(0);
 	}
 
-	prRecheckAction{
+	prPopAction {
+		var def = this.prPop;
+		this.action(def);
+		^def;
+	}
+
+	prRecheckAction{|synthDef|
+		this.subclassResponsibility(thisMethod);
+	}
+
+	action{ |synthDef|
 		this.subclassResponsibility(thisMethod);
 	}
 
 	prMakeRoutine {
 		^forkIfNeeded({
 			var previousDef = this.prPopAction;
-			previousDef.name.postln;
 			while({synthDefList.isEmpty.not}, {
-				previousDef.name.postln;
 				if(this.prRecheckAction(previousDef)){
 					previousDef = this.prPopAction;
 				}{server.latency.wait};
@@ -88,42 +94,45 @@ SynthDef_Mover {
 
 SynthDef_OnLoader : SynthDef_Mover {
 
-	*new{|server|
-		^super.new(server);
-	}
+	*new{ |server| ^super.new(server); }
 
-	prPopAction {
-		^super.prPopAction.add;
-	}
+	action { |synthDef| synthDef.add; }
 
 	prRecheckAction { |def|
 		var bool = def.isAdded;
 		if(bool.not){
-			def.add;
+			this.action(def);
 		};
 		^bool;
 	}
 
 }
 
+/*
+TO DO
+SynthDef_OnLoaderSender : SynthDef_OnLoader {
+
+	*new { |server| ^super.new(server); }
+
+	action { |synthDef| synthDef.send(server); }
+
+}*/
+
 SynthDef_OffLoader : SynthDef_Mover {
 
-	*new {|server|
-		^super.new(server);
+	*new {|server| ^super.new(server); }
+
+	action {
+		|synthDef|
+		SynthDef.removeAt(synthDef.name);
 	}
 
-	prRecheckAction{ |def|
+	prRecheckAction { |def|
 		var bool = def.isAdded;
 		if(bool){
-			SynthDef.removeAt(def.name);
+			this.action(def);
 		};
 		^bool.not;
-	}
-
-	prPopAction {
-		var def = super.prPopAction;
-		SynthDef.removeAt(def.name);
-		^def;
 	}
 
 }
