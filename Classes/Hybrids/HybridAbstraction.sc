@@ -1,4 +1,4 @@
-HybridAbstraction_Base {
+HybridAbstraction {
 	//This class manages instances of its subclasses and their respective server resources
 	classvar hybridInstances;
 	classvar <dictionary, <server;
@@ -27,7 +27,9 @@ HybridAbstraction_Base {
 		hybridInstances = List.new;
 		dictionary = Dictionary.new;
 		processor = SynthDefProcessor.new;
-		this.prNotifyQuit;
+		ServerQuit.add({
+			this.freeDictionary;
+		});
 		isInit = true;
 	}
 
@@ -37,19 +39,13 @@ HybridAbstraction_Base {
 		^instance;
 	}
 
-	*prNotifyQuit {
-		ServerQuit.add({
-			this.freeDictionary;
-		});
-	}
-
 	*prAddInstance {|instance|
 		hybridInstances.add(instance);
 	}
 
 	*prMakeSynthDefs{|instance|
 		if(this.prCheckAddDictionary(instance)){
-			this.prProcessSynthdefs(this.id);
+			this.prProcessSynthdefs;
 		};
 	}
 
@@ -69,42 +65,13 @@ HybridAbstraction_Base {
 		^false;
 	}
 
-	*prAddToDictionary { |synthDef|
-		if(this.prSubdictionaryExists, {
-			dictionary[this.id].add(synthDef.name -> synthDef);
-		});
-	}
-
 	*prRemoveInstance {|toRemove|
 		hybridInstances.remove(toRemove);
 	}
 
-	*prSetID{
-		this.subclassResponsibility(thisMethod);
-	}
-
-	*prFormatID{|tag|
-		var symbol;
-		var string = this.class.asString;
-		if(string.contains("Meta_")){
-			string = string[("Meta_").size..];
-		};
-		if(tag.isNil.not){
-			string = string++(tag.asString);
-		};
-		symbol = string.asSymbol;
-		^symbol;
-	}
-
-	*prProcessSynthdefs{|inputID|
+	*prProcessSynthdefs{
 		this.defineSynthDefs;
-		processor.add(dictionary[inputID].asArray);
-	}
-
-	*registerSynthDef{|synthDef, tag|
-		var formattedName = this.formatSynthName(synthDef.name, tag);
-		synthDef.name = formattedName;
-		this.prAddToDictionary(synthDef, this.id);
+		processor.add(dictionary[this.id].asArray);
 	}
 
 	*formatSynthName{|synthDefName, tag|
@@ -123,12 +90,52 @@ HybridAbstraction_Base {
 		^synthDefName;
 	}
 
-	*defineSynthDefs{
-		this.subclassResponsibility(thisMethod);
+	*id {
+		^this.name;
 	}
 
-	*id {
-		this.subclassResponsibility(thisMethod);
+	*modulePath {
+		^PathName(this.filenameSymbol.asString).pathOnly;
+	}
+
+	*loadModules {
+		var paths = this.modulePath.getPaths;
+		var objects = paths.select({|item| PathName(item).extension=="scd"});
+		objects = objects.collect(_.load);
+		^objects;
+	}
+
+	*defineSynthDefs {
+		var objects = this.loadModules;
+		objects.do{|item| this.prTestObject(item)};
+	}
+
+	*prTestObject{|object|
+		format("object is %", object).postln;
+		case
+		{object.isCollection and: {object.isString.not}}{
+			object.flat.do{|item|
+				format("\t\titem is: %", item).postln;
+				this.prTestAdd(item);
+			};
+		}{object.isFunction}{
+			var eval = object.value;
+			this.prTestObject(eval);
+		}{this.prTestAdd(object)};
+	}
+
+	*prTestAdd { |obj|
+		if(obj.isKindOf(SynthDef)){
+			var name = this.formatSynthName(obj.name);
+			obj.name = name;
+			this.prAddToDictionary(obj);
+		};
+	}
+
+	*prAddToDictionary { |synthDef|
+		if(this.prSubdictionaryExists, {
+			dictionary[this.id].add(synthDef.name -> synthDef);
+		});
 	}
 
 	*freeAll{
@@ -161,15 +168,5 @@ HybridAbstraction_Base {
 
 	*instances{
 		^hybridInstances;
-	}
-}
-
-HybridAbstraction : HybridAbstraction_Base {
-	*new{
-		^super.new;
-	}
-
-	*id {
-		^this.prFormatID;
 	}
 }

@@ -4,35 +4,20 @@ HybridExample : HybridAbstraction {
 
 	*new {
 		^super.new
-		.server_(HybAbstExample.server);
-	}
-
-	*defineSynthDefs {
-		this.registerSynthDef(
-			SynthDef(\sine, {
-				var env = EnvGen.kr(Env.asr(\atk.kr(0), 1, \release.kr(1)),
-					\gate.kr(1),
-					doneAction: Done.freeSelf
-				);
-				var lag = \lag.kr(0.1);
-				var sig = SinOsc.ar(\freq.kr(400, lag));
-				var out = sig * env * \ampDB.kr(-12, lag * 2).dbamp;
-				Out.ar(\out.kr(0), Pan2.ar(out, \pan.kr(0)))
-			});
-		)
+		.server_(HybridExample.server);
 	}
 
 	play {
 		this.makeSynth;
 		if(isFreed, {
-			HybAbstExample.prAddInstance(this);
+			HybridExample.prAddInstance(this);
 		});
 	}
 
 	makeSynth { |args, target, addAction|
 		this.freeSynth(1e-3);
 		synth = Synth(
-			HybAbstExample.formatSynthName(\sine),
+			HybridExample.formatSynthName(\sine),
 			args ?? {[\freq, 400]},
 			target ?? {server.defaultGroup},
 			addAction ? \addToHead

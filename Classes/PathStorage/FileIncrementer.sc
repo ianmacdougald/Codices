@@ -9,11 +9,10 @@ FileIncrementer {
 	}
 
 	fileTemplate_{|newTemplate|
-		var pathname = PathName(newTemplate);
-		extension = pathname.extension;
-		fileTemplate = PathName(pathname.fileNameWithoutExtension);
-		currentIncrement = fileTemplate.endNumber;
-		fileTemplate = fileTemplate.noEndNumbers;
+		extension = newTemplate.extension;
+		fileTemplate = newTemplate.removeExtension;
+		currentIncrement = this.prGetEndNumber(fileTemplate);
+		fileTemplate = this.prNoEndNumber(fileTemplate);
 	}
 
 	fileTemplate {
@@ -31,7 +30,7 @@ FileIncrementer {
 	}
 
 	increment {
-		if(previousFileName.isNil or: {File.exists(previousFileName)}){
+		if(previousFileName.isNil or: {previousFileName.pathExists}){
 			previousFileName = this.prFindNextFileName;
 		};
 		^previousFileName;
@@ -54,6 +53,14 @@ FileIncrementer {
 		});
 		currentIncrement = tmpInc;
 		^filename;
+	}
+
+	prGetEndNumber {|input|
+		^PathName(input).endNumber;
+	}
+
+	prNoEndNumber {|input|
+		^PathName(input).noEndNumbers;
 	}
 }
 
