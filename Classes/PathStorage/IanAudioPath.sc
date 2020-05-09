@@ -1,7 +1,6 @@
 //This is an example of how to configure a subclass of FileConfigurer
 //More or less copy and paste this, replacing the defaultPath with some other.
 IanAudioPath : PathStorage {
-	classvar id;
 	classvar internalPath;
 
 	*defaultPath{
@@ -10,27 +9,24 @@ IanAudioPath : PathStorage {
 
 	*path {
 		if(internalPath.isNil){
-			this.prSetID;
-			internalPath = super.path(id);
+			internalPath = super.path(this.name);
+			if(internalPath.isNil){
+				internalPath = this.prSetDefaultPath;
+			};
 		};
 		^internalPath;
 	}
 
 	*path_{|newpath|
 		internalPath = nil;
-		this.prSetID;
-		^super.path_(newpath, id);
+		^super.path_(newpath, this.name);
 	}
 
-	*prSetID {
-		id = id ?? {super.prSetID};
+	*prSetDefaultPath {
+		var default = this.defaultPath;
+		this.path_(default);
+		^default;
 	}
-
-	*id {
-		this.prSetID;
-		^id;
-	}
-
 }
 
 + String {

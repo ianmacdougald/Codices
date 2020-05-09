@@ -1,4 +1,4 @@
-HybridAbstraction {
+HybridAbstraction : ModuleManager {
 	//This class manages instances of its subclasses and their respective server resources
 	classvar hybridInstances;
 	classvar <dictionary, <server;
@@ -14,6 +14,11 @@ HybridAbstraction {
 	//Class method(s)
 	*server_{|newServer|
 		server = server ? Server.default;
+	}
+
+	*reload{
+		this.clearSynthDefs;
+		this.prMakeSynthDefs;
 	}
 
 	//Instance method
@@ -43,18 +48,19 @@ HybridAbstraction {
 		hybridInstances.add(instance);
 	}
 
-	*prMakeSynthDefs{|instance|
-		if(this.prCheckAddDictionary(instance)){
-			this.prProcessSynthdefs;
+	*prMakeSynthDefs{
+		if(this.prCheckAddDictionary){
+			this.prGetSynthDefs;
+			this.prProcessSynthDefs;
 		};
 	}
 
 	*prAddSubDictionary {
-		dictionary[this.id] = Dictionary.new;
+		dictionary[this.name] = Dictionary.new;
 	}
 
 	*prSubdictionaryExists {
-		^dictionary[this.id].isNil.not;
+		^dictionary[this.name].isNil.not;
 	}
 
 	*prCheckAddDictionary {
@@ -69,17 +75,13 @@ HybridAbstraction {
 		hybridInstances.remove(toRemove);
 	}
 
-	*prProcessSynthdefs{
-		this.defineSynthDefs;
-		processor.add(dictionary[this.id].asArray);
+	*prProcessSynthDefs{
+		processor.add(dictionary[this.name].asArray);
 	}
 
-	*formatSynthName{|synthDefName, tag|
-		var strid = this.id.asString;
+	*formatSynthName{|synthDefName|
+		var strid = this.name.asString;
 		var defstring = synthDefName.asString;
-		if(tag.isNil.not){
-			defstring = defstring++tag.asString;
-		};
 		if(defstring.contains(strid).not){
 			^format(
 				"%_%",
@@ -90,41 +92,24 @@ HybridAbstraction {
 		^synthDefName;
 	}
 
-	*id {
-		^this.name;
-	}
-
-	*modulePath {
-		^PathName(this.filenameSymbol.asString).pathOnly;
-	}
-
-	*loadModules {
-		var paths = this.modulePath.getPaths;
-		var objects = paths.select({|item| PathName(item).extension=="scd"});
-		objects = objects.collect(_.load);
-		^objects;
-	}
-
-	*defineSynthDefs {
-		var objects = this.loadModules;
+	*prGetSynthDefs {
+		var objects = this.loadModules.asArray;
 		objects.do{|item| this.prTestObject(item)};
 	}
 
 	*prTestObject{|object|
-		format("object is %", object).postln;
 		case
 		{object.isCollection and: {object.isString.not}}{
 			object.flat.do{|item|
-				format("\t\titem is: %", item).postln;
-				this.prTestAdd(item);
+				this.prTestObject(item);
 			};
 		}{object.isFunction}{
 			var eval = object.value;
 			this.prTestObject(eval);
-		}{this.prTestAdd(object)};
+		}{this.prAddIfSynthDef(object)};
 	}
 
-	*prTestAdd { |obj|
+	*prAddIfSynthDef { |obj|
 		if(obj.isKindOf(SynthDef)){
 			var name = this.formatSynthName(obj.name);
 			obj.name = name;
@@ -134,7 +119,7 @@ HybridAbstraction {
 
 	*prAddToDictionary { |synthDef|
 		if(this.prSubdictionaryExists, {
-			dictionary[this.id].add(synthDef.name -> synthDef);
+			dictionary[this.name].add(synthDef.name -> synthDef);
 		});
 	}
 
@@ -144,25 +129,25 @@ HybridAbstraction {
 		};
 	}
 
-	*freeDictionary{
-		var arrayOfSynthDefs;
-		dictionary.do{|dictionary|
-			dictionary.do{|synthDef|
-				arrayOfSynthDefs = arrayOfSynthDefs.add(synthDef);
-			};
-		};
-		this.prGarbageCollect(arrayOfSynthDefs);
-		dictionary.clear;
+	*removeDictionary{|key|
+		^dictionary.removeAt(key);
 	}
 
-	*removeSubDictionary{|subDictionaryKey|
-		var subDictionary = dictionary.removeAt(subDictionaryKey);
-		if(subDictionary.isNil.not){
-			this.prGarbageCollect(subDictionary.asArray);
-		};
+	*clearSynthDefsWithKey { |key|
+		this.removeSynthDefs(this.removeDictionary(key).asArray);
 	}
 
-	*prGarbageCollect{|synthDefs|
+	*clearSynthDefs {
+		this.clearSynthDefsWithKey(this.name);
+	}
+
+	*clear{
+		dictionary.keysDo({|key|
+			this.clearSynthDefsWithKey(key);
+		});
+	}
+
+	*removeSynthDefs{|synthDefs|
 		processor.remove(synthDefs);
 	}
 

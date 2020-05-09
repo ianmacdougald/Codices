@@ -15,14 +15,7 @@ PathStorage {
 
 	*path {|id|
 		this.prCheckDictionary;
-		if(dictionary[id].isNil){
-			this.prSetDefaultPath;
-		};
 		^dictionary[id];
-	}
-
-	*defaultPath {
-		this.subclassResponsibility(thisMethod);
 	}
 
 	*prCheckDictionary {
@@ -33,10 +26,6 @@ PathStorage {
 				{dictionary = dictionary.withSymbolKeys}
 			);
 		};
-	}
-
-	*prSetDefaultPath {
-		this.path_(this.defaultPath);
 	}
 
 	*prParseYAMLFile {
@@ -57,13 +46,5 @@ PathStorage {
 			fd.write(dictionary.asYAMLString);
 			fd.close;
 		};
-	}
-
-	*prSetID {
-		var id = this.asString;
-		if(id.contains("Meta_")){
-			id = id[("Meta_".size)..];
-		};
-		^id.asSymbol;
 	}
 }

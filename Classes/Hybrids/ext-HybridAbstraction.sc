@@ -1,3 +1,15 @@
++ HybridAbstraction {
+
+	*synthDefs {
+		^dictionary[this.id];
+	}
+
+	*synthDefNames {
+		^this.synthDefs.keys;
+	}
+
+}
+
 // + SynthDef_Processor{
 //
 // 	*postControlNames{|synthDefName, inputClassSymbol|
