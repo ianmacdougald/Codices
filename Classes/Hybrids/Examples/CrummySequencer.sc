@@ -2,6 +2,7 @@ CrummySequencer : HybridAbstraction {
 	var window, routine, <tempo, <clock;
 	var <>synthDef = \pmosc, synthEvent;
 	var <buttons, pointerButtons;
+	var counter = -1;
 
 	*new{|rows = 4, tempo = 1|
 		^super.new
@@ -12,7 +13,7 @@ CrummySequencer : HybridAbstraction {
 
 	*defaultModulePath {
 		var path = PathName(this.filenameSymbol.asString).pathOnly;
-		^(path +/+ "Modules/CrummySequencerModules");
+		^(path +/+ "Modules/CrummySequencer");
 	}
 
 	setClock {
@@ -47,8 +48,14 @@ CrummySequencer : HybridAbstraction {
 		routine.stop;
 	}
 
+	reloadModules {
+		this.reloadSynthDefs;
+		this.loadSynthEvent;
+	}
+
 	loadSynthEvent {
 		synthEvent = CrummySequencer.loadModules.synthEvent;
+		counter = -1;
 	}
 
 	prMakeSingleButton {
@@ -90,7 +97,6 @@ CrummySequencer : HybridAbstraction {
 		this.prMakePointerButtons(size);
 
 		routine = Routine({
-			var counter = 0;
 			loop{
 				defer{
 					pointerButtons.do{|array|
@@ -109,8 +115,8 @@ CrummySequencer : HybridAbstraction {
 								{index==0}{synthEvent.kick}
 								{index==1}{synthEvent.hh}
 								{index==2}{synthEvent.snare}
-								{index==3}{synthEvent.sine}
-								{index==4}{synthEvent.varsaw}
+								{index==3}{synthEvent.counter}
+								{index==4}{synthEvent.melody}
 							};
 						};
 					});

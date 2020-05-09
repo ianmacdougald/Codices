@@ -16,12 +16,16 @@ HybridAbstraction : ModuleManager {
 		server = server ? Server.default;
 	}
 
-	*reload{
+	*reloadSynthDefs{
 		this.clearSynthDefs;
 		this.prMakeSynthDefs;
 	}
 
 	//Instance method
+	reloadSynthDefs {
+		this.class.reloadSynthDefs;
+	}
+
 	free{
 		hybridInstances.remove(this);
 	}
@@ -134,7 +138,11 @@ HybridAbstraction : ModuleManager {
 	}
 
 	*clearSynthDefsWithKey { |key|
-		this.removeSynthDefs(this.removeDictionary(key).asArray);
+		var toRemove = this.removeDictionary(key);
+		toRemove !? {
+			toRemove = toRemove.asArray;
+		};
+		this.removeSynthDefs(toRemove);
 	}
 
 	*clearSynthDefs {

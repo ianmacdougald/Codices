@@ -7,6 +7,11 @@ HybridExample : HybridAbstraction {
 		.server_(HybridExample.server);
 	}
 
+	*defaultModulePath {
+		var path = PathName(this.filenameSymbol.asString).pathOnly;
+		^(path +/+ "Modules/HybridExample");
+	}
+
 	play {
 		this.makeSynth;
 		if(isFreed, {

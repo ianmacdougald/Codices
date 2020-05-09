@@ -63,7 +63,9 @@ SynthDefProcessor_Base {
 	}
 
 	prPop{
-		^synthDefList.removeAt(0);
+		if(synthDefList.isEmpty.not){
+			^synthDefList.removeAt(0);
+		};
 	}
 
 	prPopAction {
@@ -115,7 +117,9 @@ SynthDefRemover : SynthDefProcessor_Base {
 
 	action {
 		|synthDef|
-		SynthDef.removeAt(synthDef.name);
+		if(synthDef.isNil.not){
+			SynthDef.removeAt(synthDef.name);
+		};
 	}
 
 	prRecheckAction { |def|
