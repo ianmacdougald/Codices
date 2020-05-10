@@ -5,12 +5,29 @@ ModuleManager {
 		^super.new;
 	}
 
+	//instance method(s)
+	modulePathDialog {
+		this.class.modulePathDialog;
+	}
+
+	//class methods
 	*modulePath {
 		^PathStorage.path(this.name);
 	}
 
 	*modulePath_{|newPath|
 		PathStorage.path_(newPath, this.name);
+	}
+
+	*modulePathDialog {
+		FileDialog(
+			{ |newPath|
+				PathStorage.path_(newPath, this.name);
+			}, {},
+			fileMode: 2,
+			stripResult: true,
+			path: this.defaultModulePath
+		);
 	}
 
 	*modulePathIsWritten {
