@@ -30,10 +30,14 @@ FileIncrementer {
 	}
 
 	increment {
-		if(previousFileName.isNil or: {previousFileName.pathExists}){
+		if(previousFileName.isNil or: {this.fileExists(previousFileName)}){
 			previousFileName = this.prFindNextFileName;
 		};
 		^previousFileName;
+	}
+
+	reset {
+		currentIncrement = -1;
 	}
 
 	prFormatFileName {|template|
@@ -47,12 +51,16 @@ FileIncrementer {
 	prFindNextFileName {
 		var tmpInc = currentIncrement + 1;
 		var filename = this.prFormatFileName(fileTemplate++tmpInc);
-		while({File.exists(filename)}, {
+		while({this.fileExists(filename)}, {
 			tmpInc = tmpInc + 1;
 			filename = this.prFormatFileName(fileTemplate++tmpInc);
 		});
 		currentIncrement = tmpInc;
 		^filename;
+	}
+
+	fileExists { |input|
+		^input.pathMatch.isEmpty.not;
 	}
 
 	prGetEndNumber {|input|

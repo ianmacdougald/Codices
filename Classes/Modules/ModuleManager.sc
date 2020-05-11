@@ -1,7 +1,7 @@
 ModuleManager {
 	//module stuff
 	*new{
-		this.prCheckModulePath;
+		this.checkModulePath;
 		^super.new;
 	}
 
@@ -19,17 +19,6 @@ ModuleManager {
 		PathStorage.path_(newPath, this.name);
 	}
 
-	*modulePathDialog {
-		FileDialog(
-			{ |newPath|
-				PathStorage.path_(newPath, this.name);
-			}, {},
-			fileMode: 2,
-			stripResult: true,
-			path: this.defaultModulePath
-		);
-	}
-
 	*modulePathIsWritten {
 		^this.modulePath.isNil.not;
 	}
@@ -38,30 +27,72 @@ ModuleManager {
 		^this.modulePath.pathMatch.isEmpty.not;
 	}
 
-	*defaultModulePath{
-		this.subclassResponsibility(thisMethod);
+	*modulePathDialog {
+		FileDialog(
+			{|newPath|
+				fork{
+					PathStorage.path_(newPath, this.name);
+					while({this.modulePath.isNil}, {1e-4.wait});
+					this.loadModules;
+				};
+			}, {},
+			fileMode: 2,
+			stripResult: true,
+			path: this.defaultModulePath
+		);
 	}
+
+	*openModuleFolder {
+		FileDialog(
+			{|path|
+				Document.open(path);
+			}, {},
+			fileMode: 3,
+			stripResult: true,
+			path: this.modulePath
+		);
+	}
+
+	*openAllModules{
+		this.modulePath.getPaths.do{|item|
+			Document.open(item);
+		};
+	}
+
+	*openModule{|moduleName|
+		Document.open(this.modulePath+/+moduleName);
+	}
+
+	*defaultModulePath{^("~".standardizePath)}
 
 	*isValidModule { |string|
 		^(PathName(string).extension=="scd");
 	}
 
-	*loadModules {
-		var paths = this.modulePath.getPaths;
-		var objects = paths.select({|item|
+	*validModulePaths {
+		^this.modulePath.getPaths.select({|item|
 			this.isValidModule(item);
 		});
-		objects = objects.collect({|item|
-			var name = PathName(item).fileNameWithoutExtension;
-			name[0] = name[0].toLower;
-			[name.asSymbol, item.load]
-		}).flatten(1).asEvent;
-		^objects;
 	}
 
-	*prCheckModulePath {
+	*checkModulePath {
 		if(this.modulePathIsWritten.not){
-			this.modulePath_(this.defaultModulePath);
+			if(this.modulePathIsWritten.not, {
+				this.modulePathDialog;
+			});
 		};
 	}
+
+	*lowerFirstChar {|filename|
+		filename[0] = filename[0].toLower;
+		^filename;
+	}
+
+	*loadModules {
+		^this.validModulePaths.collect({|item|
+			var name = PathName(item).fileNameWithoutExtension;
+			[this.lowerFirstChar(name).asSymbol, item.load];
+		}).flatten(1).asEvent;
+	}
+
 }
