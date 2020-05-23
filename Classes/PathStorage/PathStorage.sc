@@ -1,26 +1,31 @@
-PathStorage {
-	classvar storedFolder;
-	classvar storedFileName;
-	classvar storagePath;
+PathStorage  {
+	classvar quarkPath;
 	classvar dictionary;
 
-	*path_{|newpath, id|
-		this.prCheckDictionary;
-		if((dictionary[id]==newpath).not, {
-			dictionary.add(id->(newpath+/+""));
-			this.prWriteToYAML(dictionary);
-		});
-		^dictionary[id];
+	*storagePath {
+		^(this.pathToQuark +/+ format("%.YAML", this.name))
 	}
 
-	*path {|id|
-		this.prCheckDictionary;
-		^dictionary[id];
+	*parse {
+		^this.storagePath.parseYAMLFile;
 	}
 
-	*prCheckDictionary {
+	*write { |item|
+		var fd = File.open(this.storagePath, "w+");
+		fd.write(item.asYAMLString);
+		fd.close;
+	}
+
+	*pathToQuark {
+		quarkPath = quarkPath ?? {
+			Main.packages.asDict.at('CodexIan');
+		};
+		^quarkPath;
+	}
+
+	*checkDictionary {
 		if(dictionary.isNil){
-			dictionary = this.prParseYAMLFile;
+			dictionary = this.parse;
 			if(dictionary.isNil,
 				{dictionary = Dictionary.new},
 				{dictionary = dictionary.withSymbolKeys}
@@ -28,23 +33,18 @@ PathStorage {
 		};
 	}
 
-	*prParseYAMLFile {
-		this.prSetStoragePath;
-		^storagePath.parseYAMLFile;
+	*path_{|newpath, id|
+		this.checkDictionary;
+		if((dictionary[id]==newpath).not, {
+			dictionary.add(id->(newpath+/+""));
+			this.write(dictionary);
+		});
+		^dictionary[id];
 	}
 
-	*prSetStoragePath {
-		storagePath = storagePath ?? {
-			Main.packages.asDict.at('CodexIan')
-			+/+ "StoredPaths.YAML"
-		};
+	*path {|id|
+		this.checkDictionary;
+		^dictionary[id];
 	}
 
-	*prWriteToYAML { |dictionary|
-		forkIfNeeded{
-			var fd = File.open(storagePath, "w+");
-			fd.write(dictionary.asYAMLString);
-			fd.close;
-		};
-	}
 }

@@ -18,6 +18,13 @@
 
 }
 
++ Object {
+	asYAMLString {
+		var str = this.asString;
+		^format("%: %\n", str, str);
+	}
+}
+
 + IdentityDictionary {
 
 	withSymbolKeys {
