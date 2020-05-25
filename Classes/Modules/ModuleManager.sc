@@ -1,193 +1,90 @@
 ModuleManager {
 	classvar internalPath;
 	classvar id = \modules;
-	var objectDictionary;
+	var key, modules; 
 
-	*new{
-		^super.new;
+	*new{ arg key; 
+		^super.newCopyArgs(key).initModules;
+	}
+
+	initModules { 
+		if(File.exists(this.moduleFolder).not, { 
+			this.makeModuleFolder;
+		}, {this.loadModules});
+	}
+
+	loadModules { 
+		modules = this.class.loadModules(this.scriptPaths);
+	}
+
+	*loadModules {|scriptPaths|
+		var objs = ();
+		scriptPaths.do({|script|
+			if(script.isString, {
+				var name = PathName(script)
+				.fileNameWithoutExtension.asSymbol;
+				objs.add(name -> script.load);
+			});
+		});
+		^objs;
+	}
+
+	moduleFolder {
+		this.moduleDirectory+/+this.name.asString+/+key.asString;
+	}
+
+	makeModuleFolder { 
+		this.class.makeModuleFolder(this.moduleFolder);
+	}
+
+	*makeModuleFolder {arg moduleFolder; 
+		File.mkdir(moduleFolder);
+		//format("\"mkdir -p %\"", moduleFolder).unixCmd; 
+	}
+
+	openModules {
+		//not implemented yet...
+	}
+	
+	scriptPaths { 
+		^this.class.scriptPaths(this.moduleFolder);
+	}
+
+	*scriptPaths {|path| 
+		^this.getValidPaths(path);
+	}
+
+	*getValidPaths {|path|
+		^path.getPaths.select({|item|
+			this.isValidPath(item);	
+		});
+	}
+
+	*isValidPath {|path|
+		^(path.extension=="scd");
 	}
 
 	*defaultPath {
 		^(Main.packages.asDict.at('CodexIan') +/+ "sc-modules");
 	}
 
-	*moduleFolder {
-		internalPath = internalPath ?? {
-			var return = PathStorage.path(id);
-			if(return.isNil, {
-				return = this.moduleFolderPath_(this.defaultPath, id);
-			});
-            return;
-		};
+	*setDefaultPath { 
+		^this.moduleDirectory_(
+			this.defaultPath, id
+		);
+	}
+
+	*moduleDirectory_{|newpath, id|
+		internalPath = PathStorage.path_(newpath, id);
 		^internalPath;
 	}
 
-	*moduleFolder_{|newPath, id|
-		^PathStorage.path_(newPath, id);
-	}
-
-	getModules {|key|
-		this.moduleFolder+/+key.asString;
-	}
-
-	scriptDictionary {|key, path|
-		var scripts = this.getValidPaths(path);
-		var dictionary = Dictionary.new;
-		scripts.do({|script|
-			var name = PathName(script)
-			.fileNameWithoutExtension.asSymbol;
-			dictionary.add(key -> script);
-		});
-		^dictionary;
-	}
-
-	// objectDictionary {|path|
-	// 	var dictionary = Dictionary.new;
-	// 	this.scriptDictionary.keysValuesDo({|key, script|
-	// 		dictionary.putPairs([key, script.load]);
-	// 	});
-	// 	^dictionary;
-	// }
-	//
-	// loadObjects {
-	//
-	// }
-
-	getValidPaths {|path|
-		^PathName(path).files.select({|file|
-			this.isValidPath(file);
-		});
-	}
-
-	isValidPath { |path|
-		^(PathName(path).extension=="scd");
-	}
-
-
-	/*	//instance method(s)
-	modulePathDialog {
-	this.class.modulePathDialog;
-	}
-
-	//class methods
-	*modulePath {
-	^ModuleStorage.path(this.name);
-	}
-
-	*modulePath_{|newPath|
-	PathStorage.path_(newPath, this.name);
-	}*/
-
-	/*	*modulePathIsWritten {
-	^this.modulePath.isNil.not;
-	}
-
-	*modulePathExists {
-	^this.modulePath.pathMatch.isEmpty.not;
-	}*/
-
-	/*	*modulePathDialog {
-	FileDialog(
-	{|newPath|
-	fork{
-	PathStorage.path_(newPath, this.name);
-	while({this.modulePath.isNil}, {1e-4.wait});
-	this.loadModules;
-	};
-	}, {},
-	fileMode: 2,
-	stripResult: true,
-	path: this.defaultModulePath
-	);
-	}
-
-	*openModuleFolder {
-	FileDialog(
-	{|path|
-	Document.open(path);
-	}, {},
-	fileMode: 3,
-	stripResult: true,
-	path: this.modulePath
-	);
-	}*/
-
-	*openAllModules{
-		this.modulePath.getPaths.do{|item|
-			Document.open(item);
+	*moduleDirectory {
+		internalPath = internalPath ?? {
+			PathStorage.path(id) ?? {
+				^this.defaultSetPath;
+			};
 		};
+		^internalPath;
 	}
-
-	*openModule{|moduleName|
-		Document.open(this.modulePath+/+moduleName);
-	}
-
-	*defaultModulePath{^("~".standardizePath)}
-
-	*isValidModule { |string|
-		^(PathName(string).extension=="scd");
-	}
-
-	*validModulePaths {
-		^this.modulePath.getPaths.select({|item|
-			this.isValidModule(item);
-		});
-	}
-
-	*checkModulePath {
-		if(this.modulePathIsWritten.not){
-			if(this.modulePathIsWritten.not, {
-				this.modulePathDialog;
-			});
-		};
-	}
-
-	*lowerFirstChar {|filename|
-		filename[0] = filename[0].toLower;
-		^filename;
-	}
-
-	*loadModules {
-		^this.validModulePaths.collect({|item|
-			var name = PathName(item).fileNameWithoutExtension;
-			[this.lowerFirstChar(name).asSymbol, item.load];
-		}).flatten(1).asEvent;
-	}
-
 }
-
-/*ModuleManager : StoragePath {
-classvar quarkPath;
-classvar moduleFolder;
-classvar id = \Modules;
-
-*quarkPath {
-quarkPath = quarkPath ?? {
-Main.packages.asDict.at('CodexIan');
-};
-^quarkPath;
-}
-
-*defaultPath {
-this.quarkPath +/+ id.asString;
-}
-
-*modulePath {
-if(internalPath.isNil){
-internalPath = PathStorage.path(id);
-if(internalPath.isNil, {
-internalPath = PathStorage.path_(this.defaultPath, id);
-});
-};
-^internalPath;
-}
-
-*modulePath_{|newpath|
-internalPath = nil;
-^PathStorage.path_(newpath, id);
-}
-
-classModulesPath {|id|
-^(this.path +/+ id.asString);
-}
-}*/

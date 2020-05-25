@@ -117,7 +117,7 @@ SynthDefRemover : SynthDefProcessor_Base {
 
 	action {
 		|synthDef|
-		if(synthDef.isNil.not){
+		if(synthDef.notNil){
 			SynthDef.removeAt(synthDef.name);
 		};
 	}

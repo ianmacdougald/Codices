@@ -7,21 +7,21 @@ HybridAbstraction : ModuleManager {
 	classvar isFreed = false;
 
 	*new{
-		if(isInit.not, {this.prInit});
-		^this.prProcessInstance(super.new);
+		if(isInit.not, {this.init});
+		^this.processInstance(super.new);
 	}
 
-	//Class method(s)
+	initModules { }
+
 	*server_{|newServer|
 		server = server ? Server.default;
 	}
 
 	*reloadSynthDefs{
 		this.clearSynthDefs;
-		this.prMakeSynthDefs;
+		this.makeSynthDefs;
 	}
 
-	//Instance method
 	reloadSynthDefs {
 		this.class.reloadSynthDefs;
 	}
@@ -30,8 +30,7 @@ HybridAbstraction : ModuleManager {
 		hybridInstances.remove(this);
 	}
 
-	//PRIVATE METHODS//
-	*prInit { |id|
+	*init {
 		this.server_(server);
 		hybridInstances = List.new;
 		dictionary = Dictionary.new;
@@ -42,44 +41,58 @@ HybridAbstraction : ModuleManager {
 		isInit = true;
 	}
 
-	*prProcessInstance {|instance|
-		this.prAddInstance(instance);
-		this.prMakeSynthDefs(instance);
+	*moduleFolder { 
+		^(PathName(this.filenameSymbol.asString).pathOnly
+		+/+ "Modules" +/+ this.name); 
+	}
+
+	*synthDefFolder { 
+		^(this.moduleFolder +/+ "SynthDefs");
+	}
+
+	*makeModuleFolder { 
+		super.makeModuleFolder(this.moduleFolder);
+		super.makeModuleFolder(this.synthDefFolder);
+	}
+
+	*processInstance {|instance|
+		this.addInstance(instance);
+		this.makeSynthDefs(instance);
 		^instance;
 	}
 
-	*prAddInstance {|instance|
+	*addInstance {|instance|
 		hybridInstances.add(instance);
 	}
 
-	*prMakeSynthDefs{
-		if(this.prCheckAddDictionary){
-			this.prGetSynthDefs;
-			this.prProcessSynthDefs;
-		};
+	*makeSynthDefs{
+		if(this.checkAddDictionary, {
+			this.getSynthDefs;
+			this.processSynthDefs;
+		});
 	}
 
-	*prAddSubDictionary {
+	*addSubDictionary {
 		dictionary[this.name] = Dictionary.new;
 	}
 
-	*prSubdictionaryExists {
-		^dictionary[this.name].isNil.not;
+	*subdictionaryExists {
+		^dictionary[this.name].notNil;
 	}
 
-	*prCheckAddDictionary {
-		if(this.prSubdictionaryExists.not){
-			this.prAddSubDictionary;
+	*checkAddDictionary {
+		if(this.subdictionaryExists.not){
+			this.addSubDictionary;
 			^true;
 		};
 		^false;
 	}
 
-	*prRemoveInstance {|toRemove|
+	*removeInstance {|toRemove|
 		hybridInstances.remove(toRemove);
 	}
 
-	*prProcessSynthDefs{
+	*processSynthDefs{
 		processor.add(dictionary[this.name].asArray);
 	}
 
@@ -96,33 +109,39 @@ HybridAbstraction : ModuleManager {
 		^synthDefName;
 	}
 
-	*prGetSynthDefs {
-		var objects = this.loadModules.asArray;
-		objects.do{|item| this.prTestObject(item)};
+	*getSynthDefs {
+		var objects = this.loadModules(this.scriptPaths).asArray;
+		objects.do{|item| this.testObject(item)};
 	}
 
-	*prTestObject{|object|
+	*scriptPaths { 
+		^super.scriptPaths(this.moduleFolder);
+	}
+
+	*testObject{|object|
 		case
 		{object.isCollection and: {object.isString.not}}{
 			object.flat.do{|item|
-				this.prTestObject(item);
+				this.testObject(item);
 			};
-		}{object.isFunction}{
+		}
+		{object.isFunction}{
 			var eval = object.value;
-			this.prTestObject(eval);
-		}{this.prAddIfSynthDef(object)};
+			this.testObject(eval);
+		}
+		{this.addIfSynthDef(object)};
 	}
 
-	*prAddIfSynthDef { |obj|
+	*addIfSynthDef { |obj|
 		if(obj.isKindOf(SynthDef)){
 			var name = this.formatSynthName(obj.name);
 			obj.name = name;
-			this.prAddToDictionary(obj);
+			this.addToDictionary(obj);
 		};
 	}
 
-	*prAddToDictionary { |synthDef|
-		if(this.prSubdictionaryExists, {
+	*addToDictionary { |synthDef|
+		if(this.subdictionaryExists, {
 			dictionary[this.name].add(synthDef.name -> synthDef);
 		});
 	}
