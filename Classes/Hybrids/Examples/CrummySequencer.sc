@@ -11,11 +11,6 @@ CrummySequencer : HybridAbstraction {
 		.prMakeSequencer(rows);
 	}
 
-	*defaultModulePath {
-		var path = PathName(this.filenameSymbol.asString).pathOnly;
-		^(path +/+ "Modules/CrummySequencer");
-	}
-
 	setClock {
 		clock = clock ? TempoClock(tempo ? 1.0);
 	}

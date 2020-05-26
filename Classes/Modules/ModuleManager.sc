@@ -21,12 +21,18 @@ ModuleManager {
 		var objs = ();
 		scriptPaths.do({|script|
 			if(script.isString, {
-				var name = PathName(script)
-				.fileNameWithoutExtension.asSymbol;
-				objs.add(name -> script.load);
+				var name = this.getModuleName(script);
+				objs.add(name.asSymbol -> script.load);
 			});
 		});
 		^objs;
+	}
+
+	*getModuleName {|script|
+		var name = PathName(script)
+		.fileNameWithoutExtension; 
+		name[0] = name[0].toLower;
+		^name;
 	}
 
 	moduleFolder {

@@ -110,7 +110,7 @@ HybridAbstraction : ModuleManager {
 	}
 
 	*getSynthDefs {
-		var objects = this.loadModules(this.scriptPaths).asArray;
+		var objects = this.loadModules.asArray;
 		objects.do{|item| this.testObject(item)};
 	}
 
@@ -180,5 +180,9 @@ HybridAbstraction : ModuleManager {
 
 	*instances{
 		^hybridInstances;
+	}
+
+	*loadModules { 
+		^super.loadModules(this.scriptPaths);
 	}
 }
