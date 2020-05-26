@@ -2,9 +2,7 @@ var makeName = {|input|
 	CrummySequencer.formatSynthName(input);
 };
 
-var scale = Scale.zhi;
 var root = 3;
-// var varsawFreq = Place([0, 2, 4, [7, 6, 6, 5, 5, 6, 6, 7]], inf).asStream;
 var melodyPattern = Pbind(
 	\instrument, makeName.value(\melody),
 	\degree, Pseq([0, 2, 4, 6], inf),
@@ -54,9 +52,13 @@ var counterPattern = Pbind(
 	\pan, Pfunc({|ev|
 		Array.rand(ev.n, -1.0, 1.0)
 	}),
-).asStream;
+).asStream
 
-
+Pdefn(\scale, Scale.minor);
+Pdefn(\root, root); 
+Pdefn(\octave, 6); 
+Pdefn(\degree, 0); 
+	
 (
 kick: {
 	Synth(makeName.value(\pmosc), [
@@ -88,18 +90,6 @@ snare: {
 counter: {
 	counterPattern.next(()).play;
 },
-// varsaw: {
-// 	Synth(makeName.value(\varsaw), [
-// 		\freq, varsawFreq.next.degreeToKey(scale).midiratio * root,
-// 		\ffRelease, 0.5,
-// 		\ffreqRatioLo, exprand(0.25, 1.0),
-// 		\ffreqRatioHi, exprand(4.0, 8.0).round(2.0),
-// 		\atk, 0.1,
-// 		\detune, 0.1,
-// 		\timescale, exprand(0.5, 1.0),
-// 		\ampDB, -9,
-// 	])
-// }
 
 melody: {
 	melodyPattern.next(()).play;
