@@ -1,7 +1,7 @@
 ModuleManager {
 	classvar internalPath;
 	classvar id = \modules;
-	var key, modules; 
+	var <key, modules; 
 
 	*new{ arg key; 
 		^super.newCopyArgs(key).initModules;
@@ -36,7 +36,9 @@ ModuleManager {
 	}
 
 	moduleFolder {
-		this.moduleDirectory+/+this.name.asString+/+key.asString;
+		^(this.class.moduleDirectory
+		+/+this.class.name.asString
+		+/+key.asString);
 	}
 
 	makeModuleFolder { 
@@ -48,8 +50,7 @@ ModuleManager {
 		//format("\"mkdir -p %\"", moduleFolder).unixCmd; 
 	}
 
-	openModules {
-		//not implemented yet...
+	openModules { //not implemented yet...
 	}
 	
 	scriptPaths { 
@@ -80,7 +81,7 @@ ModuleManager {
 		);
 	}
 
-	*moduleDirectory_{|newpath, id|
+	*moduleDirectory_{|newpath|
 		internalPath = PathStorage.path_(newpath, id);
 		^internalPath;
 	}
@@ -88,7 +89,7 @@ ModuleManager {
 	*moduleDirectory {
 		internalPath = internalPath ?? {
 			PathStorage.path(id) ?? {
-				^this.defaultSetPath;
+				^this.setDefaultPath;
 			};
 		};
 		^internalPath;
