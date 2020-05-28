@@ -2,15 +2,43 @@ ModuleManager {
 	classvar internalPath;
 	classvar id = \modules;
 	var <key, modules; 
+	var moduleTemplater; 
 
-	*new{ arg key; 
-		^super.newCopyArgs(key).initModules;
+	*new{ arg key(\default), from; 
+		^super.newCopyArgs(key).initModules(from);
 	}
 
-	initModules { 
+	initModules {arg from;  
+		moduleTemplater = moduleTemplater ?? { 
+			ModuleTemplate.new(this.moduleFolder);
+		};
+
 		if(File.exists(this.moduleFolder).not, { 
 			this.makeModuleFolder;
+			this.makeModules(from);
+			this.initModules;
 		}, {this.loadModules});
+	}
+
+	makeModules { |from|
+		if(from.notNil, { 
+			var string = this.class.moduleFolder+/+from.asString; 
+			this.copyToHere(string);
+		}, {this.makeModuleTemplates});
+	}
+
+	copyToHere{ |pathToCopy|
+		if(File.exists(pathToCopy), { 
+			format(
+				"cp -r % %", 
+				pathToCopy, 
+				this.modulePath
+			).unixCmd(postOutput: false);
+		}, {this.makeModuleTemplates});
+	}
+
+	makeModuleTemplates { 
+		this.subclassResponsibility(thisMethod);
 	}
 
 	loadModules { 
@@ -36,9 +64,11 @@ ModuleManager {
 	}
 
 	moduleFolder {
-		^(this.class.moduleDirectory
-		+/+this.class.name.asString
-		+/+key.asString);
+		^(this.class.moduleFolder+/+key);
+	}
+
+	*moduleFolder { 
+		^(this.class.moduleDirectory+/+this.name.asString);
 	}
 
 	makeModuleFolder { 
