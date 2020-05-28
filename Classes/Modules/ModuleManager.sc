@@ -1,43 +1,48 @@
 ModuleManager {
 	classvar internalPath;
 	classvar id = \modules;
-	var <key, modules; 
-	var moduleTemplater; 
+	var <moduleName, <modules;
+	var templater, nameIsPath; 
 
-	*new{ arg key(\default), from; 
-		^super.newCopyArgs(key).initModules(from);
+	*new {|moduleName(\default), from| 
+		^super.newCopyArgs(moduleName).initModules(from);
 	}
 
 	initModules {arg from;  
-		moduleTemplater = moduleTemplater ?? { 
-			ModuleTemplate.new(this.moduleFolder);
+		nameIsPath = moduleName.isPath; 
+		templater ?? {
+			templater = ModuleTemplater(this.moduleFolder);
 		};
 
 		if(File.exists(this.moduleFolder).not, { 
 			this.makeModuleFolder;
 			this.makeModules(from);
-			this.initModules;
-		}, {this.loadModules});
+		});
+		this.loadModules;
 	}
 
 	makeModules { |from|
-		if(from.notNil, { 
-			var string = this.class.moduleFolder+/+from.asString; 
-			this.copyToHere(string);
-		}, {this.makeModuleTemplates});
+		if(from.notNil, {
+			from = from.asString;
+			if(from.isPath.not, { 
+				from = this.class.moduleFolder
+				+/+from;
+			});
+			this.copyToHere(from);
+		}, {this.makeTemplates});
 	}
 
 	copyToHere{ |pathToCopy|
 		if(File.exists(pathToCopy), { 
 			format(
-				"cp -r % %", 
-				pathToCopy, 
-				this.modulePath
-			).unixCmd(postOutput: false);
-		}, {this.makeModuleTemplates});
+				"cp -ra % %", 
+				pathToCopy+/+".", 
+				this.moduleFolder
+			).unixCmd;
+		}, {this.makeTemplates});
 	}
 
-	makeModuleTemplates { 
+	makeTemplates { 
 		this.subclassResponsibility(thisMethod);
 	}
 
@@ -64,11 +69,12 @@ ModuleManager {
 	}
 
 	moduleFolder {
-		^(this.class.moduleFolder+/+key);
+		if(nameIsPath, {^moduleName});
+		^(this.class.moduleFolder+/+moduleName);
 	}
 
 	*moduleFolder { 
-		^(this.class.moduleDirectory+/+this.name.asString);
+		^(this.moduleDirectory+/+this.name.asString);
 	}
 
 	makeModuleFolder { 

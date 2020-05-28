@@ -1,4 +1,4 @@
-ModuleTemplate { 
+ModuleTemplater { 
 	var <>path; 
 
 	*new { |moduleFolder|
@@ -69,7 +69,7 @@ Pbind(
 
 	*functionString { 
 		^this.prependMessage({
-{
+{arg ev/*, add additional arguments here*/;
 
 	//write your code here please...
 
