@@ -28,7 +28,7 @@ ModuleTemplate {
 		var class = this.class;
 		class.makeTemplate(class.eventString, moduleName, path);
 	}
-	blank {|moduleName("module"), path|
+	blank {|moduleName("module")|
 		var class = this.class;
 		class.makeTemplate(class.blankString, moduleName, path);
 	} 
@@ -49,62 +49,62 @@ ModuleTemplate {
 
 	*synthDefString { 
 		^this.prependMessage({
-			SynthDef('nil', { 
+SynthDef('nil', { 
 
-				//write your code here please...
+	//write your code here please...
 
-			});
+});
 		});
 	}
 
 	*patternString { 
 		^this.prependMessage({
-			Pbind(
+Pbind(
 
-				//write your code here please...
+	//write your code here please...
 
-			);
+);
 		});
 	}
 
 	*functionString { 
 		^this.prependMessage({
-			{
+{
 
-				//write your code here please...
+	//write your code here please...
 
-			};
+};
 		});
 	}
 
 	*nodeString { 
 		^this.prependMessage({
-			Synth(\nil, [
+Synth('nil', [
 
-				//write code here please...
+	//write code here please...
 
-			]);
+]);
 		});
 	}
 
 	*eventString { 
 		^this.prependMessage({
-			(
+(
 			
-				//write your code here please...
+	//write your code here please...
 
-			);
+);
 		});
 	}
 
 	*blankString { 
 		^this.prependMessage(
-			{ 
+	{ 
 
-			//write your code here please...
+	//write your code here please...
 
-			}
-	);
+	}
+		);
 	}
 
 	*promptString { |classType|
