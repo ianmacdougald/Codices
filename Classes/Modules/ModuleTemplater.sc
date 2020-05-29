@@ -108,7 +108,7 @@ Synth('nil', [
 	}
 
 	*promptString { |classType|
-		^format("//Define % below...\n\n", classType.asString);
+		^format("//Define % below...\n", classType.asString);
 	}
 
 	*prependMessage {|dataStructure|
