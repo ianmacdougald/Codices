@@ -3,128 +3,58 @@ ModuleTemplater {
 
 	*new { |moduleFolder|
 		if(moduleFolder.isNil, { 
-			Error("No path set for ModuleTemplate").throw;
+			Error("No path set for ModuleTemplater").throw;
 		}); 
 
 		^super.newCopyArgs(moduleFolder.asString);
 	}
+	*makeTemplate { |moduleName, path, object| 
+		var targetPath = path+/+moduleName.asString++".scd";
+		this.copyFile(object, targetPath);
+	}
 	synthDef {|moduleName("synthDef")| 
-		var class = this.class;
-		class.makeTemplate(class.synthDefString, moduleName, path);
+		this.class.makeTemplate(moduleName, path, SynthDef);
 	} 
 	pattern {|moduleName("pattern")|
-		var class = this.class;
-		class.makeTemplate(class.patternString, moduleName, path);	
+		this.class.makeTemplate(moduleName, path, Pattern);
 	}
 	function {|moduleName("function")| 
-		var class = this.class;
-		class.makeTemplate(class.functionString, moduleName, path);
+		this.class.makeTemplate(moduleName, path, Function);
 	}
 	node {|moduleName("node")| 
-		var class = this.class;
-		class.makeTemplate(class.nodeString, moduleName, path);
+		this.class.makeTemplate(moduleName, path, Node);
 	} 
 	event {|moduleName("event")|
-		var class = this.class;
-		class.makeTemplate(class.eventString, moduleName, path);
+		this.class.makeTemplate( moduleName, path, Event);
 	}
 	blank {|moduleName("module")|
-		var class = this.class;
-		class.makeTemplate(class.blankString, moduleName, path);
+		this.class.makeTemplate(moduleName, path);
 	} 
-
-	*makeTemplate { |string, moduleName, path|
-		this.echoToFile(
-			string, 
-			this.modulePathString(moduleName, path)
-		);
-	}
 
 	*modulePathString {|moduleName, path|
 		if(path.isNil, { 
-			Error("No path set for ModuleTemplate").throw;
+			Error("No path set for ModuleTemplater").throw;
 		});
 		^(path+/+moduleName.asString++".scd");
 	}
 
-	*synthDefString { 
-		^this.prependMessage({
-SynthDef('nil', { 
-
-	//write your code here please...
-
-});
-		});
+	*moduleTemplatePath { 
+		^(this.filenameSymbol.asString+/+"templates");
 	}
 
-	*patternString { 
-		^this.prependMessage({
-Pbind(
-
-	//write your code here please...
-
-);
-		});
-	}
-
-	*functionString { 
-		^this.prependMessage({
-{arg ev/*, add additional arguments here*/;
-
-	//write your code here please...
-
-};
-		});
-	}
-
-	*nodeString { 
-		^this.prependMessage({
-Synth('nil', [
-
-	//write code here please...
-
-]);
-		});
-	}
-
-	*eventString { 
-		^this.prependMessage({
-(
-			
-	//write your code here please...
-
-);
-		});
-	}
-
-	*blankString { 
-		^this.prependMessage(
-	{ 
-
-	//write your code here please...
-
-	}
-		);
-	}
-
-	*promptString { |classType|
-		^format("//Define % below...\n", classType.asString);
-	}
-
-	*prependMessage {|dataStructure|
-		var string = dataStructure.asCompileString; 
-		string = string[1..(string.size - 2)];
-		^(this.promptString(dataStructure.class)++string);
-	}
-
-	*echoToFile {|string, filename|
+	*copyFile {|type("blank"), filename|
+		var templatePath;
 		if(filename.isNil, { 
-			Error("No path set for ModuleTemplate").throw;
+			Error("No path set for ModuleTemplater").throw;
 		});
-		format(
-			"echo \"%\" > %",
-			string, 
-			filename
-		).unixCmd(postOutput: false);
+		templatePath = this.moduleTemplatePath
+		+/+this.firstToLower(type)++".scd";
+		format("cp % %", templatePath, filename).unixCmd(postOutput:false); 
+	}
+
+	*firstToLower {|input|
+		input = input.asString; 
+		input[0] = input[0].toLower; 
+		^input;
 	}
 }
