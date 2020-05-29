@@ -9,16 +9,20 @@ ModuleManager {
 	}
 
 	initModules {arg from;  
-		nameIsPath = moduleName.isPath; 
-		templater ?? {
-			templater = ModuleTemplater(this.moduleFolder);
-		};
-
+		nameIsPath = moduleName.isPath;
+		templater = ModuleTemplater(this.moduleFolder);
 		if(File.exists(this.moduleFolder).not, { 
 			this.makeModuleFolder;
 			this.makeModules(from);
 		});
 		this.loadModules;
+	}
+
+	moduleName_{|newName, from|
+		if(newName.notNil, { 
+			moduleName = newName.asSymbol; 
+			this.initModules(from);
+		}); 
 	}
 
 	makeModules { |from|
@@ -28,7 +32,7 @@ ModuleManager {
 				from = this.class.moduleFolder
 				+/+from;
 			});
-			this.copyToHere(from);
+			this.copyToHere(from.postln);
 		}, {this.makeTemplates});
 	}
 

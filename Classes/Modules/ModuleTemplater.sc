@@ -8,10 +8,7 @@ ModuleTemplater {
 
 		^super.newCopyArgs(moduleFolder.asString);
 	}
-	*makeTemplate { |moduleName, path, object| 
-		var targetPath = path+/+moduleName.asString++".scd";
-		this.copyFile(object, targetPath);
-	}
+	
 	synthDef {|moduleName("synthDef")| 
 		this.class.makeTemplate(moduleName, path, SynthDef);
 	} 
@@ -30,6 +27,9 @@ ModuleTemplater {
 	blank {|moduleName("module")|
 		this.class.makeTemplate(moduleName, path);
 	} 
+	array {|moduleName("array")|
+		this.class.makeTemplate(moduleName, path, Array); 
+	}
 
 	*modulePathString {|moduleName, path|
 		if(path.isNil, { 
@@ -39,7 +39,13 @@ ModuleTemplater {
 	}
 
 	*moduleTemplatePath { 
-		^(this.filenameSymbol.asString+/+"templates");
+		^(PathName(this.filenameSymbol.asString)
+		.pathOnly+/+"templates");
+	}
+
+	*makeTemplate { |moduleName, path, object| 
+		var targetPath = path+/+moduleName.asString++".scd";
+		this.copyFile(object, targetPath);
 	}
 
 	*copyFile {|type("blank"), filename|
@@ -49,7 +55,8 @@ ModuleTemplater {
 		});
 		templatePath = this.moduleTemplatePath
 		+/+this.firstToLower(type)++".scd";
-		format("cp % %", templatePath, filename).unixCmd(postOutput:false); 
+		format("cp % %", templatePath, filename)
+		.unixCmd(postOutput:false); 
 	}
 
 	*firstToLower {|input|
