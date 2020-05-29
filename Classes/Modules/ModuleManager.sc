@@ -2,9 +2,9 @@ ModuleManager {
 	classvar internalPath;
 	classvar id = \modules;
 	var <moduleName, <modules;
-	var templater, nameIsPath; 
+	var templater, nameIsPath;
 
-	*new {|moduleName(\default), from| 
+	*new {|moduleName(\default), from|
 		^super.newCopyArgs(moduleName).initModules(from);
 	}
 
@@ -28,7 +28,7 @@ ModuleManager {
 	makeModules { |from|
 		if(from.notNil, {
 			from = from.asString;
-			if(from.isPath.not, { 
+			if(from.isPath.not, {
 				from = this.class.moduleFolder
 				+/+from;
 			});
@@ -37,20 +37,20 @@ ModuleManager {
 	}
 
 	copyToHere{ |pathToCopy|
-		if(File.exists(pathToCopy), { 
+		if(File.exists(pathToCopy), {
 			format(
-				"cp -ra % %", 
-				pathToCopy+/+".", 
+				"cp -ra % %",
+				pathToCopy+/+".",
 				this.moduleFolder
 			).unixCmd;
 		}, {this.makeTemplates});
 	}
 
-	makeTemplates { 
+	makeTemplates {
 		this.subclassResponsibility(thisMethod);
 	}
 
-	loadModules { 
+	loadModules {
 		modules = this.class.loadModules(this.scriptPaths);
 	}
 
@@ -67,7 +67,7 @@ ModuleManager {
 
 	*getModuleName {|script|
 		var name = PathName(script)
-		.fileNameWithoutExtension; 
+		.fileNameWithoutExtension;
 		name[0] = name[0].toLower;
 		^name;
 	}
@@ -77,33 +77,34 @@ ModuleManager {
 		^(this.class.moduleFolder+/+moduleName);
 	}
 
-	*moduleFolder { 
+	*moduleFolder {
 		^(this.moduleDirectory+/+this.name.asString);
 	}
 
-	makeModuleFolder { 
+	makeModuleFolder {
 		this.class.makeModuleFolder(this.moduleFolder);
 	}
 
-	*makeModuleFolder {arg moduleFolder; 
-		File.mkdir(moduleFolder);
-		//format("\"mkdir -p %\"", moduleFolder).unixCmd; 
+	*makeModuleFolder {|moduleFolder|
+		format("mkdir -p %", moduleFolder).unixCmd(postOutput:false);
+		// File.mkdir(moduleFolder);
+		//format("\"mkdir -p %\"", moduleFolder).unixCmd;
 	}
 
 	openModules { //not implemented yet...
 	}
-	
-	scriptPaths { 
+
+	scriptPaths {
 		^this.class.scriptPaths(this.moduleFolder);
 	}
 
-	*scriptPaths {|path| 
+	*scriptPaths {|path|
 		^this.getValidPaths(path);
 	}
 
 	*getValidPaths {|path|
 		^path.getPaths.select({|item|
-			this.isValidPath(item);	
+			this.isValidPath(item);
 		});
 	}
 
@@ -115,7 +116,7 @@ ModuleManager {
 		^(Main.packages.asDict.at('CodexIan') +/+ "sc-modules");
 	}
 
-	*setDefaultPath { 
+	*setDefaultPath {
 		^this.moduleDirectory_(
 			this.defaultPath, id
 		);
