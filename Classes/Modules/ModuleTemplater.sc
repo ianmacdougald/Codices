@@ -1,5 +1,5 @@
-ModuleTemplater { 
-	var <>path; 
+ModuleTemplater {
+	var <>path;
 
 	*new { |moduleFolder|
 		if(moduleFolder.isNil, { 
