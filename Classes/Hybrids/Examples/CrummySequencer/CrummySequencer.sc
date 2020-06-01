@@ -1,14 +1,22 @@
-CrummySequencer : HybridAbstraction {
+CrummySequencer : Hybrid {
 	var window, routine, <tempo, <clock;
 	var <>synthDef = \pmosc, synthEvent;
 	var <buttons, pointerButtons;
 	var counter = -1;
 
-	*new{|rows = 4, tempo = 1|
-		^super.new
+	*new{|rows = 4, tempo = 1, moduleName(\default), from|
+		^super.new(moduleName, from)
 		.loadSynthEvent
 		.tempo_(tempo)
 		.prMakeSequencer(rows);
+	}
+
+	*defaultsFolder {
+		^(PathName(this.filenameSymbol.asString).pathOnly+/+"default");
+	}
+
+	makeTemplates {
+		templater.event("synthEvent");
 	}
 
 	setClock {
@@ -49,7 +57,7 @@ CrummySequencer : HybridAbstraction {
 	}
 
 	loadSynthEvent {
-		synthEvent = CrummySequencer.loadModules.synthEvent;
+		synthEvent = modules.synthEvent;
 		counter = -1;
 	}
 

@@ -4,25 +4,87 @@ ModuleManager {
 	var <moduleName, <modules;
 	var templater, nameIsPath;
 
-	*new {|moduleName(\default), from|
+	*new {|moduleName, from|
 		^super.newCopyArgs(moduleName).initModules(from);
 	}
 
-	initModules {arg from;  
-		nameIsPath = moduleName.isPath;
-		templater = ModuleTemplater(this.moduleFolder);
-		if(File.exists(this.moduleFolder).not, { 
-			this.makeModuleFolder;
-			this.makeModules(from);
-		});
+	initModules { |from|
+		moduleName = moduleName ?? {
+			if(File.exists(this.moduleFolder+/+"default").not, {
+				from = this.defaultsFolder;
+			});
+			\default;
+		};
+		this.setVars;
+		this.checkForFolder(from);
 		this.loadModules;
 	}
 
-	moduleName_{|newName, from|
-		if(newName.notNil, { 
-			moduleName = newName.asSymbol; 
-			this.initModules(from);
-		}); 
+	*defaultsFolder {
+		^(this.implementationFolder+/+this.defaultsFolderName);
+	}
+
+	*implementationFolder {
+		^PathName(this.filenameSymbol.asString).pathOnly;
+	}
+
+	*defaultsFolderName {
+		this.subclassResponsibility(thisMethod);
+	}
+
+	setVars {
+		nameIsPath = moduleName.isPath;
+		templater = ModuleTemplater(this.moduleFolder);
+	}
+
+	moduleFolder {
+		if(nameIsPath, {^moduleName});
+		^(this.class.moduleFolder+/+moduleName);
+	}
+
+	*moduleFolder {
+		^(this.moduleDirectory+/+this.name.asString);
+	}
+
+	*moduleDirectory {
+		internalPath = internalPath ?? {
+			PathStorage.path(id) ?? {
+				^this.setDefaultPath;
+			};
+		};
+		^internalPath;
+	}
+
+	*moduleDirectory_{|newpath|
+		internalPath = PathStorage.path_(newpath, id);
+		^internalPath;
+	}
+
+	*defaultPath {
+		^(Main.packages.asDict.at('CodexIan') +/+ "sc-modules");
+	}
+
+	*setDefaultPath {
+		^this.moduleDirectory_(
+			this.defaultPath, id
+		);
+	}
+
+	checkForFolder { |from|
+		if(File.exists(this.moduleFolder).not, {
+			this.makeModuleFolder;
+			this.makeModules(from);
+		});
+	}
+
+	makeModuleFolder {
+		this.class.makeModuleFolder(this.moduleFolder);
+	}
+
+	*makeModuleFolder {|moduleFolder|
+		format("mkdir -p %", moduleFolder).unixCmd(postOutput:false);
+		// File.mkdir(moduleFolder);
+		//format("\"mkdir -p %\"", moduleFolder).unixCmd;
 	}
 
 	makeModules { |from|
@@ -32,7 +94,7 @@ ModuleManager {
 				from = this.class.moduleFolder
 				+/+from;
 			});
-			this.copyToHere(from.postln);
+			this.copyToHere(from);
 		}, {this.makeTemplates});
 	}
 
@@ -54,7 +116,7 @@ ModuleManager {
 		modules = this.class.loadModules(this.scriptPaths);
 	}
 
-	*loadModules {|scriptPaths|
+	*loadModules { |scriptPaths|
 		var objs = ();
 		scriptPaths.do({|script|
 			if(script.isString, {
@@ -63,39 +125,6 @@ ModuleManager {
 			});
 		});
 		^objs;
-	}
-
-	*getModuleName {|script|
-		var name = PathName(script)
-		.fileNameWithoutExtension;
-		name[0] = name[0].toLower;
-		^name;
-	}
-
-	moduleFolder {
-		if(nameIsPath, {^moduleName});
-		^(this.class.moduleFolder+/+moduleName);
-	}
-
-	*moduleFolder {
-		^(this.moduleDirectory+/+this.name.asString);
-	}
-
-	makeModuleFolder {
-		this.class.makeModuleFolder(this.moduleFolder);
-	}
-
-	*makeModuleFolder {|moduleFolder|
-		format("mkdir -p %", moduleFolder).unixCmd(postOutput:false);
-		// File.mkdir(moduleFolder);
-		//format("\"mkdir -p %\"", moduleFolder).unixCmd;
-	}
-
-	openModules { //not implemented yet...
-	}
-
-	scriptPaths {
-		^this.class.scriptPaths(this.moduleFolder);
 	}
 
 	*scriptPaths {|path|
@@ -112,27 +141,24 @@ ModuleManager {
 		^(path.extension=="scd");
 	}
 
-	*defaultPath {
-		^(Main.packages.asDict.at('CodexIan') +/+ "sc-modules");
+	*getModuleName {|script|
+		var name = PathName(script)
+		.fileNameWithoutExtension;
+		name[0] = name[0].toLower;
+		^name;
 	}
 
-	*setDefaultPath {
-		^this.moduleDirectory_(
-			this.defaultPath, id
-		);
+	scriptPaths {
+		^this.class.scriptPaths(this.moduleFolder);
 	}
 
-	*moduleDirectory_{|newpath|
-		internalPath = PathStorage.path_(newpath, id);
-		^internalPath;
+	moduleName_{|newName, from|
+		if(newName.notNil, {
+			moduleName = newName.asSymbol;
+			this.initModules(from);
+		});
 	}
 
-	*moduleDirectory {
-		internalPath = internalPath ?? {
-			PathStorage.path(id) ?? {
-				^this.setDefaultPath;
-			};
-		};
-		^internalPath;
+	openModules { //not implemented yet...
 	}
 }

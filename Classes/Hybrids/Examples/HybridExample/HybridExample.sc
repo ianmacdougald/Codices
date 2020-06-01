@@ -1,4 +1,4 @@
-HybridExample : HybridAbstraction {
+HybridExample : Hybrid {
 	var synth, <>server;
 	var isFreed = false;
 
