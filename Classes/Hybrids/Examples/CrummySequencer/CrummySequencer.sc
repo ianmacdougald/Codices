@@ -1,18 +1,14 @@
 CrummySequencer : Hybrid {
 	var window, routine, <tempo, <clock;
-	var <>synthDef = \pmosc, synthEvent;
+	var synthEvent;
 	var <buttons, pointerButtons;
-	var counter = -1;
+	var counter = 0;
 
-	*new{|rows = 4, tempo = 1, moduleName(\default), from|
+	*new{|rows = 4, tempo = 1, moduleName, from|
 		^super.new(moduleName, from)
 		.loadSynthEvent
 		.tempo_(tempo)
 		.prMakeSequencer(rows);
-	}
-
-	*defaultsFolder {
-		^(PathName(this.filenameSymbol.asString).pathOnly+/+"default");
 	}
 
 	makeTemplates {
@@ -114,6 +110,7 @@ CrummySequencer : Hybrid {
 					server.bind({
 						buttons.do{|column, index|
 							if(column[counter].value == 1){
+								format("column[counter].value = %", column[counter].value).postln; 
 								case
 								{index==0}{synthEvent.kick}
 								{index==1}{synthEvent.hh}

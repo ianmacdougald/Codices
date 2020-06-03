@@ -1,7 +1,4 @@
 + String {
-	isPath {
-		^this.pathMatch.isEmpty.not;
-	}
 
 	normalizePathAudio{|level(1.0), server(Server.default), sampleFormat("int24")|
 		if(this.isPath, {
@@ -18,6 +15,18 @@
 				buffer.free;
 			});
 		});
+	}
+
+	lowerFirstChar { 
+		^this.replace(this.at(0), this.at(0).toLower);
+	}
+
+	exists { 
+		^File.exists(this);	
+	}
+
+	path { 
+		^PathName(this).pathOnly;
 	}
 }
 

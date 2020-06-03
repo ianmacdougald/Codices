@@ -1,5 +1,5 @@
 var makeName = {|input|
-	CrummySequencer.formatSynthName(input);
+	CrummySequencer.formatName(input);
 };
 
 var root = 3;
@@ -52,7 +52,7 @@ var counterPattern = Pbind(
 	\pan, Pfunc({|ev|
 		Array.rand(ev.n, -1.0, 1.0)
 	}),
-).asStream
+).asStream;
 
 Pdefn(\scale, Scale.minor);
 Pdefn(\root, root); 

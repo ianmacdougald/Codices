@@ -8,19 +8,19 @@ var e = { |a(\atk.kr(0)), r(\release.kr(1)), t(\timescale.kr(1)), d(2)|
 	});
 };
 
-var f = {|input, freq(\freq.kr(400)), timescale(\timescale.kr(1)), filterClass(BMoog), qArg(\q.kr(0.5))|
+var f = {|input, freq(\freq.kr(400)), timescale(\timescale.kr(1)), filterClass(RLPF), qArg(\rq.kr(0.5))|
 
 	SynthDef.wrap({
 		var ffEnv = EnvGen.ar(Env.perc(
 			\ffAtk.kr(0), \ffRelease.kr(1), 1, \ffCurve.kr(-4)
 		),
-		timeScale: timescale ? \timescale.kr(1),
+		timeScale: timescale, 
 		doneAction: Done.none
 		).range(\ffreqRatioLo.kr(1.0), \ffreqRatioHi.kr(8.0));
 
-		var filteredSig = (filterClass ? RLPF).ar(input,
-			((freq ? \freq.kr(400)) * ffEnv).clip(20.0, 16000.0),
-			qArg ?? {\rq.kr(0.1)}
+		var filteredSig = filterClass.ar(input,
+			(freq * ffEnv).clip(20.0, 16000.0),
+			qArg
 		);
 
 		filteredSig;

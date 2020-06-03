@@ -1,3 +1,10 @@
+//The ModuleManger is responsible for managing folders of modules and loading them.
+//Can we make it so that the ModuleManager is responsible for loading modules and oversees a class that manages the folders?
+//What would i call the new stuff?
+//I think the folder class can be called ModuleFolder
+//And the class that manages everything can be just be called Module or maybe 
+//ModuleSystem is better
+//Or ModularSystem is better or...Modular...I like Modular
 ModuleManager {
 	classvar internalPath;
 	classvar id = \modules;
@@ -10,9 +17,9 @@ ModuleManager {
 
 	initModules { |from|
 		moduleName = moduleName ?? {
-			if(File.exists(this.moduleFolder+/+"default").not, {
-				from = this.defaultsFolder;
-			});
+			if(File.exists(
+				this.class.moduleFolder+/+"default"
+			).not, {from = this.defaultsFolder});
 			\default;
 		};
 		this.setVars;
@@ -20,8 +27,8 @@ ModuleManager {
 		this.loadModules;
 	}
 
-	*defaultsFolder {
-		^(this.implementationFolder+/+this.defaultsFolderName);
+	defaultsFolder {
+		^(this.class.implementationFolder+/+"default");
 	}
 
 	*implementationFolder {

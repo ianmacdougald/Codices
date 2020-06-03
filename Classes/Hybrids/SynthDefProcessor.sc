@@ -1,14 +1,11 @@
 SynthDefProcessor_Base {
-	var <server, <synthDescLib;
-	var routine, <synthDefList;
+	var <>server, routine, <synthDefList; 
 
-	*new { |server|
-		^super.new
-		.server_(server)
-		.initList
+	*new { |server(Server.default)|
+		^super.newCopyArgs(server).init;
 	}
 
-	initList {
+	init {
 		synthDefList = List.new;
 	}
 
@@ -38,10 +35,6 @@ SynthDefProcessor_Base {
 		^routine.isPlaying;
 	}
 
-	server_{ |newServer|
-		server = server ? Server.default;
-	}
-
 	loadSynthDefCollection { |collection|
 		collection.do{
 			|item| this.addSynthDef(item)
@@ -61,15 +54,13 @@ SynthDefProcessor_Base {
 		^input;
 	}
 
-	pop{
-		if(synthDefList.isEmpty.not){
-			^synthDefList.removeAt(0);
-		};
+	pop {
+		^try{synthDefList.removeAt(0)} 
 	}
 
 	popAction {
 		var def = this.pop;
-		this.action(def);
+		def !? {this.action(def)};
 		^def;
 	}
 
@@ -101,11 +92,11 @@ SynthDefAdder : SynthDefProcessor_Base {
 	action { |synthDef| synthDef.add; }
 
 	recheckAction { |def|
-		var bool = def.isAdded;
-		if(bool.not){
+		var bool = def.isAdded.not;
+		if(bool){
 			this.action(def);
 		};
-		^bool;
+		^bool.not;
 	}
 
 }
@@ -114,13 +105,10 @@ SynthDefRemover : SynthDefProcessor_Base {
 
 	*new {|server(Server.default)| ^super.new(server); }
 
-	action {
-		|synthDef|
-		if(synthDef.notNil){
-			SynthDef.removeAt(synthDef.name);
-		};
+	action { |synthDef|
+		synthDef !? {SynthDef.removeAt(synthDef.name)};
 	}
-
+	
 	recheckAction { |def|
 		var bool = def.isAdded;
 		if(bool){
@@ -161,9 +149,9 @@ SynthDefProcessor {
 }
 
 + SynthDef {
+	
 	isAdded {
-		^(SynthDescLib.global
-			.synthDescs[name].isNil.not);
+		^(SynthDescLib.global.synthDescs[name].notNil);
 	}
 
 }

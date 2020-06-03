@@ -1,26 +1,22 @@
 HybridExample : Hybrid {
-	var synth, <>server;
-	var isFreed = false;
+	var synth;
 
-	*new {
-		^super.new
-		.server_(HybridExample.server);
+	*new {|moduleName, from|
+		^super.new(moduleName, from);
 	}
 
-	play {
-		this.makeSynth;
-		if(isFreed, {
-			HybridExample.prAddInstance(this);
-		});
+	makeTemplates { 
+		templater.synthDef; 
 	}
 
-	makeSynth { |args, target, addAction|
-		this.freeSynth(1e-3);
+	play { |args([\freq, 400]), target(server), addAction(\addToHead)|
+		var class = this.class;
+		this.free(1e-3);
 		synth = Synth(
-			HybridExample.formatSynthName(\sine),
-			args ?? {[\freq, 400]},
-			target ?? {server.defaultGroup},
-			addAction ? \addToHead
+			class.dictionary[class.name].keys.asArray[0],
+			args, 
+			target, 
+			addAction
 		).register;
 	}
 
@@ -35,13 +31,7 @@ HybridExample : Hybrid {
 		};
 	}
 
-	freeSynth {|time(1)|
-		this.set(\release, time, \gate, 0);
-	}
-
 	free {|time(1)|
-		this.freeSynth(time);
-		super.free;
-		isFreed = true;
+		this.set(\release, time, \gate, 0);
 	}
 }

@@ -1,22 +1,13 @@
-Hybrid : ModuleManager {
-	// classvar hybridInstances;
-	classvar isInit = false;
-	// classvar isFreed = false;
-	classvar <dictionary;
-	classvar processor;
-	var synthDefKey = \synthDefs;
-	var <synthDefTemplater;
+Hybrid : Modular {
+	classvar isInit = false, <dictionary, processor;
 	var <server;
 
-	*new {|moduleName(\default), from|
+	*new {|moduleName, from|
 		if(isInit.not, {this.init});
-		^super.new(moduleName, from)
-		.processInstance;
+		^super.new(moduleName, from).init;
 	}
 
-	//initializing class variables
-	*init {
-		// hybridInstances = List.new;
+	*initHybrid {
 		dictionary = Dictionary.new;
 		processor = SynthDefProcessor.new;
 		ServerQuit.add({
@@ -25,167 +16,76 @@ Hybrid : ModuleManager {
 		isInit = true;
 	}
 
-	//setting up the instance
-	processInstance {
+	*freeDictionary { 
+		dictionary.do({|subD|
+			processor.remove(subD.asArray);
+		});
+	}
+
+	initHybrid {
 		server = server ? Server.default;
-		synthDefTemplater = ModuleTemplater.new(this.synthDefFolder);
-		if(this.checkDictionary, {
-			// this.addInstance;
+		if(this.class.subDictionaryExists.not, {
+			this.class.addSubDictionary;
 			this.makeSynthDefs;
 		});
 	}
 
-	checkDictionary {
-		if(this.subDictionaryExists.not, {
-			this.addSubDictionary;
-			^true;
-		}, {^false});
-	}
-
 	*subDictionaryExists {|className|
-		^dictionary[className].notNil;
+		^dictionary[this.name].notNil;
 	}
 
-	subDictionaryExists {
-		var class = this.class;
-		^class.subDictionaryExists(class.name);
+	*addSubDictionary { 
+		dictionary[this.name] = Dictionary.new;
 	}
-
-	*addSubDictionary { |className|
-		dictionary[className] = Dictionary.new;
-	}
-
-	addSubDictionary {
-		var class = this.class;
-		class.addSubDictionary(class.name);
-	}
-
-	/*	*addInstance {|instance|
-	hybridInstances.add(instance);
-	}
-
-	addInstance {
-	this.class.addInstance(this);
-	}*/
 
 	makeSynthDefs {
-		this.getSynthDefs;
-		this.processSynthDefs;
+		modules.do({|module|
+			this.addToDictionary(module);
+		}); 
+		this.class.processSynthDefs;
 	}
 
-	getSynthDefs {
-		this.checkSynthDefFolder;
-		PathName(this.synthDefFolder).files.do({|script|
-			this.addToDictionary(script.fullPath.load);
-		});
-	}
-
-	checkSynthDefFolder {
-		if(File.exists(this.synthDefFolder).not, {
-			this.class.makeModuleFolder(this.synthDefFolder);
-			synthDefTemplater.synthDef;
-		});
+	addToDictionary { |object|
+		case 
+		{object.isCollection and: {object.isString.not}}{ 
+			object.do({|item| this.addToDictionary(item)});
+		}
+		{object.isFunction}{this.addToDictionary(object.value)}
+		{object.isKindOf(SynthDef)}{
+			var class = this.class; 
+			object.name = class.formatName(object); 
+			class.addToDictionary(class.name, object);
+		};
 	}
 
 	*addToDictionary {|className, synthDef|
-		dictionary[className].add(synthDef.name.asSymbol -> synthDef);
+		dictionary[className].add(synthDef.name.asSymbol.postln -> synthDef);
 	}
 
-	addToDictionary { |synthDef|
-		if(synthDef.isKindOf(SynthDef), {
-			var class = this.class;
-			synthDef.name = this.formatName(synthDef);
-			class.addToDictionary(class.name, synthDef);
-		});
-	}
-
-	formatName { |synthDef|
-		^this.class.formatName(synthDef.name);
-	}
-
-	*formatName { |synthDefName|
+	*formatName { |object| 
 		var strid = this.name.asString;
-		var defstring = synthDefName.asString;
+		var defstring = object.name.asString;
 		if(defstring.contains(strid).not, {
-			^format(
-				"%_%",
-				strid,
-				defstring
-			).asSymbol;
+			^format("%_%", strid, defstring).asSymbol;
 		});
-		^synthDefName;
+		^object.name;
 	}
 
-	*processSynthDefs {|className|
-		processor.add(dictionary[className].asArray);
+	*processSynthDefs {
+		processor.add(dictionary[this.name].asArray);
 	}
-
-	processSynthDefs {
-		var class = this.class;
-		class.processSynthDefs(class.name);
-	}
-
-	//other utilities...
+	
 	server_{|newServer|
 		server = server ? Server.default;
 	}
 
 	reloadSynthDefs {
-		this.clearSynthDefs;
+		this.class.clearSynthDefs;
 		this.makeSynthDefs;
 	}
-
-	*clearSynthDefs { |className|
-		var toRemove = this.removeDictionary(className);
-		toRemove !? {
-			toRemove = toRemove.asArray;
-			this.removeSynthDefs(toRemove);
-		};
+	
+	*clearSynthDefs { 
+		var toRemove = dictionary.removeAt(this.name);
+		toRemove !? {processor.remove(toRemove.asArray)};
 	}
-
-	clearSynthDefs {
-		var class = this.class;
-		class.clearSynthDefs(class.name);
-	}
-
-	*removeDictionary { |key|
-		^dictionary.removeAt(key);
-	}
-
-	*removeSynthDefs {|synthDefs|
-		processor.remove(synthDefs);
-	}
-
-	reset {
-		this.reloadSynthDefs;
-	}
-
-	synthDefKey_{ |newKey, from|
-		synthDefKey = newKey;
-		synthDefTemplater.path = this.synthDefFolder;
-		this.reset;
-	}
-
-	/*	*instances {
-	^hybridInstances;
-	}*/
-
-	synthDefFolder {
-		^(this.moduleFolder+/+synthDefKey);
-	}
-
-	makeSynthDefFolder {
-		this.class.makeModuleFolder(this.synthDefFolder);
-	}
-
-	/*
-	*removeInstance {|toRemove|
-	hybridInstances.remove(toRemove);
-	}
-
-	*freeAll {
-	hybridInstances.size.do{|item|
-	hybridInstances[0].free;
-	};
-	}*/
 }
