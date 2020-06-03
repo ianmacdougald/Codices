@@ -16,7 +16,7 @@ Hybrid : Modular {
 		isInit = true;
 	}
 
-	*freeDictionary { 
+	*freeDictionary {
 		dictionary.do({|subD|
 			processor.remove(subD.asArray);
 		});
@@ -34,43 +34,43 @@ Hybrid : Modular {
 		^dictionary[this.name].notNil;
 	}
 
-	*addSubDictionary { 
+	*addSubDictionary {
 		dictionary[this.name] = Dictionary.new;
 	}
 
 	makeSynthDefs {
 		modules.do({|module|
 			this.addToDictionary(module);
-		}); 
+		});
 		this.class.processSynthDefs;
 	}
 
 	addToDictionary { |object|
-		case 
-		{object.isCollection and: {object.isString.not}}{ 
+		case
+		{object.isCollection and: {object.isString.not}}{
 			object.do({|item| this.addToDictionary(item)});
 		}
 		{object.isFunction}{this.addToDictionary(object.value)}
 		{object.isKindOf(SynthDef)}{
-			var class = this.class; 
-			object.name = class.formatName(object); 
+			var class = this.class;
+			object.name = class.formatName(object);
 			class.addToDictionary(class.name, object);
 		};
 	}
 
 	*addToDictionary {|className, synthDef|
 		dictionary[className].add(
-			synthDef.name.asSymbol.postln -> synthDef
+			synthDef.name.asSymbol -> synthDef
 		);
 	}
 
-	*formatName { |synthDef| 
+	*formatName { |synthDef|
 		^this.formatString(synthDef.name);
 	}
 
-	*formatString { |input| 
+	*formatString { |input|
 		var name = this.name.asString;
-		if(input.asString.contains(name).not, { 
+		if(input.asString.contains(name).not, {
 			^format("%_%", name, input.asString).asSymbol;
 		});
 		^input.asSymbol;
@@ -79,7 +79,7 @@ Hybrid : Modular {
 	*processSynthDefs {
 		processor.add(dictionary[this.name].asArray);
 	}
-	
+
 	server_{|newServer|
 		server = server ? Server.default;
 	}
@@ -88,14 +88,14 @@ Hybrid : Modular {
 		this.class.clearSynthDefs;
 		this.initHybrid;
 	}
-	
-	*clearSynthDefs { 
+
+	*clearSynthDefs {
 		var toRemove = dictionary.removeAt(this.name);
 		toRemove !? {processor.remove(toRemove.asArray)};
 	}
 
 	moduleName_{|newModule, from|
-		moduleName = newModule; 
+		moduleName = newModule;
 		this.initModular(from);
 		this.reloadSynthDefs;
 	}
