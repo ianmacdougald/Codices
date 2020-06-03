@@ -1,22 +1,17 @@
 SynthDefProcessor_Base {
-	var <server;
-	var <synthDescLib;
-	var routine, <synthDefList;
-	var onLoader, offLoader ;
+	var <>server, routine, <synthDefList; 
 
-	*new { |server|
-		^super.new
-		.server_(server)
-		.prInitList
+	*new { |server(Server.default)|
+		^super.newCopyArgs(server).init;
 	}
 
-	prInitList {
-		synthDefList = synthDefList ? List.new;
+	init {
+		synthDefList = List.new;
 	}
 
 	run {
 		this.stop;
-		routine = this.prMakeRoutine;
+		routine = this.makeRoutine;
 	}
 
 	stop {
@@ -25,13 +20,13 @@ SynthDefProcessor_Base {
 		};
 	}
 
-	load {|synthDef|
-		this.prLoadSynthDefCollection(
-			this.prTestCollection(synthDef)
+	load { |synthDef|
+		this.loadSynthDefCollection(
+			this.testCollection(synthDef)
 		);
 	}
 
-	process {|synthDef|
+	process { |synthDef|
 		this.load(synthDef);
 		this.run;
 	}
@@ -40,41 +35,36 @@ SynthDefProcessor_Base {
 		^routine.isPlaying;
 	}
 
-	server_{|newServer|
-		server = server ? Server.default;
-	}
-
-	prLoadSynthDefCollection { |collection|
+	loadSynthDefCollection { |collection|
 		collection.do{
-			|item| this.prAddSynthDef(item)
+			|item| this.addSynthDef(item)
 		};
 	}
 
-	prAddSynthDef {|synthDef|
-		synthDefList.add(synthDef);
+	addSynthDef { |synthDef|
+		if(synthDef.isKindOf(SynthDef), {
+			synthDefList.add(synthDef);
+		});
 	}
 
-	prTestCollection {
-		|input|
+	testCollection { |input|
 		if(input.isCollection.not){
 			input = [input];
 		};
 		^input;
 	}
 
-	prPop{
-		if(synthDefList.isEmpty.not){
-			^synthDefList.removeAt(0);
-		};
+	pop {
+		^try{synthDefList.removeAt(0)} 
 	}
 
-	prPopAction {
-		var def = this.prPop;
-		this.action(def);
+	popAction {
+		var def = this.pop;
+		def !? {this.action(def)};
 		^def;
 	}
 
-	prRecheckAction{|synthDef|
+	recheckAction{|synthDef|
 		this.subclassResponsibility(thisMethod);
 	}
 
@@ -82,12 +72,12 @@ SynthDefProcessor_Base {
 		this.subclassResponsibility(thisMethod);
 	}
 
-	prMakeRoutine {
+	makeRoutine {
 		^forkIfNeeded({
-			var previousDef = this.prPopAction;
+			var previousDef = this.popAction;
 			while({synthDefList.isEmpty.not}, {
-				if(this.prRecheckAction(previousDef)){
-					previousDef = this.prPopAction;
+				if(this.recheckAction(previousDef)){
+					previousDef = this.popAction;
 				}{server.latency.wait};
 			});
 		});
@@ -97,32 +87,29 @@ SynthDefProcessor_Base {
 
 SynthDefAdder : SynthDefProcessor_Base {
 
-	*new{ |server| ^super.new(server); }
+	*new{ |server(Server.default)| ^super.new(server); }
 
 	action { |synthDef| synthDef.add; }
 
-	prRecheckAction { |def|
-		var bool = def.isAdded;
-		if(bool.not){
+	recheckAction { |def|
+		var bool = def.isAdded.not;
+		if(bool){
 			this.action(def);
 		};
-		^bool;
+		^bool.not;
 	}
 
 }
 
 SynthDefRemover : SynthDefProcessor_Base {
 
-	*new {|server| ^super.new(server); }
+	*new {|server(Server.default)| ^super.new(server); }
 
-	action {
-		|synthDef|
-		if(synthDef.notNil){
-			SynthDef.removeAt(synthDef.name);
-		};
+	action { |synthDef|
+		synthDef !? {SynthDef.removeAt(synthDef.name)};
 	}
-
-	prRecheckAction { |def|
+	
+	recheckAction { |def|
 		var bool = def.isAdded;
 		if(bool){
 			this.action(def);
@@ -136,10 +123,10 @@ SynthDefProcessor {
 	var lastProcessed;
 
 	*new{
-		^super.new.prInit;
+		^super.new.init;
 	}
 
-	prInit {
+	init {
 		adder = SynthDefAdder.new;
 		remover = SynthDefRemover.new;
 	}
@@ -162,9 +149,9 @@ SynthDefProcessor {
 }
 
 + SynthDef {
+	
 	isAdded {
-		^(SynthDescLib.global
-			.synthDescs[name].isNil.not);
+		^(SynthDescLib.global.synthDescs[name].notNil);
 	}
 
 }

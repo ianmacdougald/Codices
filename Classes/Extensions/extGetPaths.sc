@@ -6,16 +6,26 @@
 
 	getAudioPaths {
 		^this.getPaths.select({|item|
-			this.isValidPath(item);
+			this.isValidAudioPath(item);
 		});
 	}
 
-	isValidPath { |input|
-		var ext = PathName(input).extension;
-		^this.validAudioPaths.find([ext]).isNil.not;
+	getScriptPaths { 
+		^this.getPaths.select({|item|
+			this.isValidScript(item);
+		});
 	}
 
-	validAudioPaths {
+	isValidScript { |input|
+		^(PathName(input).extension=="scd");
+	}
+
+	isValidAudioPath { |input|
+		var ext = PathName(input).extension;
+		^this.class.validAudioPaths.find([ext]).isNil.not;
+	}
+
+	*validAudioPaths {
 		^[
 			"wav",
 			"aiff",

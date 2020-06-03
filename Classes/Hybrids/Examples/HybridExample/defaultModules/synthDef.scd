@@ -1,4 +1,4 @@
-SynthDef(\sine, {
+SynthDef(\synth, {
 	var env = EnvGen.kr(Env.asr(\atk.kr(0), 1, \release.kr(1)),
 		\gate.kr(1),
 		doneAction: Done.freeSelf
