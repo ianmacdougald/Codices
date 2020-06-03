@@ -1,9 +1,9 @@
 (
     version:        "0.1.1",
-    copyright:      "digi-synth",
+    copyright:      "ianmacdougald",
     name:           "CodexIan",
     path:           "CodexIan",
-    summary:        "Collection of classes and extensions made by me, Ian, to support music making.",
+    summary:        "Collection of classes and extensions made by me, Ian, for music making (eventually).",
     helpdoc:        "Help/Libraries/CodexIan",
-    author:         "digi-synth",
+    author:         "ianmacdougald",
 )

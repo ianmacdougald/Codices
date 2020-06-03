@@ -1,10 +1,8 @@
 # CodexIan 
-A (growing) library of classes and extensions for SuperCollider that (currently) covers issues 
-relating to managing folder paths persistently and filenames dynamically. Extensions to *SCLang* 
-aid this. 
+CodexIan is a (growing) library of classes and extensions for SuperCollider that aim to support a specific workflow for music composition, namely one that supports a flexible and easily abstracted approach to object-oriented composition (see.
 
 ### Installation
 In SuperCollider, evaluate the following: 
 
-`Quarks.install("https://github.com/digi-synth/CodexIan")`
+`Quarks.install("https://github.com/ianmacdougald/CodexIan")`
 
