@@ -1,14 +1,9 @@
 (
-<<<<<<< Updated upstream
-    version:        "0.1.1",
-    copyright:      "digi-synth",
-=======
     version:        "0.2.0",
     copyright:      "ianmacdougald",
->>>>>>> Stashed changes
     name:           "CodexIan",
     path:           "CodexIan",
-    summary:        "Collection of classes and extensions made by me, Ian, to support music making.",
+    summary:        "Library of classes designed to support modularized approach to object-oriented composition"
     helpdoc:        "Help/Libraries/CodexIan",
-    author:         "digi-synth",
+    author:         "ianmacdougald",
 )
