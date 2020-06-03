@@ -1,4 +1,4 @@
-Hybrid_Old : ModuleManager {
+Hybrid_Old : Modular {
 	// classvar hybridInstances;
 	classvar isInit = false;
 	// classvar isFreed = false;

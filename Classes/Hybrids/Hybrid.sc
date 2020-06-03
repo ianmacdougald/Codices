@@ -3,8 +3,8 @@ Hybrid : Modular {
 	var <server;
 
 	*new {|moduleName, from|
-		if(isInit.not, {this.init});
-		^super.new(moduleName, from).init;
+		if(isInit.not, {this.initHybrid});
+		^super.new(moduleName, from).initHybrid;
 	}
 
 	*initHybrid {
@@ -59,16 +59,21 @@ Hybrid : Modular {
 	}
 
 	*addToDictionary {|className, synthDef|
-		dictionary[className].add(synthDef.name.asSymbol.postln -> synthDef);
+		dictionary[className].add(
+			synthDef.name.asSymbol.postln -> synthDef
+		);
 	}
 
-	*formatName { |object| 
-		var strid = this.name.asString;
-		var defstring = object.name.asString;
-		if(defstring.contains(strid).not, {
-			^format("%_%", strid, defstring).asSymbol;
+	*formatName { |synthDef| 
+		^this.formatString(synthDef.name);
+	}
+
+	*formatString { |input| 
+		var name = this.name.asString;
+		if(input.asString.contains(name).not, { 
+			^format("%_%", name, input.asString).asSymbol;
 		});
-		^object.name;
+		^input.asSymbol;
 	}
 
 	*processSynthDefs {
@@ -81,11 +86,18 @@ Hybrid : Modular {
 
 	reloadSynthDefs {
 		this.class.clearSynthDefs;
-		this.makeSynthDefs;
+		this.initHybrid;
 	}
 	
 	*clearSynthDefs { 
 		var toRemove = dictionary.removeAt(this.name);
 		toRemove !? {processor.remove(toRemove.asArray)};
 	}
+
+	moduleName_{|newModule, from|
+		moduleName = newModule; 
+		this.initModular(from);
+		this.reloadSynthDefs;
+	}
 }
+

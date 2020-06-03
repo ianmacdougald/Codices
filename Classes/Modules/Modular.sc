@@ -91,6 +91,6 @@ Modular {
 
 	moduleName_{|newModule, from|
 		moduleName = newModule; 
-		this.init(from);
+		this.initModular(from);
 	}
 }
