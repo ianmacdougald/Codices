@@ -11,8 +11,8 @@ FileIncrementer {
 	fileTemplate_{|newTemplate|
 		extension = newTemplate.extension;
 		fileTemplate = newTemplate.removeExtension;
-		currentIncrement = this.prGetEndNumber(fileTemplate);
-		fileTemplate = this.prNoEndNumber(fileTemplate);
+		currentIncrement = this.getEndNumber(fileTemplate);
+		fileTemplate = this.noEndNumber(fileTemplate);
 	}
 
 	fileTemplate {
@@ -30,8 +30,8 @@ FileIncrementer {
 	}
 
 	increment {
-		if(previousFileName.isNil or: {this.fileExists(previousFileName)}){
-			previousFileName = this.prFindNextFileName;
+		if(previousFileName.isNil or: {previousFileName.exists}){
+			previousFileName = this.nextFileName;
 		};
 		^previousFileName;
 	}
@@ -40,7 +40,7 @@ FileIncrementer {
 		currentIncrement = -1;
 	}
 
-	prFormatFileName {|template|
+	formatFileName {|template|
 		var return = folder+/+template;
 		if(extension.isEmpty.not){
 			return = return++"."++extension;
@@ -48,26 +48,22 @@ FileIncrementer {
 		^return;
 	}
 
-	prFindNextFileName {
+	nextFileName {
 		var tmpInc = currentIncrement + 1;
-		var filename = this.prFormatFileName(fileTemplate++tmpInc);
-		while({this.fileExists(filename)}, {
+		var filename = this.formatFileName(fileTemplate++tmpInc);
+		while({filename.exists}, {
 			tmpInc = tmpInc + 1;
-			filename = this.prFormatFileName(fileTemplate++tmpInc);
+			filename = this.formatFileName(fileTemplate++tmpInc);
 		});
 		currentIncrement = tmpInc;
 		^filename;
 	}
 
-	fileExists { |input|
-		^input.pathMatch.isEmpty.not;
-	}
-
-	prGetEndNumber {|input|
+	getEndNumber {|input|
 		^PathName(input).endNumber;
 	}
 
-	prNoEndNumber {|input|
+	noEndNumber {|input|
 		^PathName(input).noEndNumbers;
 	}
 }

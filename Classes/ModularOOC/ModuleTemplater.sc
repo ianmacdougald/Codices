@@ -1,11 +1,9 @@
 ModuleTemplater {
+	classvar <templatePath;
 	var <>path;
 
 	*new { |moduleFolder|
-		if(moduleFolder.isNil, { 
-			Error("No path set for ModuleTemplater").throw;
-		}); 
-
+		moduleFolder ?? {Error("No path set.").throw};
 		^super.newCopyArgs(moduleFolder.asString);
 	}
 	
@@ -22,7 +20,7 @@ ModuleTemplater {
 		this.class.makeTemplate(moduleName, path, Node);
 	} 
 	event {|moduleName("event")|
-		this.class.makeTemplate( moduleName, path, Event);
+		this.class.makeTemplate(moduleName, path, Event);
 	}
 	blank {|moduleName("module")|
 		this.class.makeTemplate(moduleName, path);
@@ -31,16 +29,13 @@ ModuleTemplater {
 		this.class.makeTemplate(moduleName, path, Array); 
 	}
 
-	*modulePathString {|moduleName, path|
-		if(path.isNil, { 
-			Error("No path set for ModuleTemplater").throw;
-		});
-		^(path+/+moduleName.asString++".scd");
+	*resetTemplatePath { 
+		templatePath = (PathName(this.filenameSymbol.asString)
+		.pathOnly+/+"templates");
 	}
 
-	*moduleTemplatePath { 
-		^(PathName(this.filenameSymbol.asString)
-		.pathOnly+/+"templates");
+	*setTemplatePath { |newPath|
+		templatePath = newPath;
 	}
 
 	*makeTemplate { |moduleName, path, object| 
@@ -49,19 +44,9 @@ ModuleTemplater {
 	}
 
 	*copyFile {|type("blank"), filename|
-		var templatePath;
-		if(filename.isNil, { 
-			Error("No path set for ModuleTemplater").throw;
-		});
-		templatePath = this.moduleTemplatePath
-		+/+this.firstToLower(type)++".scd";
-		format("cp % %", templatePath, filename)
-		.unixCmd(postOutput:false); 
-	}
-
-	*firstToLower {|input|
-		input = input.asString; 
-		input[0] = input[0].toLower; 
-		^input;
+		var currentPath;
+		templatePath ?? {this.resetTemplatePath};
+		currentPath = templatePath+/+type.lowerFirstChar++".scd";
+		File.copy(currentPath, filename);
 	}
 }

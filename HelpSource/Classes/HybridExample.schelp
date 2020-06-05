@@ -1,0 +1,61 @@
+TITLE::HybridExample
+summary::An example implementation of a Hybrid-typed class. 
+categories::Libraries>CodexIan>Modular OOC
+related::Classes/Hybrid, Classes/Modular
+
+DESCRIPTION:: 
+HybridExample was developed as an example of what working with both link::Classes/Hybrid:: and its superclass link::Classes/Modular:: is like. The class itself is simple: it defines a module, namely a synthDef, which is processed by Hybrid's procedures and can be interchanged per Modular's. For further examples, see link::Guides/UsingModular::.
+
+ CLASSMETHODS::
+ copymethod:: Modular *new
+ private::new
+
+ INSTANCEMETHODS::
+ private:: makeTemplates
+
+ method:: play
+ Plays the class's link::Classes/Synth::. 
+ argument::args 
+ argument::target
+ argument::addAction
+
+
+method:: isPlaying 
+If the class's Synth object is on the server and playing, returns true.
+method:: set
+discussion:: See link::Classes/Synth#-set::
+method:: free
+Frees the internal Synth.
+
+Examples::
+
+code::
+s.waitForBoot({x = HybridExample.new});
+
+//Inspect the dictionary in Hybrid (via HybridExample's class interface)
+x.class.dictionary
+
+//Play the Synth through the instance.
+x.play; 
+
+//Set it.
+x.set(\freq, 800);
+
+//Free it
+x.free(2);
+
+//Switch to a different set of modules
+x.moduleName_(\experimental);
+
+//If you want, define a new SynthDef.
+//........
+
+//Play it.
+x.play
+
+//Set it
+//x.set(\argument, 2.0); 
+
+//Free it. 
+x.free
+::

@@ -30,6 +30,12 @@
 	}
 }
 
++ Object { 
+	lowerFirstChar { 
+		^this.asString.lowerFirstChar;
+	}
+}
+
 + Symbol {
 	isPath {
 		^this.asString.isPath;

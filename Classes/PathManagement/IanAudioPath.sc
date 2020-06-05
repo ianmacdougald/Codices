@@ -1,31 +1,27 @@
-//This is an example of how to configure a subclass of FileConfigurer
-//More or less copy and paste this, replacing the defaultPath with some other.
 IanAudioPath {
 	classvar internalPath;
 
-	*defaultPath{
+	*defaultPath {
 		^("~/Desktop/audio".standardizePath);
 	}
 
 	*path {
 		if(internalPath.isNil){
-			internalPath = PathStorage.path(this.name);
+			internalPath = PathStorage.at(this.name);
 			if(internalPath.isNil){
-				internalPath = this.path_(this.defaultPath);
+				internalPath = this.setDefaultPath; 
 			};
 		};
 		^internalPath;
 	}
 
-	*path_{|newpath|
+	*set {|newpath|
 		internalPath = nil;
-		^PathStorage.path_(newpath, this.name);
+		^PathStorage.setAt(newpath, this.name);
 	}
 
 	*setDefaultPath {
-		var default = this.defaultPath;
-		this.path_(default);
-		^default;
+		^this.set(this.defaultPath);
 	}
 }
 
@@ -42,7 +38,7 @@ IanAudioPath {
 	}
 
 	ianAudioPath_{|newpath|
-		IanAudioPath.path_(newpath);
+		IanAudioPath.set(newpath);
 		^this.ianAudioPath;
 	}
 

@@ -1,0 +1,50 @@
+TITLE::Hybrid
+summary::Base for developing classes that straddle client-server divide.
+categories::Libraries>CodexIan>Modular OOC
+related::Classes/Modular, Classes/HybridExample
+
+DESCRIPTION:: 
+
+Hybrid aims to streamline the development of hybrid classes, namely those that straddle SuperCollider's link::Guides/ClientVsServer##client-server architecture.:: Specifically, Hybrid manages the loading and unloading of link::Classes/SynthDef:: objects so that other Hybrid-typed classes can easily call associated link::Classes/Synth:: objects with minimal issues relating to link::Guides/Sync-Async##asynchronicity between the client and the server::. It does this by combining the procedures of link::Classes/Modular:: with the services of link::Classes/SynthDefProcessor::. As such, the resources of a Hybrid-typed class are specified and can be manipulated in the same ways as they are for any Modular-typed class. For more, see link::Guides/UsingModular::. 
+
+note::Like Modular, Hybrid itself should not be instanced. Doing so will probably throw an error. To see the class's features in action, refer to link::Classes/HybridExample::.
+::
+CLASSMETHODS::
+
+copymethod:: Modular *new
+
+private::initHybrid
+private::subDictionaryExists
+private::addSubDictionary
+private::addToDictionary
+private::formatString
+private::processSynthDefs
+
+method::dictionary
+Gets the dictionary containing SynthDef objects that Hybrid is currently managing. 
+
+method::clearDictionary
+Frees all subDictionaries and the SynthDef objects they store.
+
+method::clearSynthDefs
+Frees only the class's associated subDictionary and the SynthDefs objects it stores.
+
+method::formatName
+Formats a SynthDef's link::Classes/SynthDef#-name#name:: to include the link::Classes/Class#-name#name:: of the class. This is used internally to prevent clashes between names. However, it can be useful when scripting for calling Synths.
+
+INSTANCEMETHODS::
+
+private::initHybrid
+private::makeSynthDefs
+private::addToDictionary
+
+method::moduleName
+
+method::reloadSynthDefs
+Removes the sub-dictionary associated with a class as well as its associated SynthDefs from the server. This is useful when switching between modules.
+
+method:: loadModules
+Loads (or reloads) the modules pointed to by the folder.
+
+method:: server
+

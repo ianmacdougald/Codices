@@ -33,18 +33,28 @@ PathStorage  {
 		};
 	}
 
-	*path_{|newpath, id|
+	*setAt { |newpath, key|
 		this.checkDictionary;
-		if((dictionary[id]==newpath).not, {
-			dictionary.add(id->(newpath+/+""));
+		if((dictionary[key]==newpath).not, {
+			dictionary.add(key->(newpath+/+""));
 			this.write(dictionary);
 		});
-		^dictionary[id];
+		^dictionary[key];
 	}
 
-	*path {|id|
+	*at { |key|
 		this.checkDictionary;
-		^dictionary[id];
+		^dictionary[key];
 	}
 
+	*removeAt { |key|
+		this.checkDictionary; 
+		dictionary.removeAt(key); 
+		this.write(dictionary);
+	}
+
+	*keys { 
+		this.checkDictionary; 
+		^dictionary.keys;
+	}
 }
