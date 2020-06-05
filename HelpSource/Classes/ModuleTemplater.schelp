@@ -1,0 +1,96 @@
+TITLE::ModuleTemplater
+summary::Create .scd files with templates of code. 
+categories::Libraries>CodexIan>Modular System
+related::Classes/Modular
+
+DESCRIPTION::
+ModuleTemplater creates emphasis::.scd:: files with code templates for the following classes: 
+
+list::
+	## SynthDef
+	## Pattern
+	## Function
+	## Node
+	## Event
+	## Array
+::
+
+It was designed for internal use within link::Classes/Modular:: and any of its respective subclasses.
+
+CLASSMETHODS::
+
+method::new
+Creates a new instance of ModuleTemplater.
+
+argument::moduleFolder
+A string that refers to the folder in which templates will be generated. 
+
+private::modulePathString
+private::moduleTemplatePath
+private::makeTemplate
+private::copyFile
+private::firstToLower
+
+INSTANCEMETHODS::
+
+method::synthDef
+Creates a template of a SynthDef object.
+argument::moduleName 
+A string that specifies the name of the file to be generated.
+
+note::the name of the file that is generated will become the name of the module loaded by link::Classes/Modular::.::
+
+method::pattern
+Creates a template for a Pattern object.
+argument::moduleName
+
+method::function
+Creates a template for a Function object.
+argument::moduleName
+
+method::node
+Creates a template for a Node object. 
+argument::moduleName
+
+method::event
+Creates a template for an Event object. 
+argument::moduleName
+
+method::array 
+Creates a template for an Array object. 
+argument::moduleName
+
+method::blank
+Creates an empty emphasis::.scd::file
+argument::moduleName
+
+method::path
+Gets and sets the folder where templates are created.
+
+EXAMPLES::
+
+code::
+(
+var path, templater; 
+//1. Set up a path...
+path = "~/Desktop/_templateTest".standardizePath; 
+path.mkdir; 
+
+//2. Load the path into a ModuleTemplater
+templater = ModuleTemplater.new(path); 
+
+//3. Make templates for SynthDef
+templater.synthDef; 
+templater.synthDef("anotherSynthDef"); 
+
+//4. Make templates for Function
+templater.function; 
+templater.function("anotherFunction"); 
+
+//5. Inspect the file names. 
+//(Look at and delete the folder from the desktop too.)
+PathName(path).files.do{|item|
+	item.fileName.postln; 
+}; 
+)
+::

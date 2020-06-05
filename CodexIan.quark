@@ -1,9 +1,9 @@
 (
-    version:        "0.1.1",
+    version:        "0.2.0",
     copyright:      "ianmacdougald",
     name:           "CodexIan",
     path:           "CodexIan",
-    summary:        "Collection of classes and extensions made by me, Ian, for music making (eventually).",
+    summary:        "Library of classes designed to support modularized approach to object-oriented composition"
     helpdoc:        "Help/Libraries/CodexIan",
     author:         "ianmacdougald",
 )

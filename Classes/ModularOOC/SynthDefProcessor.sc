@@ -119,31 +119,27 @@ SynthDefRemover : SynthDefProcessor_Base {
 }
 
 SynthDefProcessor {
-	var adder, remover;
-	var lastProcessed;
+	var <server, adder, remover;
 
-	*new{
-		^super.new.init;
+	*new{|server(Server.default)|
+		^super.newCopyArgs(server).init;
 	}
 
 	init {
-		adder = SynthDefAdder.new;
-		remover = SynthDefRemover.new;
+		adder = SynthDefAdder.new(server);
+		remover = SynthDefRemover.new(server);
 	}
 
 	add { |synthDefs|
 		adder.process(synthDefs);
-		lastProcessed = synthDefs;
 	}
 
 	remove { |synthDefs|
 		remover.process(synthDefs);
 	}
 
-	removeLast {
-		if(lastProcessed.isNil.not){
-			this.remove(lastProcessed);
-		};
+	server_{|newServer|
+		remover.server = adder.server = server = newServer;
 	}
 
 }

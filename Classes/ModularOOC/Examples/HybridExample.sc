@@ -31,7 +31,7 @@ HybridExample : Hybrid {
 		};
 	}
 
-	free {|time(1)|
-		this.set(\release, time, \gate, 0);
+	free {
+		if(this.isPlaying, {synth.free});
 	}
 }

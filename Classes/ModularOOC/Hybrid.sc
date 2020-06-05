@@ -4,19 +4,19 @@ Hybrid : Modular {
 
 	*new {|moduleName, from|
 		if(isInit.not, {this.initHybrid});
-		^super.new(moduleName, from).initHybrid;
+		^super.new(moduleName, from);
 	}
 
 	*initHybrid {
 		dictionary = Dictionary.new;
 		processor = SynthDefProcessor.new;
 		ServerQuit.add({
-			this.freeDictionary;
+			this.clearDictionary;
 		});
 		isInit = true;
 	}
 
-	*freeDictionary {
+	*clearDictionary {
 		dictionary.do({|subD|
 			processor.remove(subD.asArray);
 		});
@@ -87,6 +87,11 @@ Hybrid : Modular {
 	reloadSynthDefs {
 		this.class.clearSynthDefs;
 		this.initHybrid;
+	}
+
+	loadModules { 
+		super.loadModules; 
+		this.reloadSynthDefs;
 	}
 
 	*clearSynthDefs {

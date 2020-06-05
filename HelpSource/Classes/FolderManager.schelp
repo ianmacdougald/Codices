@@ -1,0 +1,60 @@
+CLASS::FolderManager
+categories::Libraries>CodexIan>Path Management
+related::Classes/FileIncrementer, Classes/PathStorage
+summary::Maintains and copies both folders and their contents.
+DESCRIPTION::
+
+FolderManager is a utility which allows for copying subfolders within a directory specified relatively or folders pointed to by absolute paths.
+
+CLASSMETHODS::
+
+method::new
+Creates a new instance of FolderManager
+argument::folder
+A string which serves as the basis for recreating absolute paths from symbol keys that represent relative paths.
+
+INSTANCEMETHODS::
+
+method::copyContents
+Copies the contents of one directory into a target directory, making the latter if it does not already exist. 
+
+argument::from
+A symbol or string representing either a relative path within the stored folder or representing an absolute path to a folder
+argument::to
+The same as strong::from::.
+
+method::folder
+Gets and sets the absolute path to a folder for use with relative paths.
+
+private::tagPath
+
+EXAMPLES::
+code::
+//1. Make an instance of FolderManager pointing to the Desktop folder
+f = FolderManager.new("~/Desktop".standardizePath);
+
+(
+//2. Make an arbitrary folder there and fill it with files
+~somePath = "~/Desktop/somePath".standardizePath; 
+~somePath.mkdir; 
+~templater = ModuleTemplater.new(~somePath); 
+~templater.synthDef; 
+~templater.event; 
+~templater.function;
+)
+
+//3. Inspect the contents of the new directory
+PathName(~somePath).files.do({|item| item.fileName.postln});
+
+//4. Copy the contents of that directory into another within the Desktop folder
+//you can use a relative string or symbol or an absolute path. 
+//here, there is a mix of both
+f.copyContents(~somePath, \another);
+
+//5. Check to see that they're the same
+PathName(f.folder+/+"another").files.do({|item| item.fileName.postln});
+
+//6. Cleanup
+File.deleteAll(~somePath);
+File.deleteAll(f.folder+/+"another");
+::

@@ -1,7 +1,7 @@
 FolderManager { 
 	var <folder; 
 
-	*new { |folder, makeIt(true)|
+	*new { |folder|
 		^super.newCopyArgs(folder);
 	}
 	

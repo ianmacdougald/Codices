@@ -1,14 +1,12 @@
 TITLE:: IanAudioPath
 summary::configures a single default folder path that is persistently stored.
-categories::Libraries>CodexIan>File Management
 related::Classes/PathStorage
+categories::Libraries>CodexIan>File Management
 
-DESCRIPTION::
-This subclass of link::Classes/PathStorage:: provides an interface for creating a custom and persistent storage path to a folder.
+description::
+This subclass of link::Classes/PathStorage:: provides an interface for creating a custom and persistent storage path to a folder. This class is a template from which other subclasses of link::Classes/PathStorage:: can be written. For details regarding this, see (and copy) its implementation.
 
-Moreover, the class is a template from which other subclasses of link::Classes/PathStorage:: can be written. For details regarding this, see (and copy) its implementation.
-
-CLASSMETHODS::
+ClassMethods::
 
 method::path
 Get and persistently set the folderpath this class points to.

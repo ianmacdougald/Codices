@@ -11,8 +11,8 @@ Modular {
 	}
 
 	*initModular { 
-		directory = PathStorage.path(id) ?? { 
-			PathStorage.path_(
+		directory = PathStorage.at(id) ?? { 
+			PathStorage.setAt(
 				this.defaultDirectory, 
 				id	
 			);
@@ -86,7 +86,7 @@ Modular {
 	}
 
 	*directory_{|newPath|
-		directory = PathStorage.path_(newPath, id);
+		directory = PathStorage.setAt(newPath, id);
 	}
 
 	moduleName_{|newModule, from|

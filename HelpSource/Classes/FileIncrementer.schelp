@@ -4,7 +4,7 @@ categories::Libraries>CodexIan>File Management
 related::Classes/PathStorage
 
 DESCRIPTION::
-This class creates incrementally unique filenames stored in a specified folder.
+FileIncrementer creates incrementally unique filenames stored in a specified folder.
 
 CLASSMETHODS::
 method::new
@@ -18,16 +18,16 @@ method::increment
 Increment the filename and return it.
 
 method::extension
-Get and set the extension that is added to the end of the file.
+Gets and sets the extension that is added to the end of the file.
 
 method::fileTemplate
-Get and set the template from which filenames are incremented.
+Gets and sets the template from which filenames are incremented.
 
 method::folder
-Get and set the folder where the instance looks for created filenames to increment.
+Gets and sets the folder where the instance looks for created filenames to increment.
 
 method::currentIncrement
-Get the current incrementer value (i.e. the last one that was used to format a file).
+Gets the current incrementer value (i.e. the last one that was used to format a file).
 
 private::prFindNextFileName
 private::prFormatFileName

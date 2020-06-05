@@ -1,0 +1,113 @@
+TITLE::SynthDefProcessor
+summary::Manage the loading and unloading of SynthDefs from a server.
+categories::Libraries>CodexIan>Modular OOC
+
+DESCRIPTION::
+SynthDefProcessor is responsible for loading and unloading SynthDef objects from a given server. 
+
+CLASSMETHODS::
+method::new
+Creates a new instance of SynthDefProcessor
+
+INSTANCEMETHODS::
+private::init
+
+method::add 
+Adds a SynthDef or a collection of SynthDef objects to the server. 
+argument::synthDefs
+A SynthDef or collection of SynthDef objects. 
+
+method::remove
+Remove a SynthDef or a collection of SynthDef objects from the server. 
+argument::synthDefs
+A SynthDef or collection of SynthDef objects. 
+
+method::server
+Gets and sets the server. 
+
+EXAMPLES::
+code::
+(
+//1. Instance a SynthDefProcessor
+Server.default = s = Server.local; 
+s.waitForBoot({
+	p = SynthDefProcessor.new; 
+});
+)
+
+(
+//2. Define a SynthDef
+d = SynthDef(\someSynthDef, { 
+	Out.ar(\out.kr(0), SinOsc.ar(\freq.kr(400)));
+});
+)
+
+//3. Add it.
+p.add(d);
+
+//4. Test it. 
+x = Synth(\someSynthDef); 
+x.set(\freq, 800); 
+x.free; 
+
+//5. Remove it. 
+p.remove(d); 
+
+//6. Test it. 
+x = Synth(\someSynthDef); 
+::
+
+SynthDefProcessorr can also accept collections of SynthDef objects to process all at once. 
+code:: 
+(
+//1. Instance a SynthDefProcessor.
+Server.default = s = Server.local; 
+s.waitForBoot({ 
+	p = SynthDefProcessor.new; 
+});
+)
+
+(
+//2. Define a collection of SynthDef objects.
+d = Array.fill(16, { |i|
+	var name = format("TestSynth%", i).asSymbol; 
+	SynthDef(name, { 
+		var env = EnvGen.ar(
+			Env.perc, 
+			timeScale: \timescale.kr(1), 
+			doneAction: Done.freeSelf
+		); 
+		var sig = SinOsc.ar(\freq.kr(400)); 
+		sig = sig * env * \ampDB.kr(-12).dbamp;
+		Out.ar(\out.kr(0), sig);
+	});
+});
+)
+
+//3. Add them. 
+p.add(d); 
+
+(
+//4. Test them. 
+fork{
+	var dur = 0.2;
+	var degree = Pxrand([0, 2, 3, 4, 5, 7], inf).asStream;
+	16.do{|i|
+		//make one Synth from each SynthDef
+		var name = format("TestSynth%", i).asSymbol; 
+		var freq = 440 * degree.next
+		.degreeToKey(Scale.major).midiratio;
+		Synth(name, [
+			\freq, freq, 
+			\timescale, dur * 2
+		]); 
+		dur.wait;
+	};
+}
+)
+
+//5. Remove them. 
+p.remove(d); 
+
+//6. Test them again (run above code). 
+::
