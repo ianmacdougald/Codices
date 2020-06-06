@@ -1,7 +1,7 @@
 TITLE::Modular
 summary::Development platform for creating flexible class interfaces with scriptable objects. 
 categories::Libraries>CodexIan>Modular OOC
-related::Classes/ModuleTemplater, Classes/Hybrid
+related::Guides/UsingModular, Classes/Hybrid
 
 DESCRIPTION::
 Modular is responsible for managing collections of modules consisting of scriptable objects. Modular maintains a directory of such collections, the path to which can be persistently set and reset (see link::Classes/PathStorage::). 
@@ -32,9 +32,9 @@ Gets the directory of modules maintained by a given subclass of Modular.
 
 method::directory
 Gets and (persistently) sets the directory of modules for all subclasses of Modular. 
-note::Before using a subclass of Modular for the first time, be sure to configure the path to the modules folder either through Modular or one of its subclasses.::
+note::Before using a subclass of Modular for the first time, be sure to configure the path to the modules directory either through Modular or one of its subclasses.::
 code::
-Modular.path_("~/Documents/sc-modules".standardizePath);
+Modular.directory_("~/Documents/sc-modules".standardizePath);
 ::
 
 INSTANCEMETHODS::

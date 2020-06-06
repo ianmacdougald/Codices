@@ -10,24 +10,20 @@ Hybrid : Modular {
 	*initHybrid {
 		dictionary = Dictionary.new;
 		processor = SynthDefProcessor.new;
-		ServerQuit.add({
-			this.clearDictionary;
-		});
+		ServerQuit.add({this.clearDictionary});
 		isInit = true;
 	}
 
 	*clearDictionary {
-		dictionary.do({|subD|
-			processor.remove(subD.asArray);
-		});
+		dictionary.do({|subD| processor.remove(subD.asArray)});
 	}
 
 	initHybrid {
 		server = server ? Server.default;
 		if(this.class.subDictionaryExists.not, {
 			this.class.addSubDictionary;
-			this.makeSynthDefs;
 		});
+		this.makeSynthDefs;
 	}
 
 	*subDictionaryExists {|className|
@@ -39,59 +35,64 @@ Hybrid : Modular {
 	}
 
 	makeSynthDefs {
+		var toProcess = [];
 		modules.do({|module|
-			this.addToDictionary(module);
+			toProcess = toProcess.add(this.checkModule(module));
 		});
-		this.class.processSynthDefs;
+		this.class.processSynthDefs(toProcess.flat);
 	}
 
-	addToDictionary { |object|
+	checkModule { |object|
+		var synthDefs = [];
 		case
 		{object.isCollection and: {object.isString.not}}{
-			object.do({|item| this.addToDictionary(item)});
+			object.do({|item| ^this.checkModule(item)});
 		}
-		{object.isFunction}{this.addToDictionary(object.value)}
+		{object.isFunction}{^this.checkModule(object.value)}
 		{object.isKindOf(SynthDef)}{
-			var class = this.class;
-			object.name = class.formatName(object);
-			class.addToDictionary(class.name, object);
+			object.name = this.formatName(object).asSymbol;
+			if(this.checkDictionary(object), { 
+				synthDefs = synthDefs.add(object);
+			});
 		};
+		^synthDefs;
 	}
 
-	*addToDictionary {|className, synthDef|
-		dictionary[className].add(
-			synthDef.name.asSymbol -> synthDef
-		);
+	checkDictionary { |synthDef|
+		var class = this.class;
+		if(class.notInDictionary(synthDef), { 
+			class.addToDictionary(synthDef);
+			^true;
+		}); 
+		^false;
 	}
 
-	*formatName { |synthDef|
-		^this.formatString(synthDef.name);
+	*notInDictionary { |synthDefName| 
+		^dictionary[this.name][synthDefName].isNil;
 	}
 
-	*formatString { |input|
-		var name = this.name.asString;
-		if(input.asString.contains(name).not, {
-			^format("%_%", name, input.asString).asSymbol;
+	*addToDictionary { |synthDef|
+		dictionary[this.name].add(synthDef.name -> synthDef);
+	}
+
+	formatName { |object|
+		^this.tagName(this.class.name, this.tagName(moduleName, object.name));
+	}
+
+	tagName {|tag, name|
+		tag = tag.asString; name = name.asString;
+		if(name.contains(tag).not, { 
+			name = format("%_%", tag, name);
 		});
-		^input.asSymbol;
+		^name;
 	}
 
-	*processSynthDefs {
-		processor.add(dictionary[this.name].asArray);
+	*processSynthDefs { |synthDef|
+		processor.add(synthDef);
 	}
 
 	server_{|newServer|
 		server = server ? Server.default;
-	}
-
-	reloadSynthDefs {
-		this.class.clearSynthDefs;
-		this.initHybrid;
-	}
-
-	loadModules { 
-		super.loadModules; 
-		this.reloadSynthDefs;
 	}
 
 	*clearSynthDefs {
@@ -99,10 +100,13 @@ Hybrid : Modular {
 		toRemove !? {processor.remove(toRemove.asArray)};
 	}
 
+	loadModules { 
+		super.loadModules; 
+		this.initHybrid;
+	}
+
 	moduleName_{|newModule, from|
 		moduleName = newModule;
 		this.initModular(from);
-		this.reloadSynthDefs;
 	}
 }
-

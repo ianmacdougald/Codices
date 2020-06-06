@@ -1,10 +1,10 @@
 TITLE::HybridExample
 summary::An example implementation of a Hybrid-typed class. 
 categories::Libraries>CodexIan>Modular OOC
-related::Classes/Hybrid, Classes/Modular
+related::Classes/Hybrid, Classes/Modular, Guides/Using Modular
 
 DESCRIPTION:: 
-HybridExample was developed as an example of what working with both link::Classes/Hybrid:: and its superclass link::Classes/Modular:: is like. The class itself is simple: it defines a module, namely a synthDef, which is processed by Hybrid's procedures and can be interchanged per Modular's. For further examples, see link::Guides/UsingModular::.
+HybridExample was developed as an example of what working with both link::Classes/Hybrid:: and its superclass link::Classes/Modular:: is like. The class itself is simple: it defines a module, namely a link::Classes/SynthDef::, which is processed by Hybrid's procedures and can be interchanged per Modular's. For further examples, see link::Guides/UsingModular::.
 
  CLASSMETHODS::
  copymethod:: Modular *new

@@ -1,0 +1,11 @@
+TITLE:: Using Modular
+summary:: Guide to working with the classes Modular and Hybrid
+categories:: Libraries>CodexIan>Guides
+
+DESCRIPTION::
+
+The classes Modular and Hybrid define a specific workflow for developing classes that contain swappable component slots for scriptable SuperCollider objects—namely, 
+
+SECTION::Modular
+
+SECTION::Hybrid

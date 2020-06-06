@@ -22,7 +22,7 @@
 
 	isValidAudioPath { |input|
 		var ext = PathName(input).extension;
-		^this.class.validAudioPaths.find([ext]).isNil.not;
+		^this.class.validAudioPaths.find([ext]).notNil;
 	}
 
 	*validAudioPaths {
@@ -32,6 +32,10 @@
 			"oof",
 			"mp3"
 		];
+	}
+
+	getBuffers { 
+		^this.getAudioPaths.collect(_.asBuffer);
 	}
 
 }
