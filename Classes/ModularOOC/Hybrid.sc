@@ -2,9 +2,9 @@ Hybrid : Modular {
 	classvar isInit = false, <dictionary, processor;
 	var <server;
 
-	*new {|moduleName, from|
+	*new {|moduleSet, from|
 		if(isInit.not, {this.initHybrid});
-		^super.new(moduleName, from);
+		^super.new(moduleSet, from);
 	}
 
 	*initHybrid {
@@ -16,6 +16,7 @@ Hybrid : Modular {
 
 	*clearDictionary {
 		dictionary.do({|subD| processor.remove(subD.asArray)});
+		dictionary.clear;
 	}
 
 	initHybrid {
@@ -50,7 +51,7 @@ Hybrid : Modular {
 		}
 		{object.isFunction}{^this.checkModule(object.value)}
 		{object.isKindOf(SynthDef)}{
-			object.name = this.formatName(object).asSymbol;
+			object.name = this.formatName(object.name).asSymbol;
 			if(this.checkDictionary(object), { 
 				synthDefs = synthDefs.add(object);
 			});
@@ -75,11 +76,11 @@ Hybrid : Modular {
 		dictionary[this.name].add(synthDef.name -> synthDef);
 	}
 
-	formatName { |object|
-		^this.tagName(this.class.name, this.tagName(moduleName, object.name));
+	formatName { |string|
+		^this.tag(this.class.name, this.tag(moduleSet, string));
 	}
 
-	tagName {|tag, name|
+	tag {|tag, name|
 		tag = tag.asString; name = name.asString;
 		if(name.contains(tag).not, { 
 			name = format("%_%", tag, name);
@@ -105,8 +106,8 @@ Hybrid : Modular {
 		this.initHybrid;
 	}
 
-	moduleName_{|newModule, from|
-		moduleName = newModule;
+	moduleSet_{|newSet, from|
+		moduleSet = newSet;
 		this.initModular(from);
 	}
 }

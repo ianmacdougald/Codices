@@ -1,12 +1,12 @@
 TITLE::Modular
 summary::Development platform for creating flexible class interfaces with scriptable objects. 
-categories::Libraries>CodexIan>Modular OOC
+categories::Libraries>CodexIan>Modular
 related::Guides/UsingModular, Classes/Hybrid
 
 DESCRIPTION::
 Modular is responsible for managing collections of modules consisting of scriptable objects. Modular maintains a directory of such collections, the path to which can be persistently set and reset (see link::Classes/PathStorage::). 
 
-Each class that inherits from Modular maintains its own subdirectory populated by unique sets of modules, which can be loaded and reloaded into the class without recompiling sclang. Modular folders can be easily cloned or freshly generated from templates specified on a per-class basis (see link::Classes/ModuleTemplater::). As such, each Modular-typed class is free to focus on high level behaviors without worrying about these lower level procedures.
+Each class that inherits from Modular maintains its own subdirectory populated by unique sets of modules, which can be loaded and reloaded into the class without recompiling teletype::sclang::. Modular folders can be easily cloned or freshly generated from templates specified on a per-class basis (see link::Classes/ModuleTemplater::). As such, each Modular-typed class is free to focus on high level behaviors without worrying about these lower level procedures.
 
 note::Modular is a development tool that should not be instantiated. Rather, it is meant to encapsulate behaviors on behalf of its subclasses. So instance those instead.
 ::
@@ -16,11 +16,11 @@ CLASSMETHODS::
 method::new
 Creates a new instance.
 
-argument::moduleName
+argument::moduleSet
 A symbol key representing the name of the set of modules to call. This key will correspond to a folder of modules within Modular's directory.
 
 argument::from
-A symbol key representing the name of the folder to clone if moduleName does not exist.
+A symbol key representing the name of the folder to clone if moduleSet does not exist.
 
 private::initModular
 private::defaultDirectory
@@ -55,10 +55,10 @@ Gets an event containing the loaded modules.
 
 private::getModuleName
 
-method::moduleName
-Gets and sets the current moduleName. 
-argument::newModule
-A symbol specifying the new set of modules to load. Setting moduleName will in turn load the new resources. 
+method::moduleSet
+Gets and sets the current moduleSet. 
+argument::newSet
+A symbol specifying the new set of modules to load. Setting teletype::moduleSet:: will in turn load the new resources. 
 
 argument::from
 A symbol referring to an existing set of modules to copy if the new module name does not exist yet.

@@ -42,7 +42,7 @@ x.play;
 x.set(\freq, 800);
 
 //Free it
-x.free(2);
+x.free;
 
 //Switch to a different set of modules
 x.moduleName_(\experimental);
@@ -57,5 +57,5 @@ x.play
 //x.set(\argument, 2.0); 
 
 //Free it. 
-x.free
+x.free;
 ::

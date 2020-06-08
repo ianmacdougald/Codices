@@ -16,7 +16,7 @@ ModuleTemplater {
 	function {|moduleName("function")| 
 		this.class.makeTemplate(moduleName, path, Function);
 	}
-	node {|moduleName("node")| 
+	synth {|moduleName("synth")| 
 		this.class.makeTemplate(moduleName, path, Node);
 	} 
 	event {|moduleName("event")|

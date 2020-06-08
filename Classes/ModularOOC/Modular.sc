@@ -1,12 +1,12 @@
 Modular {
 	classvar isInit = false, id = 'sc-modules';
 	classvar <directory, <folderManager;
-	var <moduleName, <modules, templater;
+	var <moduleSet, <modules, templater;
 
-	*new { |moduleName(\default), from|
+	*new { |moduleSet(\default), from|
 		if(isInit.not, {this.initModular});
 		this.checkDefaults;
-		^super.newCopyArgs(moduleName)
+		^super.newCopyArgs(moduleSet)
 		.initModular(from);	
 	}
 
@@ -24,18 +24,18 @@ Modular {
 		^(PathName(this.filenameString).pathOnly+/+"sc-modules");
 	}
 	
-	*checkDefaults { 
-		if(this.moduleFolder.exists.not, { 
-			var scripts = this.filenameString.path.getScriptPaths;
+	*checkDefaults {
+		var scripts = this.filenameString.path.getScriptPaths;
+		if(this.moduleFolder.exists.not and: {scripts.isEmpty.not}, { 
 			var defaultPath = this.moduleFolder+/+"default"; 
 			defaultPath.mkdir;
-			scripts.do({ |script|
+			protect{scripts.do({ |script|
 				var scriptName = PathName(script).fileName;
 				File.copy(
 					script, 
 					defaultPath+/+scriptName
 				);
-			});
+			})};
 		});
 	}
 
@@ -46,7 +46,7 @@ Modular {
 	}
 
 	moduleFolder { 
-		^(this.class.moduleFolder+/+moduleName);
+		^(this.class.moduleFolder+/+moduleSet);
 	}
 
 	*moduleFolder { 
@@ -56,7 +56,7 @@ Modular {
 	processFolders { |from|
 		if(this.moduleFolder.exists.not, { 
 			var fm = this.class.folderManager;
-			from !? {fm.copyContents(from, moduleName)} ?? {
+			from !? {fm.copyContents(from, moduleSet)} ?? {
 				this.makeModuleFolder;
 				this.makeTemplates;
 			};
@@ -74,12 +74,12 @@ Modular {
 	loadModules { 
 		modules = ();
 		this.moduleFolder.getScriptPaths.do({|script|
-			var name = this.getModuleName(script); 
+			var name = this.getModuleSet(script); 
 			modules.add(name.asSymbol -> script.load);
 		});
 	}
 
-	getModuleName { |input|
+	getModuleSet { |input|
 		 ^PathName(input)
 		.fileNameWithoutExtension
 		.lowerFirstChar; 
@@ -89,8 +89,8 @@ Modular {
 		directory = PathStorage.setAt(newPath, id);
 	}
 
-	moduleName_{|newModule, from|
-		moduleName = newModule; 
+	moduleSet_{|newSet, from|
+		moduleSet = newSet; 
 		this.initModular(from);
 	}
 }
