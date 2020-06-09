@@ -30,6 +30,9 @@ private::folderManager
 method::moduleFolder 
 Gets the directory of modules maintained by a given subclass of Modular. 
 
+method::moduleSets
+Gets the names of the teletype::moduleSets:: that currently exist.
+
 method::directory
 Gets and (persistently) sets the directory of modules for all subclasses of Modular. 
 note::Before using a subclass of Modular for the first time, be sure to configure the path to the modules directory either through Modular or one of its subclasses.::
@@ -39,6 +42,7 @@ Modular.directory_("~/Documents/sc-modules".standardizePath);
 
 INSTANCEMETHODS::
 private::initModular
+private::getModuleSet
 
 method::moduleFolder
 Gets the current directory of modules loaded into the instance. 

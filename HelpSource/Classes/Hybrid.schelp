@@ -31,21 +31,27 @@ Frees all subDictionaries and the SynthDef objects they store.
 method::clearSynthDefs
 Frees only the class's associated subDictionary and the SynthDefs objects it stores.
 
+copymethod:: Modular *moduleFolder
+copymethod:: Modular *moduleSets
+copymethod:: Modular *directory
+
 INSTANCEMETHODS::
 
 private::initHybrid
 private::makeSynthDefs
 private::addToDictionary
 
-method::moduleSet
-
 method::formatName
 Formats a SynthDef's link::Classes/SynthDef#-name#name:: to include the link::Classes/Class#-name#name:: of the class. This is used internally to prevent clashes between names. However, it can be useful for calling Synths when scripting.
-
-method:: loadModules
-Loads (or reloads) the modules pointed to by the folder.
 
 method:: server
 private::tag
 private::checkDictionary
 private::checkModule
+private::loadModules
+
+copymethod:: Modular -moduleFolder
+copymethod:: Modular -loadModules
+copyMethod:: Modular -modules
+copyMethod:: Modular -moduleSet
+private::moduleSet

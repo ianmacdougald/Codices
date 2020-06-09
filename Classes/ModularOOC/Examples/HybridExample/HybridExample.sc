@@ -1,10 +1,6 @@
 HybridExample : Hybrid {
 	var synth;
 
-	*new {|moduleName, from|
-		^super.new(moduleName, from);
-	}
-
 	makeTemplates { 
 		templater.synthDef; 
 	}

@@ -93,4 +93,9 @@ Modular {
 		moduleSet = newSet; 
 		this.initModular(from);
 	}
+
+	*moduleSets {
+		^PathName(this.moduleFolder).folders
+		.collectAs({|m|m.folderName.asSymbol}, Set);
+	}
 }

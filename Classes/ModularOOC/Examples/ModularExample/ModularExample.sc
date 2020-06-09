@@ -1,11 +1,8 @@
 ModularExample : Modular { 
 	var routine, pattern;
 
-	//The constructor should supply an initial moduleSet (and from argument) to Modular, otherwise \default will be supplied by default.
-	*new {|moduleSet, from|
-		^super.new(moduleSet, from);
-	}
-
+	//No need to define a constructor. It is defined in Modular
+	
 	//The only actual requirement when developing a Modular-typed class is that the the developer define what kinds of modules to use. 
 	//This is done in the makeTemplates method by requesting templates in the following way.
 	//Note that Modular instances a ModuleTemplater, storing it in the variable "templater".
