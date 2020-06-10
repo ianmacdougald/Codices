@@ -21,13 +21,16 @@ Modular {
 	}
 
 	*defaultDirectory { 
-		^(PathName(this.filenameString).pathOnly+/+"sc-modules");
+		^(Main.packages.asDict.at('CodexIan')+/+id);
 	}
 	
 	*checkDefaults {
 		var scripts = this.filenameString.path.getScriptPaths;
 		if(this.moduleFolder.exists.not and: {scripts.isEmpty.not}, { 
-			folderManager.copyFilesTo(scripts, (this.moduleFolder+/+"default").mkdir);
+			folderManager.copyFilesTo(
+				scripts, 
+				(this.moduleFolder+/+"default").mkdir
+			);
 		}); 
 	}
 
@@ -47,7 +50,8 @@ Modular {
 
 	processFolders { |from|
 		if(this.moduleFolder.exists.not, { 
-			from !? {this.class.folderManager.mkdirCopy(from, moduleSet)} ?? {
+			var fm = this.class.folderManager;
+			from !? {fm.mkdirCopy(from, moduleSet)} ?? {
 				this.moduleFolder.mkdir;
 				this.makeTemplates;
 			};
