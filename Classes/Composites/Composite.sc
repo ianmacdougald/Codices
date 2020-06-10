@@ -7,7 +7,7 @@ Composite {
 		if(isInit.not, {this.initComposite});
 		this.checkDefaults;
 		^super.newCopyArgs(moduleSet)
-		.initComposite(from);	
+		.initComposite(from).basicNew;	
 	}
 
 	*initComposite { 
