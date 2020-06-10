@@ -1,17 +1,17 @@
 TITLE::Hybrid
 summary::Base for developing classes that straddle client-server divide.
-categories::Libraries>CodexIan>Modular System 
-related::Classes/Modular, Classes/HybridExample, Guides/UsingModular
+categories::Libraries>CodexIan>Composite OOC
+related::Classes/Composite, Classes/HybridExample, Guides/UsingComposites
 
 DESCRIPTION:: 
 
-Hybrid aims to streamline the development of hybrid classes, namely those that straddle SuperCollider's link::Guides/ClientVsServer##client-server architecture.:: Specifically, Hybrid manages the loading and unloading of link::Classes/SynthDef##SynthDefs:: so that other Hybrid-typed classes can easily call related link::Classes/Synth##Synths:: with minimal issues relating to link::Guides/Sync-Async##asynchronicity between the client and the server::. It does this by combining the procedures of link::Classes/Modular:: with the services of link::Classes/SynthDefProcessor::. As such, the resources of a Hybrid-typed class are specified and can be manipulated in the same ways as they are for any Modular-typed class.
+Hybrid aims to streamline the development of hybrid classes, namely those that straddle SuperCollider's link::Guides/ClientVsServer##client-server architecture.:: Specifically, Hybrid manages the loading and unloading of link::Classes/SynthDef##SynthDefs:: so that other Hybrid-typed classes can easily call related link::Classes/Synth##Synths:: with minimal issues relating to link::Guides/Sync-Async##asynchronicity between the client and the server::. It does this by combining the procedures of link::Classes/Composite:: with the services of link::Classes/SynthDefProcessor::. As such, the resources of a Hybrid-typed class are specified and can be manipulated in the same ways as they are for any Composite-typed class.
 
-note::Like Modular, Hybrid itself should not be instanced. Doing so will probably throw an error. To see the class's features in action, refer to link::Classes/HybridExample::.
+note::Like Composite, Hybrid itself should not be instanced. Doing so will probably throw an error. To see the class's features in action, refer to link::Classes/HybridExample::.
 ::
 CLASSMETHODS::
 
-copymethod:: Modular *new
+copymethod:: Composite *new
 private::new
 
 private::initHybrid
@@ -31,10 +31,10 @@ Frees all subDictionaries and the SynthDef objects they store.
 method::clearSynthDefs
 Frees only the class's associated subDictionary and the SynthDefs objects it stores.
 
-subsection::From Modular
-copymethod:: Modular *moduleFolder
-copymethod:: Modular *moduleSets
-copymethod:: Modular *directory
+subsection::From Composite
+copymethod:: Composite *moduleFolder
+copymethod:: Composite *moduleSets
+copymethod:: Composite *directory
 
 INSTANCEMETHODS::
 
@@ -51,8 +51,8 @@ private::checkDictionary
 private::checkModule
 private::loadModules
 
-subsection::From Modular
-copymethod:: Modular -moduleFolder
-copymethod:: Modular -loadModules
-copyMethod:: Modular -modules
-copyMethod:: Modular -moduleSet
+subsection::From Composite
+copymethod:: Composite -moduleFolder
+copymethod:: Composite -loadModules
+copyMethod:: Composite -modules
+copyMethod:: Composite -moduleSet

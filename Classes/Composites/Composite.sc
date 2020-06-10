@@ -1,16 +1,16 @@
-Modular {
+Composite {
 	classvar isInit = false, id = 'sc-modules';
 	classvar <directory, <folderManager;
 	var <moduleSet, <modules, templater;
 
 	*new { |moduleSet(\default), from|
-		if(isInit.not, {this.initModular});
+		if(isInit.not, {this.initComposite});
 		this.checkDefaults;
 		^super.newCopyArgs(moduleSet)
-		.initModular(from);	
+		.initComposite(from);	
 	}
 
-	*initModular { 
+	*initComposite { 
 		directory = PathStorage.at(id) ?? { 
 			PathStorage.setAt(
 				this.defaultDirectory, 
@@ -34,8 +34,8 @@ Modular {
 		}); 
 	}
 
-	initModular { |from|
-		templater = ModuleTemplater(this.moduleFolder);
+	initComposite { |from|
+		templater = Templater(this.moduleFolder);
 		this.processFolders(from);
 		this.loadModules;
 	}
@@ -82,7 +82,7 @@ Modular {
 
 	moduleSet_{|newSet, from|
 		moduleSet = newSet; 
-		this.initModular(from);
+		this.initComposite(from);
 	}
 
 	*moduleSets {

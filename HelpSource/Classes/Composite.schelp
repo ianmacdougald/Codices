@@ -1,0 +1,68 @@
+TITLE::Composite
+summary::Development platform for creating flexible class interfaces with scriptable objects. 
+categories::Libraries>CodexIan>Composite System
+related::Guides/UsingComposites, Classes/Hybrid
+
+DESCRIPTION::
+Composite is responsible for managing collections of modules consisting of scriptable objects. Composite maintains a directory of such collections, the path to which can be persistently set and reset (see link::Classes/PathStorage::). 
+
+Each class that inherits from Composite maintains its own subdirectory populated by unique sets of modules, which can be loaded and reloaded into the class without recompiling teletype::sclang::. Composite folders can be easily cloned or freshly generated from templates specified on a per-class basis (see link::Classes/ModuleTemplater::). As such, each Composite-typed class is free to focus on high level behaviors without worrying about these lower level procedures.
+
+note::Composite is a development tool that should not be instantiated. Rather, it is meant to encapsulate behaviors on behalf of its subclasses. So instance those instead.
+::
+
+CLASSMETHODS::
+
+method::new
+Creates a new instance.
+
+argument::moduleSet
+A symbol key representing the name of the set of modules to call. This key will correspond to a folder of modules within Composite's directory.
+
+argument::from
+A symbol key representing the name of the folder to clone if moduleSet does not exist.
+
+private::initComposite
+private::defaultDirectory
+private::checkDefaults
+private::folderManager
+
+method::moduleFolder 
+Gets the directory of modules maintained by a given subclass of Composite. 
+
+method::moduleSets
+Gets the names of the teletype::moduleSets:: that currently exist.
+
+method::directory
+Gets and (persistently) sets the directory of modules for all subclasses of Composite. 
+note::Before using a subclass of Composite for the first time, be sure to configure the path to the modules directory either through Composite or one of its subclasses.::
+code::
+Composite.directory_("~/Documents/sc-modules".standardizePath);
+::
+
+INSTANCEMETHODS::
+private::initComposite
+private::getModuleSet
+
+method::moduleFolder
+Gets the current directory of modules loaded into the instance. 
+
+private::processFolders
+private::makeModuleFolder
+private::makeTemplates
+
+method::loadModules
+Loads (or reloads) the modules pointed to by the module folder. 
+
+method::modules
+Gets an event containing the loaded modules. 
+
+private::getModuleName
+
+method::moduleSet
+Gets and sets the current moduleSet. 
+argument::newSet
+A symbol specifying the new set of modules to load. Setting teletype::moduleSet:: will in turn load the new resources. 
+
+argument::from
+A symbol referring to an existing set of modules to copy if the new module name does not exist yet.

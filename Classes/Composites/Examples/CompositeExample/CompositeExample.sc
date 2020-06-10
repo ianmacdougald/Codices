@@ -1,11 +1,11 @@
-ModularExample : Modular { 
+CompositeExample : Composite { 
 	var routine, pattern;
 
-	//No need to define a constructor. It is defined in Modular
+	//No need to define a constructor. It is defined in Composite
 	
-	//The only actual requirement when developing a Modular-typed class is that the the developer define what kinds of modules to use. 
+	//The only actual requirement when developing a Composite-typed class is that the the developer define what kinds of modules to use. 
 	//This is done in the makeTemplates method by requesting templates in the following way.
-	//Note that Modular instances a ModuleTemplater, storing it in the variable "templater".
+	//Note that Composite instances a Templater, storing it in the variable "templater".
 	makeTemplates { 
 		templater.pattern( "sequence1" ); 
 		templater.pattern( "sequence2" ); 

@@ -1,4 +1,4 @@
-Hybrid : Modular {
+Hybrid : Composite {
 	classvar isInit = false, <dictionary, processor;
 	var <server;
 
@@ -108,6 +108,6 @@ Hybrid : Modular {
 
 	moduleSet_{|newSet, from|
 		moduleSet = newSet;
-		this.initModular(from);
+		this.initComposite(from);
 	}
 }

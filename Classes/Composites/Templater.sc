@@ -1,4 +1,4 @@
-ModuleTemplater {
+Templater {
 	classvar <templatePath;
 	var <>path;
 

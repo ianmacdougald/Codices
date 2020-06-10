@@ -1,10 +1,10 @@
-TITLE::ModuleTemplater
+TITLE::Templater
 summary::Create .scd files with templates of code. 
-categories::Libraries>CodexIan>Modular System
-related::Classes/Modular
+categories::Libraries>CodexIan>Composite System
+related::Classes/Composite
 
 DESCRIPTION::
-ModuleTemplater creates emphasis::.scd:: files with code templates for the following classes: 
+Templater creates emphasis::.scd:: files with code templates for the following classes: 
 
 list::
 	## SynthDef
@@ -15,12 +15,12 @@ list::
 	## Array
 ::
 
-It was designed for internal use within link::Classes/Modular:: and any of its respective subclasses.
+It was designed for internal use within link::Classes/Composite:: and any of its respective subclasses.
 
 CLASSMETHODS::
 
 method::new
-Creates a new instance of ModuleTemplater.
+Creates a new instance of Templater.
 
 argument::moduleFolder
 A string that refers to the folder in which templates will be generated. 
@@ -35,34 +35,34 @@ INSTANCEMETHODS::
 
 method::synthDef
 Creates a template of a SynthDef object.
-argument::moduleName 
+argument::templateName 
 A string that specifies the name of the file to be generated.
 
-note::the name of the file that is generated will become the name of the module loaded by link::Classes/Modular::.::
+note::the name of the file that is generated will become the name of the module loaded by link::Classes/Composite::.::
 
 method::pattern
 Creates a template for a Pattern object.
-argument::moduleName
+argument::templateName
 
 method::function
 Creates a template for a Function object.
-argument::moduleName
+argument::templateName
 
 method::node
 Creates a template for a Node object. 
-argument::moduleName
+argument::templateName
 
 method::event
 Creates a template for an Event object. 
-argument::moduleName
+argument::templateName
 
 method::array 
 Creates a template for an Array object. 
-argument::moduleName
+argument::templateName
 
 method::blank
 Creates an empty emphasis::.scd::file
-argument::moduleName
+argument::templateName
 
 method::path
 Gets and sets the folder where templates are created.
@@ -76,8 +76,8 @@ var path, templater;
 path = "~/Desktop/_templateTest".standardizePath; 
 path.mkdir; 
 
-//2. Load the path into a ModuleTemplater
-templater = ModuleTemplater.new(path); 
+//2. Load the path into a Templater
+templater = Templater.new(path); 
 
 //3. Make templates for SynthDef
 templater.synthDef; 
