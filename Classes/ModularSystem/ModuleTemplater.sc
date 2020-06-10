@@ -40,7 +40,9 @@ ModuleTemplater {
 
 	*makeTemplate { |moduleName, path, object| 
 		var targetPath = path+/+moduleName.asString++".scd";
-		this.copyFile(object, targetPath);
+		try({this.copyFile(object, targetPath)}, {
+			this.copyFile(object, targetPath.increment);
+		});
 	}
 
 	*copyFile {|type("blank"), filename|

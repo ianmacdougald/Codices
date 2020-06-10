@@ -27,16 +27,8 @@ Modular {
 	*checkDefaults {
 		var scripts = this.filenameString.path.getScriptPaths;
 		if(this.moduleFolder.exists.not and: {scripts.isEmpty.not}, { 
-			var defaultPath = this.moduleFolder+/+"default"; 
-			defaultPath.mkdir;
-			protect{scripts.do({ |script|
-				var scriptName = PathName(script).fileName;
-				File.copy(
-					script, 
-					defaultPath+/+scriptName
-				);
-			})};
-		});
+			folderManager.copyFilesTo(scripts, (this.moduleFolder+/+"default").mkdir);
+		}); 
 	}
 
 	initModular { |from|
@@ -55,16 +47,11 @@ Modular {
 
 	processFolders { |from|
 		if(this.moduleFolder.exists.not, { 
-			var fm = this.class.folderManager;
-			from !? {fm.copyContents(from, moduleSet)} ?? {
-				this.makeModuleFolder;
+			from !? {this.class.folderManager.mkdirCopy(from, moduleSet)} ?? {
+				this.moduleFolder.mkdir;
 				this.makeTemplates;
 			};
 		});
-	}
-
-	makeModuleFolder { 
-		File.mkdir(this.moduleFolder);
 	}
 
 	makeTemplates { 

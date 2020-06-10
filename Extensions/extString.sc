@@ -28,6 +28,10 @@
 	path { 
 		^PathName(this).pathOnly;
 	}
+
+	increment { 
+		^FileIncrementer(PathName(this).fileName, this.path).increment;
+	}
 }
 
 + Object { 

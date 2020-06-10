@@ -15,13 +15,19 @@ A string which serves as the basis for recreating absolute paths from symbol key
 
 INSTANCEMETHODS::
 
-method::copyContents
-Copies the contents of one directory into a target directory, making the latter if it does not already exist. 
-
-argument::from
-A symbol or string representing either a relative path within the stored folder or representing an absolute path to a folder
+method::mkdirCopy
+Copies the files of one directory into a target directory, which is made if it does not already exist.
+argument::from 
+A relative or absolute path to the directory whose files are to be copied. 
 argument::to
-The same as strong::from::.
+A relative or absolute path to the directory where the copied files should go.
+
+method::copyFilesTo
+Copies a collection of file paths to a target directory. 
+argument::files
+A collection of filepaths.
+argument::targetDir
+An absolute path to the directory where files should go.
 
 method::folder
 Gets and sets the absolute path to a folder for use with relative paths.
@@ -35,8 +41,7 @@ f = FolderManager.new("~/Desktop".standardizePath);
 
 (
 //2. Make an arbitrary folder there and fill it with files
-~somePath = "~/Desktop/somePath".standardizePath; 
-~somePath.mkdir; 
+~somePath = "~/Desktop/somePath".standardizePath.mkdir; 
 ~templater = ModuleTemplater.new(~somePath); 
 ~templater.synthDef; 
 ~templater.event; 
@@ -49,7 +54,7 @@ PathName(~somePath).files.do({|item| item.fileName.postln});
 //4. Copy the contents of that directory into another within the Desktop folder
 //you can use a relative string or symbol or an absolute path. 
 //here, there is a mix of both
-f.copyContents(~somePath, \another);
+f.mkdirCopy(~somePath, \another);
 
 //5. Check to see that they're the same
 PathName(f.folder+/+"another").files.do({|item| item.fileName.postln});
