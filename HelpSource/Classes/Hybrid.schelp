@@ -1,6 +1,6 @@
 TITLE::Hybrid
 summary::Base for developing classes that straddle client-server divide.
-categories::Libraries>CodexIan>Modular OOC
+categories::Libraries>CodexIan>Modular System 
 related::Classes/Modular, Classes/HybridExample, Guides/UsingModular
 
 DESCRIPTION:: 
@@ -31,6 +31,7 @@ Frees all subDictionaries and the SynthDef objects they store.
 method::clearSynthDefs
 Frees only the class's associated subDictionary and the SynthDefs objects it stores.
 
+subsection::From Modular
 copymethod:: Modular *moduleFolder
 copymethod:: Modular *moduleSets
 copymethod:: Modular *directory
@@ -50,8 +51,8 @@ private::checkDictionary
 private::checkModule
 private::loadModules
 
+subsection::From Modular
 copymethod:: Modular -moduleFolder
 copymethod:: Modular -loadModules
 copyMethod:: Modular -modules
 copyMethod:: Modular -moduleSet
-private::moduleSet

@@ -1,6 +1,6 @@
 TITLE:: FileIncrementer
 summary::creates incrementally unique filenames.
-categories::Libraries>CodexIan>File Management
+categories::Libraries>CodexIan>Path Management
 related::Classes/PathStorage
 
 DESCRIPTION::
