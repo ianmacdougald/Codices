@@ -1,6 +1,5 @@
 # CodexIan 
-CodexIan is a (growing) library of classes and extensions for SuperCollider that aim to support a specific workflow for music composition, namely one that supports a flexible and easily abstracted approach to object-oriented composition (see.
-
+CodexIan is a (growing) library of classes and extensions for SuperCollider that aims to support a modular approach to music composition by object composition or ``musical object composition.'' 
 ### Installation
 In SuperCollider, evaluate the following: 
 

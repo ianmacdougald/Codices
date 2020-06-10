@@ -3,7 +3,7 @@
     copyright:      "ianmacdougald",
     name:           "CodexIan",
     path:           "CodexIan",
-    summary:        "Library of classes designed to support modularized approach to object-oriented composition",
+    summary:        "Library of classes designed to support modularized approach to musical object composition.",
     helpdoc:        "Help/Libraries/CodexIan",
     author:         "ianmacdougald",
 )
