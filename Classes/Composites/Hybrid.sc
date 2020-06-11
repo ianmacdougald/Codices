@@ -1,17 +1,12 @@
 Hybrid : Composite {
-	classvar isInit = false, <dictionary, processor;
+	classvar <dictionary, processor;
 	var <server;
 
-	*new {|moduleSet, from|
-		if(isInit.not, {this.initHybrid});
-		^super.new(moduleSet, from);
-	}
-
-	*initHybrid {
-		dictionary = Dictionary.new;
-		processor = SynthDefProcessor.new;
-		ServerQuit.add({this.clearDictionary});
-		isInit = true;
+	*initClass { 
+		super.initClass;
+		dictionary = dictionary ?? {Dictionary.new}; 
+		processor = processor ?? {SynthDefProcessor.new};
+		ServerQuit.add({this.clearDictionary});	
 	}
 
 	*clearDictionary {
@@ -19,7 +14,7 @@ Hybrid : Composite {
 		dictionary.clear;
 	}
 
-	initHybrid {
+	initComposite {
 		server = server ? Server.default;
 		if(this.class.subDictionaryExists.not, {
 			this.class.addSubDictionary;
@@ -103,11 +98,7 @@ Hybrid : Composite {
 
 	loadModules { 
 		super.loadModules; 
-		this.initHybrid;
+		this.initComposite;
 	}
 
-	moduleSet_{|newSet, from|
-		moduleSet = newSet;
-		this.initComposite(from);
-	}
 }

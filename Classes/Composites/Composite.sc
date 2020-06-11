@@ -1,23 +1,22 @@
 Composite {
-	classvar isInit = false, id = 'sc-modules';
-	classvar <directory, <folderManager;
+	classvar <directory, <folderManager, id = 'sc-modules';
 	var <moduleSet, <modules, templater;
 
-	*new { |moduleSet(\default), from|
-		if(isInit.not, {this.initComposite});
-		this.checkDefaults;
+	*new { | moduleSet(\default), from |
+		this.initCompositeClass;
 		^super.newCopyArgs(moduleSet)
-		.initComposite(from).basicNew;	
+		.getModules(from)
+		.initComposite
 	}
 
-	*initComposite { 
-		directory = PathStorage.at(id) ?? { 
-			PathStorage.setAt(
-				this.defaultDirectory, 
-				id	
-			);
-		};
-		folderManager = FolderManager.new(this.moduleFolder);
+	*initClass { 
+		directory = directory ?? {PathStorage.at(id) ?? { 
+			PathStorage.setAt(this.defaultDirectory, id);
+		}}; 
+		folderManager = folderManager ?? {
+			FolderManager.new(this.moduleFolder); 
+		}; 
+		this.checkDefauts;
 	}
 
 	*defaultDirectory { 
@@ -34,11 +33,13 @@ Composite {
 		}); 
 	}
 
-	initComposite { |from|
+	getModules { |from|
 		templater = Templater(this.moduleFolder);
 		this.processFolders(from);
 		this.loadModules;
 	}
+
+	initComposite {}
 
 	moduleFolder { 
 		^(this.class.moduleFolder+/+moduleSet);
@@ -82,7 +83,8 @@ Composite {
 
 	moduleSet_{|newSet, from|
 		moduleSet = newSet; 
-		this.initComposite(from);
+		this.getModules(from);
+		this.initComposite;
 	}
 
 	*moduleSets {
