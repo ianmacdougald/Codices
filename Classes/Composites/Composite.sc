@@ -3,20 +3,20 @@ Composite {
 	var <moduleSet, <modules, templater;
 
 	*new { | moduleSet(\default), from |
-		this.initCompositeClass;
+		this.establish;
 		^super.newCopyArgs(moduleSet)
 		.getModules(from)
 		.initComposite
 	}
 
-	*initClass { 
-		directory = directory ?? {PathStorage.at(id) ?? { 
+	*establish { 
+		directory ?? {directory = PathStorage.at(id) ?? { 
 			PathStorage.setAt(this.defaultDirectory, id);
 		}}; 
-		folderManager = folderManager ?? {
-			FolderManager.new(this.moduleFolder); 
+		folderManager ?? {
+			folderManager = FolderManager.new(this.moduleFolder); 
 		}; 
-		this.checkDefauts;
+		this.checkDefaults;
 	}
 
 	*defaultDirectory { 

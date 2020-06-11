@@ -1,12 +1,12 @@
 Hybrid : Composite {
-	classvar <dictionary, processor;
+	classvar <dictionary, processor, qa;
 	var <server;
 
-	*initClass { 
-		super.initClass;
-		dictionary = dictionary ?? {Dictionary.new}; 
-		processor = processor ?? {SynthDefProcessor.new};
-		ServerQuit.add({this.clearDictionary});	
+	*establish { 
+		super.establish;
+		dictionary ?? {dictionary = Dictionary.new}; 
+		processor ?? {processor = SynthDefProcessor.new};
+		qa ?? {ServerQuit.add({this.clearDictionary}); qa = 1};	
 	}
 
 	*clearDictionary {
@@ -20,7 +20,10 @@ Hybrid : Composite {
 			this.class.addSubDictionary;
 		});
 		this.makeSynthDefs;
+		this.initHybrid;
 	}
+
+	initHybrid {}
 
 	*subDictionaryExists {|className|
 		^dictionary[this.name].notNil;
