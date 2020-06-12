@@ -1,19 +1,19 @@
 TITLE::Music Compositing 
-summary:: Guide to working with the classes Composites and Hybrids 
+summary:: Guide to working with the Composites and Hybrids 
 categories:: Libraries>CodexIan
 
 section::Overview
 link::Classes/Composite:: along with its subclass link::Classes/Hybrid:: defines a specific workflow for developing and interacting with classes that encapsulate scriptable objects, referred to here as modules. Composite was designed to be simple in order to support an approach to music making that combines the specificity of a compiled class's interface with the open-ended potential of scripting, a mixture which I am calling music compositing.
 
-note::Modular and Hybrid should not be instanced on their own. Instead, they both are the bases of various subclasses that take advantage of their features; these can be instanced unless otherwise specified.::
+note::Composite and Hybrid should not be instanced on their own. Instead, they both are the bases of various subclasses that take advantage of their features; these can be instanced unless otherwise specified.::
 
-section::Modular
+section::Composite
 
-Modular is the base class from which the workflow of all Modular-typed classes is established. Its design was focused on simplicity of use: all classes that inherit from Modular can take advantage of its features without ever having to deal with them. Modular itself is only responsible for two simple tasks—keeping track of modules and loading them. The latter process is entirely accomplished through the method link::Classes/Modular#-loadModules::; the former, however, merits more explanation. The modules accessed by Modular are stored in a specific configuration that is managed by the class and described below. 
+Composite is the base that defines the basic behavior of all Composite-typed classes. This behavior can be broken down into two simple tasks—keeping track of modules and loading them. The latter process is entirely accomplished through the method link::Classes/Composite#-loadModules::; the former, however, merits more explanation. The modules accessed by Composite are stored in a specific configuration that is managed by the class and described below. 
 
 subsection::Module directory
 
-Modules are stored in layers of embedded folders; the outtermost layer is referred to as the module directory. The Module directory, which can be accessed through link::Classes/Modular#*directory::, is the folder that contains all of the modules of each Modular-typed class. It is organized like this: 
+Modules are stored in layers of embedded folders; the outtermost layer is referred to as the module directory. The Module directory, which can be accessed through link::Classes/Composite#*directory::, is the folder that contains all of the modules of each Composite-typed class. It is organized like this: 
 
 Module Directory
 tree::
@@ -41,50 +41,49 @@ tree::
 		::
 ::
 
-The class folders, module folders, and even the modules themselves can be generated dynamically by Modular given specific conditions. For instance, if a developer is creating a Modular-typed class that she would like to ship with default modules, all she has to do is simply define emphasis::.scd:: files within the same folder as the class file or in a subfolder. Then, when that class is instanced for the very first time, Modular will automatically generate a class folder and a module folder called teletype::default:: that will contain copies of those modules. This process will also repeat if the class folder is ever deleted.
+The class folders, module folders, and even the modules themselves can be generated dynamically by Composite given specific conditions. For instance, if a developer is creating a Composite-typed class that she would like to ship with default modules, all she has to do is simply define emphasis::.scd:: files within the same folder as the class file or in a subfolder. Then, when that class is instanced for the very first time, Composite will automatically generate a class folder and a module folder called teletype::default:: that will contain copies of those modules. This process will also repeat if the class folder is ever deleted.
 
 note::Be sure to initialize the module directory if it is your first time using it. Once set, the directory path will persist across link::Classes/Interpreter:: sessions (see link::Classes/PathStorage::). By default, the directory is stored in the folder of this Quark, teletype::CodexIan::. 
 code:: 
 //Check where the directory is.
-Modular.directory.postln; 
+Composite.directory.postln; 
 
 //Set the directory.
-Modular.directroy = "~/Example/Path/Here".standardizePath;
+Composite.directroy = "~/Example/Path/Here".standardizePath;
 ::
 ::
 
 subsection::Module folders
 
-The modules in a folder are accessed by either setting the argument teletype::moduleSet:: in link::Classes/Modular#*new#*new:: or setting the instance's link::Classes/Modular#-moduleSet#moduleSet::. The teletype::moduleSet:: can either be a symbol acting like a sort of key that represents a set of modules stored in the class's folder of modules or it can be an absolute path to one of those folders.
+The modules in a folder are accessed by either setting the argument teletype::moduleSet:: in link::Classes/Composite#*new#*new:: or setting the instance's link::Classes/Composite#-moduleSet#moduleSet::. The teletype::moduleSet:: can either be a symbol acting like a sort of key that represents a set of modules stored in the class's folder of modules or it can be an absolute path to one of those folders.
 
 If the folder that the teletype::moduleSet:: points to does not yet exist, the folder will automatically be made and the modules inside it will be generated from templates. As a result, if a new set of modules is made, the instance that requested them should not throw an error. Rather, the class should still function, albeit silently. For more on how this works, see link::Classes/ModuleTemplater::. Furthermore, if a new folder does not yet exist but a symbol (or path) is supplied for the argument teletype::from::, then the modules from the existing folder will be copied to the new one. 
 
 subsection::Modules
-Modules are emphasis::.scd:: files containing scripts that return an arbitrary object. When link::Classes/Modular#-loadModules:: is called, these files are collected and subsequently link::Classes/String#-load#loaded:: into an link::Classes/Event:: that can be accessed from link::Classes/Modular#-modules::. The name of each respective module is taken from the name of its source file. For instance, the link::Classes/SynthDef:: loaded from emphasis::synthDef.scd:: will be stored in teletype::modules:: using the key teletype::\synthDef::. Moreover, if the name of the file were teletype::NoisyOscillator::, its associated object would be stored in teletype::modules:: with the key teletype::\noisyOscillator::.
+Modules are emphasis::.scd:: files containing scripts that return an arbitrary object. When link::Classes/Composite#-loadModules:: is called, these files are collected and subsequently link::Classes/String#-load#loaded:: into an link::Classes/Event:: that can be accessed from link::Classes/Composite#-modules::. The name of each respective module is taken from the name of its source file. For instance, the link::Classes/SynthDef:: loaded from emphasis::synthDef.scd:: will be stored in teletype::modules:: using the key teletype::\synthDef::. Moreover, if the name of the file were teletype::NoisyOscillator::, its associated object would be stored in teletype::modules:: with the key teletype::\noisyOscillator::.
 
-If modules currently loaded into an instance of a Modular-typed class are edited, one does not have to recompile teletype::sclang:: to access these updates. Simply reloading the modules using link::Classes/Modular#-loadModules:: will achieve this. Modules are automatically loaded when instancing a Modular-typed class and are automatically reloaded when sets of modules are exchanged via the teletype::moduleSet:: interface. 
+If modules currently loaded into an instance of a Composite-typed class are edited, one does not have to recompile teletype::sclang:: to access these updates. Simply reloading the modules using link::Classes/Composite#-loadModules:: will achieve this. Modules are automatically loaded when instancing a Composite-typed class and are automatically reloaded when sets of modules are exchanged via the teletype::moduleSet:: interface. 
 
 subsection::Development Example
 
 code::
-ModularExample : Modular { 
+CompositeExample : Composite { 
 	var routine, pattern;
 
-	//The constructor should supply an initial moduleSet (and from argument) to Modular, otherwise \default will be supplied by default.
-	*new {|moduleSet, from|
-		^super.new(moduleSet, from);
-	}
+	//If you want to initialize variables but don't want to rewrite Composite's constructor, 
+	//use the otherwise empty method initComposite.
+	initComposite {}
 
-	//The only actual requirement when developing a Modular-typed class is that the the developer define what kinds of modules to use. 
-	//This is done in the makeTemplates method by requesting templates in the following way.
-	//Note that Modular instances a ModuleTemplater, storing it in the variable "templater".
+	//The only actual requirement for developing Composite-typed classes is to define the modules that make up the composite. 
+	//This is done in the method makeTemplater. Composite holds an instance of Templater called templater for this purpose.
+	//If a specific template is not available, extend Templater to make it.
 	makeTemplates { 
 		templater.pattern( "sequence1" ); 
 		templater.pattern( "sequence2" ); 
 		templater.pattern( "sequence3" );
 	}
 
-	//This is an example of a kind of behavior one can make—playing three patterns in a routine. 
+	//This is an example of a kind of behavior one can develop—playing three patterns in a routine. 
 	//Note that the class assumes that the modules defined in makeTemplates exist with the same names and with the same types. 
 	//However, how they exist is entirely up to the user...
 	play { 
@@ -112,14 +111,14 @@ ModularExample : Modular {
 
 subsection::Usage Example
 code::
-x = ModularExample.new; 
+x = CompositeExample.new; 
 
 //Insepct the modules
 x.modules.postln; 
 
 (
-//If above was the first time that ModularExample was instanced, note that an entry now exists in the module directory. 
-var path = Modular.directory; 
+//If above was the first time that CompositeExample was instanced, note that an entry now exists in the module directory. 
+var path = Composite.directory; 
 PathName(path).folders.do({|item|
 	item.folderName.postln; 
 });
@@ -127,7 +126,7 @@ PathName(path).folders.do({|item|
 
 (
 //Inspecting that folder, see that an entry exists called default by default. 
-var path = Modular.directory+/+"ModularExample"; 
+var path = Composite.directory+/+"CompositeExample"; 
 PathName(path).folders.do({|item|
 	item.folderName.postln; 
 });
@@ -135,7 +134,7 @@ PathName(path).folders.do({|item|
 
 (
 //Inspecting default, we see that three .scd files exist corresponding with the templates defined in the class
-var path = Modular.directory+/+"ModularExample"+/+"default"; 
+var path = Composite.directory+/+"CompositeExample"+/+"default"; 
 PathName(path).files.do({|item|
 	item.fileName.postln; 
 });
@@ -149,7 +148,7 @@ x.modules.postln;
 
 (
 //See that not only does the new folder experimental exist, but it is populated with correctly named module templates. 
-var path = Modular.directory+/+"ModularExample"+/+"experimental"; 
+var path = Composite.directory+/+"CompositeExample"+/+"experimental"; 
 PathName(path).files.do({|item|
 	item.fileName.postln; 
 });
@@ -160,7 +159,7 @@ x.moduleSet = \default;
 
 (
 //Note here that no new folder was made.
-var path = Modular.directory+/+"ModularExample"; 
+var path = Composite.directory+/+"CompositeExample"; 
 PathName(path).folders.do({|item|
 	item.folderName.postln; 
 });
@@ -172,7 +171,7 @@ x.moduleSet_(\exp2, \experimental);
 
 (
 //See that the new folder exists. Because experimental was created from templates, though, unless you edited it yourself in the meantime, the new folder will also be a copy of templates.
-var path = Modular.directory+/+"ModularExample"; 
+var path = Composite.directory+/+"CompositeExample"; 
 PathName(path).folders.do({|item|
 	item.folderName.postln; 
 });
@@ -180,4 +179,4 @@ PathName(path).folders.do({|item|
 ::
 
 SECTION::Hybrid
-Hybrid is a subclass of Modular that extends its behaviors to assist 
+Hybrid is a subclass of Composite that extends its behaviors to assist 

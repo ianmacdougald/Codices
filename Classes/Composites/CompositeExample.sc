@@ -1,18 +1,20 @@
 CompositeExample : Composite { 
 	var routine, pattern;
 
-	//No need to define a constructor. It is defined in Composite
-	
-	//The only actual requirement when developing a Composite-typed class is that the the developer define what kinds of modules to use. 
-	//This is done in the makeTemplates method by requesting templates in the following way.
-	//Note that Composite instances a Templater, storing it in the variable "templater".
+	//If you want to initialize variables but don't want to rewrite Composite's constructor, 
+	//use the otherwise empty method initComposite.
+	initComposite {}
+
+	//The only actual requirement for developing Composite-typed classes is to define the modules that make up the composite. 
+	//This is done in the method makeTemplater. Composite holds an instance of Templater called templater for this purpose.
+	//If a specific template is not available, extend Templater to make it.
 	makeTemplates { 
 		templater.pattern( "sequence1" ); 
 		templater.pattern( "sequence2" ); 
 		templater.pattern( "sequence3" );
 	}
 
-	//This is an example of a kind of behavior one can make—playing three patterns in a routine. 
+	//This is an example of a kind of behavior one can develop—playing three patterns in a routine. 
 	//Note that the class assumes that the modules defined in makeTemplates exist with the same names and with the same types. 
 	//However, how they exist is entirely up to the user...
 	play { 

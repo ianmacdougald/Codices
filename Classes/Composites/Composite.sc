@@ -4,9 +4,7 @@ Composite {
 
 	*new { | moduleSet(\default), from |
 		this.establish;
-		^super.newCopyArgs(moduleSet)
-		.getModules(from)
-		.initComposite
+		^super.newCopyArgs(moduleSet).getModules(from).initComposite;
 	}
 
 	*establish { 
@@ -14,7 +12,7 @@ Composite {
 			PathStorage.setAt(this.defaultDirectory, id);
 		}}; 
 		folderManager ?? {
-			folderManager = FolderManager.new(this.moduleFolder); 
+			folderManager = FolderManager.new(this.classFolder); 
 		}; 
 		this.checkDefaults;
 	}
@@ -25,10 +23,10 @@ Composite {
 	
 	*checkDefaults {
 		var scripts = this.filenameString.path.getScriptPaths;
-		if(this.moduleFolder.exists.not and: {scripts.isEmpty.not}, { 
+		if(this.classFolder.exists.not and: {scripts.isEmpty.not}, { 
 			folderManager.copyFilesTo(
 				scripts, 
-				(this.moduleFolder+/+"default").mkdir
+				(this.classFolder+/+"default").mkdir
 			);
 		}); 
 	}
@@ -42,10 +40,10 @@ Composite {
 	initComposite {}
 
 	moduleFolder { 
-		^(this.class.moduleFolder+/+moduleSet);
+		^(this.class.classFolder+/+moduleSet);
 	}
 
-	*moduleFolder { 
+	*classFolder { 
 		^(this.directory +/+ this.name);
 	}
 
@@ -66,15 +64,14 @@ Composite {
 	loadModules { 
 		modules = ();
 		this.moduleFolder.getScriptPaths.do({|script|
-			var name = this.getModuleSet(script); 
-			modules.add(name.asSymbol -> script.load);
+			modules.add(this.getModuleName(script) -> script.load);
 		});
 	}
 
-	getModuleSet { |input|
+	getModuleName { |input|
 		 ^PathName(input)
 		.fileNameWithoutExtension
-		.lowerFirstChar; 
+		.lowerFirstChar.asSymbol; 
 	}
 
 	*directory_{|newPath|
@@ -84,11 +81,10 @@ Composite {
 	moduleSet_{|newSet, from|
 		moduleSet = newSet; 
 		this.getModules(from);
-		this.initComposite;
 	}
 
 	*moduleSets {
-		^PathName(this.moduleFolder).folders
+		^PathName(this.classFolder).folders
 		.collectAs({|m|m.folderName.asSymbol}, Set);
 	}
 }
