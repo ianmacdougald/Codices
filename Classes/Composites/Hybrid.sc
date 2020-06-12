@@ -1,6 +1,6 @@
 Hybrid : Composite {
 	classvar <dictionary, processor, qa;
-	var <server;
+	var <>server;
 
 	*establish { 
 		super.establish;
@@ -47,7 +47,6 @@ Hybrid : Composite {
 		{object.isCollection and: {object.isString.not}}{
 			object.do({|item| ^this.checkModule(item)});
 		}
-		{object.isFunction}{^this.checkModule(object.value)}
 		{object.isKindOf(SynthDef)}{
 			object.name = this.formatName(object.name).asSymbol;
 			if(this.checkDictionary(object), { 
@@ -90,10 +89,6 @@ Hybrid : Composite {
 		processor.add(synthDef);
 	}
 
-	server_{|newServer|
-		server = server ? Server.default;
-	}
-
 	*clearSynthDefs {
 		var toRemove = dictionary.removeAt(this.name);
 		toRemove !? {processor.remove(toRemove.asArray)};
@@ -103,5 +98,4 @@ Hybrid : Composite {
 		super.loadModules; 
 		this.initComposite;
 	}
-
 }
