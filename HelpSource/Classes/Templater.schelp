@@ -1,7 +1,7 @@
 TITLE::Templater
-summary::Create .scd files with templates of code. 
+summary::Create .scd files from templates of code. 
 categories::Libraries>CodexIan>Composite System
-related::Classes/Composite
+related::Classes/Compositing
 
 DESCRIPTION::
 Templater creates emphasis::.scd:: files with code templates for the following classes: 
@@ -10,7 +10,7 @@ list::
 	## SynthDef
 	## Pattern
 	## Function
-	## Node
+	## Synth 
 	## Event
 	## Array
 ::
@@ -42,27 +42,21 @@ note::the name of the file that is generated will become the name of the module 
 
 method::pattern
 Creates a template for a Pattern object.
-argument::templateName
 
 method::function
 Creates a template for a Function object.
-argument::templateName
 
-method::node
-Creates a template for a Node object. 
-argument::templateName
+method::synth
+Creates a template for a Synth object. 
 
 method::event
 Creates a template for an Event object. 
-argument::templateName
 
 method::array 
 Creates a template for an Array object. 
-argument::templateName
 
 method::blank
 Creates an empty emphasis::.scd::file
-argument::templateName
 
 method::path
 Gets and sets the folder where templates are created.
@@ -93,4 +87,7 @@ PathName(path).files.do{|item|
 	item.fileName.postln; 
 }; 
 )
+
+//6. Clean up
+File.deleteAll("~/Desktop/_templateTest".standardizePath);
 ::

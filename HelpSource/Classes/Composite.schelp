@@ -1,12 +1,10 @@
 TITLE::Composite
-summary::Development platform for creating flexible class interfaces with scriptable objects. 
-categories::Libraries>CodexIan>Composite System
-related::Guides/UsingComposites, Classes/Hybrid
+summary::Development platform for creating composite classes of scriptable objects.
+categories::Libraries>CodexIan>Compositing
+related::Guides/MusicCompositing, Classes/Hybrid
 
 DESCRIPTION::
-Composite is responsible for managing collections of modules consisting of scriptable objects. Composite maintains a directory of such collections, the path to which can be persistently set and reset (see link::Classes/PathStorage::). 
-
-Each class that inherits from Composite maintains its own subdirectory populated by unique sets of modules, which can be loaded and reloaded into the class without recompiling teletype::sclang::. Composite folders can be easily cloned or freshly generated from templates specified on a per-class basis (see link::Classes/ModuleTemplater::). As such, each Composite-typed class is free to focus on high level behaviors without worrying about these lower level procedures.
+Composite establishes a workflow both for developing and interacting with composite objects, namely those which are comprised of interconnected scriptable modules. As such, Composite is responsible for maintaing a directory that each of its subclasses populates with their own modular collections. Moreover, Composite defines an interface for easily manipulating these collections, allowing new modules to be generated from templates (see link::Classes/Templater::), cloned from existing collections, and also both loaded and reloaded without recompiling teletype::sclang::. In this way, each Composite-typed class is free to focus on defining interesting interactions between modules rather than dealing with the pesky details of their storage and organization.  
 
 note::Composite is a development tool that should not be instantiated. Rather, it is meant to encapsulate behaviors on behalf of its subclasses. So instance those instead.
 ::
@@ -20,9 +18,9 @@ argument::moduleSet
 A symbol key representing the name of the set of modules to call. This key will correspond to a folder of modules within Composite's directory.
 
 argument::from
-A symbol key representing the name of the folder to clone if moduleSet does not exist.
+A symbol key representing the name of the folder to clone if the folder from moduleSet does not exist.
 
-private::initComposite
+private::establish
 private::defaultDirectory
 private::checkDefaults
 private::folderManager
@@ -34,13 +32,14 @@ method::moduleSets
 Gets the names of the teletype::moduleSets:: that currently exist.
 
 method::directory
-Gets and (persistently) sets the directory of modules for all subclasses of Composite. 
+Gets and (persistently) sets the directory of modules for all subclasses of Composite. For further details, see link::Classes/PathStorage::.
 note::Before using a subclass of Composite for the first time, be sure to configure the path to the modules directory either through Composite or one of its subclasses.::
 code::
 Composite.directory_("~/Documents/sc-modules".standardizePath);
 ::
 
 INSTANCEMETHODS::
+private::getModules
 private::initComposite
 private::getModuleSet
 
@@ -52,7 +51,7 @@ private::makeModuleFolder
 private::makeTemplates
 
 method::loadModules
-Loads (or reloads) the modules pointed to by the module folder. 
+Loads (or reloads) the modules pointed to by the instance's module folder. 
 
 method::modules
 Gets an event containing the loaded modules. 

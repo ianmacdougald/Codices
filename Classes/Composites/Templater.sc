@@ -7,26 +7,26 @@ Templater {
 		^super.newCopyArgs(moduleFolder.asString);
 	}
 	
-	synthDef {|moduleName("synthDef")| 
-		this.class.makeTemplate(moduleName, path, SynthDef);
+	synthDef {|templateName("synthDef")| 
+		this.class.makeTemplate(templateName, path, SynthDef);
 	} 
-	pattern {|moduleName("pattern")|
-		this.class.makeTemplate(moduleName, path, Pattern);
+	pattern {|templateName("pattern")|
+		this.class.makeTemplate(templateName, path, Pattern);
 	}
-	function {|moduleName("function")| 
-		this.class.makeTemplate(moduleName, path, Function);
+	function {|templateName("function")| 
+		this.class.makeTemplate(templateName, path, Function);
 	}
-	synth {|moduleName("synth")| 
-		this.class.makeTemplate(moduleName, path, Node);
+	synth {|templateName("synth")| 
+		this.class.makeTemplate(templateName, path, Node);
 	} 
-	event {|moduleName("event")|
-		this.class.makeTemplate(moduleName, path, Event);
+	event {|templateName("event")|
+		this.class.makeTemplate(templateName, path, Event);
 	}
-	blank {|moduleName("module")|
-		this.class.makeTemplate(moduleName, path);
+	blank {|templateName("module")|
+		this.class.makeTemplate(templateName, path);
 	} 
-	array {|moduleName("array")|
-		this.class.makeTemplate(moduleName, path, Array); 
+	array {|templateName("array")|
+		this.class.makeTemplate(templateName, path, Array); 
 	}
 
 	*resetTemplatePath { 
@@ -38,8 +38,8 @@ Templater {
 		templatePath = newPath;
 	}
 
-	*makeTemplate { |moduleName, path, object| 
-		var targetPath = path+/+moduleName.asString++".scd";
+	*makeTemplate { |templateName, path, object| 
+		var targetPath = path+/+templateName.asString++".scd";
 		try({this.copyFile(object, targetPath)}, {
 			this.copyFile(object, targetPath.increment);
 		});

@@ -1,10 +1,9 @@
-TITLE:: Using Modular
-summary:: Guide to working with the classes Modular and Hybrid
+TITLE::Music Compositing 
+summary:: Guide to working with the classes Composites and Hybrids 
 categories:: Libraries>CodexIan>Guides
 
 section::Overview
-
-link::Classes/Modular:: and its subclass link::Classes/Hybrid:: define a specific workflow both for developing and interacting with classes that contain scriptable modules. The design of this workflow aims to be simple and stable, such that the developer can focus on implementing functions that integrate these modules and the user can assume Modular-typed classes comply with a general standard. 
+link::Classes/Composite:: along with its subclass link::Classes/Hybrid:: defines a specific workflow for developing and interacting with classes that encapsulate scriptable objects, referred to here as modules. Composite was designed to be simple in order to support an approach to music making that combines the specificity of a compiled class's interface with the open-ended potential of scripting, a mixture which I am calling music compositing.
 
 note::Modular and Hybrid should not be instanced on their own. Instead, they both are the bases of various subclasses that take advantage of their features; these can be instanced unless otherwise specified.::
 

@@ -1,7 +1,7 @@
 TITLE::HybridExample
 summary::An example implementation of a Hybrid-typed class. 
 categories::Libraries>CodexIan>Composites 
-related::Classes/Hybrid, Classes/Composite, Guides/Using Composite
+related::Classes/Hybrid, Classes/Composite, Guides/MusicCompositing
 
 DESCRIPTION:: 
 HybridExample was developed as an example of what working with both link::Classes/Hybrid:: and its superclass link::Classes/Composite:: is like. The class itself is simple: it defines a module, namely a link::Classes/SynthDef::, which is processed by Hybrid's procedures and can be interchanged per Composite's. For further examples, see link::Guides/UsingComposites::.
