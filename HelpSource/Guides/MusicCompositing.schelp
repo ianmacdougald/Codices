@@ -1,6 +1,6 @@
 TITLE::Music Compositing 
 summary:: Guide to working with the classes Composites and Hybrids 
-categories:: Libraries>CodexIan>Guides
+categories:: Libraries>CodexIan
 
 section::Overview
 link::Classes/Composite:: along with its subclass link::Classes/Hybrid:: defines a specific workflow for developing and interacting with classes that encapsulate scriptable objects, referred to here as modules. Composite was designed to be simple in order to support an approach to music making that combines the specificity of a compiled class's interface with the open-ended potential of scripting, a mixture which I am calling music compositing.

@@ -1,6 +1,6 @@
 TITLE::SynthDefProcessor
 summary::Manage the loading and unloading of SynthDefs from a server.
-categories::Libraries>CodexIan>Modular System
+categories::Libraries>CodexIan>Utilities
 
 DESCRIPTION::
 SynthDefProcessor is responsible for loading and unloading SynthDef objects from a given server. 
