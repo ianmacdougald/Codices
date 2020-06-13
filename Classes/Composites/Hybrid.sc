@@ -15,7 +15,7 @@ Hybrid : Composite {
 	}
 
 	initComposite {
-		server = server ? Server.default;
+		server = Server.default;
 		if(this.class.subDictionaryExists.not, {
 			this.class.addSubDictionary;
 		});
@@ -47,6 +47,7 @@ Hybrid : Composite {
 		{object.isCollection and: {object.isString.not}}{
 			object.do({|item| ^this.checkModule(item)});
 		}
+		{object.isFunction}{^this.checkModule(object.value)}
 		{object.isKindOf(SynthDef)}{
 			object.name = this.formatName(object.name).asSymbol;
 			if(this.checkDictionary(object), { 
@@ -98,4 +99,5 @@ Hybrid : Composite {
 		super.loadModules; 
 		this.initComposite;
 	}
+
 }

@@ -81,6 +81,7 @@ Composite {
 	moduleSet_{|newSet, from|
 		moduleSet = newSet; 
 		this.getModules(from);
+		this.initComposite;
 	}
 
 	*moduleSets {
