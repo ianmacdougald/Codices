@@ -3,7 +3,7 @@ summary:: Guide to working with the Composites and Hybrids
 categories:: Libraries>CodexIan
 
 section::Overview
-link::Classes/Composite:: along with its subclass link::Classes/Hybrid:: defines a specific workflow for developing and interacting with classes that encapsulate scriptable objects, referred to here as modules. Composite was designed to be simple in order to support an approach to music making that combines the specificity of a compiled class's interface with the open-ended potential of scripting, a mixture which I am calling music compositing.
+link::Classes/Composite:: defines a framework for developing and interacting with classes that encapsulate scriptable SuperCollider objects called modules. The purpose of this framework is to support an approach to music making that combines the specificity of a compiled class's interface with the open-ended potential of scripting, a mixture which I am calling music compositing.
 
 note::Composite and Hybrid should not be instanced on their own. Instead, they both are the bases of various subclasses that take advantage of their features; these can be instanced unless otherwise specified.::
 
@@ -41,7 +41,7 @@ tree::
 		::
 ::
 
-The class folders, module folders, and even the modules themselves can be generated dynamically by Composite given specific conditions. For instance, if a developer is creating a Composite-typed class that she would like to ship with default modules, all she has to do is simply define emphasis::.scd:: files within the same folder as the class file or in a subfolder. Then, when that class is instanced for the very first time, Composite will automatically generate a class folder and a module folder called teletype::default:: that will contain copies of those modules. This process will also repeat if the class folder is ever deleted.
+The class folders, module folders, and even the modules themselves can be generated dynamically by Composite given specific conditions. For instance, if a developer is creating a Composite-typed class that she would like to ship with default modules, all she has to do is simply define emphasis::.scd:: files within the same directory as the class's implementation or in a subdirectory. Then, when that class is instanced for the very first time, Composite will automatically generate a class folder and a module folder called teletype::default:: that will contain copies of those modules. This process will also repeat if the class folder is ever deleted.
 
 note::Be sure to initialize the module directory if it is your first time using it. Once set, the directory path will persist across link::Classes/Interpreter:: sessions (see link::Classes/PathStorage::). By default, the directory is stored in the folder of this Quark, teletype::CodexIan::. 
 code:: 
@@ -57,7 +57,7 @@ subsection::Module folders
 
 The modules in a folder are accessed by either setting the argument teletype::moduleSet:: in link::Classes/Composite#*new#*new:: or setting the instance's link::Classes/Composite#-moduleSet#moduleSet::. The teletype::moduleSet:: can either be a symbol acting like a sort of key that represents a set of modules stored in the class's folder of modules or it can be an absolute path to one of those folders.
 
-If the folder that the teletype::moduleSet:: points to does not yet exist, the folder will automatically be made and the modules inside it will be generated from templates. As a result, if a new set of modules is made, the instance that requested them should not throw an error. Rather, the class should still function, albeit silently. For more on how this works, see link::Classes/ModuleTemplater::. Furthermore, if a new folder does not yet exist but a symbol (or path) is supplied for the argument teletype::from::, then the modules from the existing folder will be copied to the new one. 
+If the folder that the teletype::moduleSet:: points to does not yet exist, the folder will automatically be made and the modules inside it will be generated from link::Classes/Templater##templates::. As a result, if a new set of modules is made, the instance that requested them should not throw an error. Rather, the class should still function, albeit silently. Furthermore, if a new folder does not yet exist but a symbol (or path) referring to an existing folder is supplied for the argument teletype::from::, then the modules from that folder will be cloned to the new one. 
 
 subsection::Modules
 Modules are emphasis::.scd:: files containing scripts that return an arbitrary object. When link::Classes/Composite#-loadModules:: is called, these files are collected and subsequently link::Classes/String#-load#loaded:: into an link::Classes/Event:: that can be accessed from link::Classes/Composite#-modules::. The name of each respective module is taken from the name of its source file. For instance, the link::Classes/SynthDef:: loaded from emphasis::synthDef.scd:: will be stored in teletype::modules:: using the key teletype::\synthDef::. Moreover, if the name of the file were teletype::NoisyOscillator::, its associated object would be stored in teletype::modules:: with the key teletype::\noisyOscillator::.

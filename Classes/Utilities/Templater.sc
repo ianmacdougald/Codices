@@ -1,54 +1,67 @@
 Templater {
-	classvar <templatePath;
+	classvar <>templateDir;
 	var <>path;
 
-	*new { |moduleFolder|
+	*new { | moduleFolder |
 		moduleFolder ?? {Error("No path set.").throw};
 		^super.newCopyArgs(moduleFolder.asString);
 	}
 	
-	synthDef {|templateName("synthDef")| 
-		this.class.makeTemplate(templateName, path, SynthDef);
+	synthDef { | templateName("synthDef") | 
+		this.makeTemplate(templateName, SynthDef);
 	} 
-	pattern {|templateName("pattern")|
-		this.class.makeTemplate(templateName, path, Pattern);
+	
+	pattern { | templateName("pattern") |
+		this.makeTemplate(templateName, Pattern);
 	}
-	function {|templateName("function")| 
-		this.class.makeTemplate(templateName, path, Function);
+	
+	function { | templateName("function") | 
+		this.makeTemplate(templateName, Function);
 	}
-	synth {|templateName("synth")| 
-		this.class.makeTemplate(templateName, path, Node);
+	
+	synth { | templateName("synth") | 
+		this.makeTemplate(templateName, Node);
 	} 
-	event {|templateName("event")|
-		this.class.makeTemplate(templateName, path, Event);
+	
+	event { | templateName("event") |
+		this.makeTemplate(templateName, Event);
 	}
-	blank {|templateName("module")|
-		this.class.makeTemplate(templateName, path);
+	
+	blank { | templateName("module") |
+		this.makeTemplate(templateName);
 	} 
-	array {|templateName("array")|
-		this.class.makeTemplate(templateName, path, Array); 
+	
+	array { | templateName("array") |
+		this.makeTemplate(templateName, Array); 
 	}
 
-	*resetTemplatePath { 
-		templatePath = (PathName(this.filenameSymbol.asString)
-		.pathOnly+/+"templates");
+	makeTemplate { | templateName, object |
+		this.class.targetCopy(templateName, path, object);
 	}
 
-	*setTemplatePath { |newPath|
-		templatePath = newPath;
+	resetTemplateDir { 
+		this.class.templateDir = this.class.defaultPath;
 	}
 
-	*makeTemplate { |templateName, path, object| 
+	setTemplateDir { | newPath |
+		this.class.templateDir_(newPath);
+	}
+
+	*targetCopy { | templateName, path, object| 
 		var targetPath = path+/+templateName.asString++".scd";
 		try({this.copyFile(object, targetPath)}, {
 			this.copyFile(object, targetPath.increment);
 		});
 	}
 
-	*copyFile {|type("blank"), filename|
+	*defaultPath {
+		^(PathName(this.filenameString).pathOnly+/+"templates");
+	}
+
+	*copyFile { |type("blank"), filename|
 		var currentPath;
-		templatePath ?? {this.resetTemplatePath};
-		currentPath = templatePath+/+type.lowerFirstChar++".scd";
+		templateDir ?? {templateDir = this.defaultPath};
+		currentPath = templateDir+/+type.lowerFirstChar++".scd";
 		File.copy(currentPath, filename);
 	}
 }

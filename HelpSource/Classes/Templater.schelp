@@ -1,22 +1,23 @@
 TITLE::Templater
 summary::Create .scd files from templates of code. 
 categories::Libraries>CodexIan>Utilities
-related::Classes/Compositing
+related::Classes/FileIncrementer, Classes/Composite
 
 DESCRIPTION::
 Templater creates emphasis::.scd:: files with code templates for the following classes: 
 
 list::
-	## SynthDef
-	## Pattern
-	## Function
-	## Synth 
-	## Event
-	## Array
+	## link::Classes/SynthDef::
+	## link::Classes/Pattern::
+	## link::Classes/Function::
+	## link::Classes/Synth:: 
+	## link::Classes/Event::
+	## link::Classes/Array::
 ::
 
-It was designed for internal use within link::Classes/Composite:: and any of its respective subclasses.
+However, if a situation arises in which a composite needs templates from different objects or combinations of objects, like a function that returns an array of events, Templater can be easily link::#Extending Templater#extended::.
 
+Templater was originally designed to work within the link::Classes/Composite:: framework. To see it in action, refer to this link::Guides/MusicCompositing##guide::.
 CLASSMETHODS::
 
 method::new
@@ -26,58 +27,63 @@ argument::moduleFolder
 A string that refers to the folder in which templates will be generated. 
 
 private::modulePathString
-private::moduleTemplatePath
+private::moduleTemplateDir
 private::makeTemplate
 private::copyFile
 private::firstToLower
+private::targetCopy
+private::templateDir
+private::defaultPath
 
 INSTANCEMETHODS::
-
-method::synthDef
-Creates a template of a SynthDef object.
-argument::templateName 
-A string that specifies the name of the file to be generated.
-
-note::the name of the file that is generated will become the name of the module loaded by link::Classes/Composite::.::
-
-method::pattern
-Creates a template for a Pattern object.
-
-method::function
-Creates a template for a Function object.
-
-method::synth
-Creates a template for a Synth object. 
-
-method::event
-Creates a template for an Event object. 
-
-method::array 
-Creates a template for an Array object. 
-
-method::blank
-Creates an empty emphasis::.scd::file
+private::makeTemplate
+method::setTemplateDir
+Sets the path where the class looks for templates to copy. 
+method::resetTemplateDir
+Resets the path where the class looks for templates to copy to the default location.
 
 method::path
-Gets and sets the folder where templates are created.
+Gets and sets the path where new templates are to be stored.
+
+subsection::Templating methods
+method::synthDef
+Creates a template of a SynthDef object.
+
+method::pattern
+Creates a template of a Pattern object.
+
+method::function
+Creates a template of a Function object.
+
+method::synth
+Creates a template of a Synth object. 
+
+method::event
+Creates a template of an Event object. 
+
+method::array 
+Creates a template of an Array object. 
+
+method::blank
+Creates an empty emphasis::.scd:: file
 
 EXAMPLES::
 
 code::
 (
 var path, templater; 
-//1. Set up a path...
-path = "~/Desktop/_templateTest".standardizePath; 
-path.mkdir; 
 
-//2. Load the path into a Templater
+//1. Set up a path.
+path = "~/Desktop/_templateTest".standardizePath.mkdir; 
+
+//2. Load the path into a Templater.
 templater = Templater.new(path); 
 
-//3. Make templates for SynthDef
+//3. Make templates for SynthDef.
 templater.synthDef; 
 templater.synthDef("anotherSynthDef"); 
 
-//4. Make templates for Function
+//4. Make templates for Function.
 templater.function; 
 templater.function("anotherFunction"); 
 
@@ -88,6 +94,62 @@ PathName(path).files.do{|item|
 }; 
 )
 
-//6. Clean up
+//6. Clean up.
 File.deleteAll("~/Desktop/_templateTest".standardizePath);
 ::
+
+If one tries to make a template at a location where a template with the same name already exists, the class automatically link::Classes/FileIncrementer##increments:: the name starting with 1.
+code::
+(
+var path, templater;
+
+//1. Set up a path. 
+path = "~Desktop/_secondTemplateTest".standardizePath.mkdir; 
+
+//2. Load the path into a Templater.
+templater = Templater.new(path); 
+
+//3. Make templates of a Patttern. 
+templater.pattern("dupTest"); 
+templater.pattern("dupTest");
+templater.pattern("dupTest");
+
+//4. Inspect the file names. 
+PathName(path).files.do{|item|
+	item.fileName.postln;
+}; 
+)	
+
+//5. Clean up. 
+File.deleteAll("~/Desktop/_secondTemplateTest".standardizePath);
+::
+section::Extending Templater
+Because sitautions may arise in which it is necessary to have templates for objects not defined by default, Templater can be easily extended to include new templates. The procedure for doing so requires two steps—writing new templates and writing an extension method for Templater that makes them.
+
+This latter step requires a bit of explanation. By default, Templater looks for templates in a folder specified by its orientation to the class's implementation file. However, if new templates are written somewhere else, Templater has to be set in order to look for them. Once this is true and a template has been made from this folder, it is good practice to reset Templater back to its default state. 
+
+For instance: 
+code::
++ Templater { 
+
+	//This method will generate a custom template from a user-defined directory of templates.
+	customTemplate { | templateName("custom") |
+		
+		//Set the class to look in the folder with the new templates.
+		this.setTemplateDir("/Folder/With/New/Templates");
+
+		//Make a template from that folder. 
+		//If the name of the template (without an extension) is not 
+		//a SuperCollider object, specify which template is referred to with a string.
+		this.makeTemplate(
+			templateName, 
+			"nameOfTemplateFile_NoExtension"
+		);
+
+		//Reset Templater to look for templates in its default directory.
+		this.resetTemplateDir;
+	}
+}
+::
+
+That's it. Now templates of any variety can be called by the class.
