@@ -1,5 +1,5 @@
 FileIncrementer {
-	var fileTemplate, <folder, <>extension;
+	var fileTemplate, <>folder, <>extension;
 	var <currentIncrement, previousFileName;
 
 	*new {|fileTemplate = "some-file.wav", folder|
@@ -9,24 +9,15 @@ FileIncrementer {
 	}
 
 	fileTemplate_{|newTemplate|
-		extension = newTemplate.extension;
-		fileTemplate = newTemplate.removeExtension;
-		currentIncrement = this.getEndNumber(fileTemplate);
-		fileTemplate = this.noEndNumber(fileTemplate);
+		var pathname = PathName(newTemplate);
+		extension = pathname.extension;
+		pathname = pathname.fileNameWithoutExtension;
+		currentIncrement = PathName(pathname).endNumber;
+		fileTemplate = PathName(pathname).noEndNumbers;
 	}
 
 	fileTemplate {
 		^(fileTemplate++"."++extension);
-	}
-
-	folder_{|newFolder|
-		if(newFolder.isString.not){
-			case
-			{newFolder.isNil}{newFolder = "~/Desktop".standardizePath}
-			{newFolder.isKindOf(PathName)}{newFolder = newFolder.pathOnly}
-			{newFolder.isKindOf(Buffer)}{newFolder = newFolder.path};
-		};
-		folder = newFolder;
 	}
 
 	increment {
@@ -59,13 +50,6 @@ FileIncrementer {
 		^filename;
 	}
 
-	getEndNumber {|input|
-		^PathName(input).endNumber;
-	}
-
-	noEndNumber {|input|
-		^PathName(input).noEndNumbers;
-	}
 }
 
 + PathName {
