@@ -124,11 +124,11 @@ PathName(path).files.do{|item|
 File.deleteAll("~/Desktop/_secondTemplateTest".standardizePath);
 ::
 section::Extending Templater
-Because sitautions may arise in which it is necessary to have templates for objects not defined by default, Templater can be easily extended to include new templates. The procedure for doing so requires two steps—writing new templates and writing an extension method for Templater that makes them.
+Because sitautions may arise in which it is necessary to have templates for objects not defined by default, Templater can be easily extended to include new templates. The procedure for doing so requires two steps—writing a new template and writing an extension method for Templater that makes it.
 
-This latter step requires a bit of explanation. By default, Templater looks for templates in a folder specified by its orientation to the class's implementation file. However, if new templates are written somewhere else, Templater has to be set in order to look for them. Once this is true and a template has been made from this folder, it is good practice to reset Templater back to its default state. 
+By default, Templater looks for templates in the directory where the class is implemented. However, if new templates are written somewhere else, Templater must be directed to them. This is achieved via the method link::Classes/Templater#-setTemplateDir::. Once the class is set to look in the new folder, the targeted template can be made via link::Classes/Templater#-makeTemplate::. Subsequently, it is good practice to reset Templater back to its default state using link::Classes/Templater#-resetTemplateDir::.
 
-For instance: 
+The following is an example of what this looks like.
 code::
 + Templater { 
 
@@ -151,5 +151,3 @@ code::
 	}
 }
 ::
-
-That's it. Now templates of any variety can be called by the class.
