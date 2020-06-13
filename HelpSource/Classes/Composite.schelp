@@ -4,7 +4,9 @@ categories::Libraries>CodexIan>Composites
 related::Guides/MusicCompositing, Classes/Hybrid
 
 DESCRIPTION::
-Composite establishes a workflow both for developing and interacting with composite objects, namely those which are comprised of interconnected scriptable modules. As such, Composite is responsible for maintaing a directory that each of its subclasses populates with their own modular collections. Moreover, Composite defines an interface for easily manipulating these collections, allowing new modules to be generated from templates (see link::Classes/Templater::), cloned from existing collections, and also both loaded and reloaded without recompiling teletype::sclang::. In this way, each Composite-typed class is free to focus on defining interesting interactions between modules rather than dealing with the pesky details of their storage and organization.  
+Composite establishes a workflow both for developing and interacting with composite objects, namely those which are comprised of interconnected scriptable modules. Composite is responsible for maintaing a directory that each of its subclasses populates with their own modular collections. 
+
+Moreover, Composite defines an interface for easily manipulating these collections, allowing new modules to be generated from templates (see link::Classes/Templater::), cloned from existing collections, and also both loaded and reloaded without recompiling teletype::sclang::. In this way, each Composite-typed class is free to focus on defining interesting interactions between modules rather than dealing with the pesky details of their storage and organization.  
 
 note::Composite is a development tool that should not be instantiated. Rather, it is meant to encapsulate behaviors on behalf of its subclasses. So instance those instead.
 ::
@@ -25,7 +27,7 @@ private::defaultDirectory
 private::checkDefaults
 private::folderManager
 
-method::moduleFolder 
+method::classFolder 
 Gets the directory of modules maintained by a given subclass of Composite. 
 
 method::moduleSets

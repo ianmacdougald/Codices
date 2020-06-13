@@ -11,7 +11,7 @@ note::Like Composite, Hybrid itself should not be instanced. Doing so will proba
 ::
 CLASSMETHODS::
 
-copymethod:: Composite *new
+copymethod::Composite *new
 private::new
 
 private::initHybrid
@@ -29,10 +29,10 @@ method::clearDictionary
 Frees all subDictionaries and the SynthDef objects they store.
 
 method::clearSynthDefs
-Frees only the class's associated subDictionary and the SynthDefs objects it stores.
+Clears the class's sub-dictionary, freeing its SynthDefs too.
 
 subsection::From Composite
-copymethod:: Composite *moduleFolder
+copymethod:: Composite *classFolder
 copymethod:: Composite *moduleSets
 copymethod:: Composite *directory
 private::establish
