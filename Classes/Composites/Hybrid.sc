@@ -89,7 +89,7 @@ Hybrid : Composite {
 		processor.add(synthDef);
 	}
 
-	*clearSynthDefs {
+	*freeSynthDefs {
 		var toRemove = dictionary.removeAt(this.name);
 		toRemove !? {processor.remove(toRemove.asArray)};
 	}

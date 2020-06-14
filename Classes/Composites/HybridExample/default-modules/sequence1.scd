@@ -2,10 +2,11 @@
 
 	Pbind(
 		\instrument, modules.synthDef1.name, 
-		\dur, 0.2, 
+		\dur, 0.1, 
 		\degree, Pseq([0, 2, 4, 7], inf), 
 		\mtranspose, Pstutter(8, Pseq([0, 4], inf)) + 3, 
 		\scale, Scale.minor, 
+		\timescale, Pkey(\dur) * 4,
 
 		\op0Atk, 0.0, 
 		\op0Release, 0.25, 

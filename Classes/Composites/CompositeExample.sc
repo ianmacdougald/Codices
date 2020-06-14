@@ -9,9 +9,9 @@ CompositeExample : Composite {
 	//This is done in the method makeTemplater. Composite holds an instance of Templater called templater for this purpose.
 	//If a specific template is not available, extend Templater to make it.
 	makeTemplates { 
+		templater.pattern( "sequence0" ); 
 		templater.pattern( "sequence1" ); 
-		templater.pattern( "sequence2" ); 
-		templater.pattern( "sequence3" );
+		templater.pattern( "sequence2" );
 	}
 
 	//This is an example of a kind of behavior one can develop—playing three patterns in a routine. 
@@ -19,14 +19,14 @@ CompositeExample : Composite {
 	//However, how they exist is entirely up to the user...
 	play { 
 		routine = fork{ 
-			pattern = modules.sequence1.play;
-			8.wait; 
+			pattern = modules.sequence0.play;
+			2.wait; 
 			pattern.stop; 
-			pattern = modules.sequence2.play;
-			32.wait; 
+			pattern = modules.sequence1.play;
+			2.wait; 
 			pattern.stop;
-			pattern = modules.sequence3.play;
-			32.wait; 
+			pattern = modules.sequence2.play;
+			2.wait; 
 			pattern.stop;
 		};
 	}
@@ -36,5 +36,4 @@ CompositeExample : Composite {
 		routine.stop; 
 		pattern.stop; 
 	}
-
 }

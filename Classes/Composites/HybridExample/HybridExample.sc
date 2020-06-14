@@ -18,13 +18,13 @@ HybridExample : Hybrid {
 	play { 
 		routine = fork{ 
 			pattern = modules.sequence0.play;
-			4.wait; 
+			2.wait; 
 			pattern.stop; 
 			pattern = modules.sequence1.play;
-			8.wait; 
+			2.wait; 
 			pattern.stop;
 			pattern = modules.sequence2.play;
-			8.wait; 
+			2.wait; 
 			pattern.stop;
 		};
 	}

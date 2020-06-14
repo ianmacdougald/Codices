@@ -5,9 +5,9 @@ related::Classes/Composite, Guides/MusicCompositing
 
 DESCRIPTION:: 
 
-Hybrid aims to streamline the development of hybrid composite classes, namely those that straddle SuperCollider's link::Guides/ClientVsServer##client-server architecture.:: Specifically, Hybrid manages the loading and unloading of link::Classes/SynthDef##SynthDefs:: so that other Hybrid-typed classes can easily call related link::Classes/Synth##Synths:: with minimal issues relating to link::Guides/Sync-Async##asynchronicity between the client and the server::. It does this by combining the procedures of link::Classes/Composite:: with the services of link::Classes/SynthDefProcessor::.
+teletype::Hybrid:: aims to streamline the development of hybrid composite classes, namely those that straddle SuperCollider's link::Guides/ClientVsServer##client-server architecture.:: Specifically, Hybrid manages the loading and unloading of link::Classes/SynthDef##SynthDefs:: so that other Hybrid-typed classes can easily call related link::Classes/Synth##Synths:: with minimal issues relating to link::Guides/Sync-Async##asynchronicity between the client and the server::. It does this by combining the procedures of link::Classes/Composite:: with the services of link::Classes/SynthDefProcessor::.
 
-note::Like Composite, Hybrid itself should not be instanced. Doing so will probably throw an error. To see the class's features in action, refer to link::Classes/HybridExample::.
+note::Like teletype::Composite::, teletype::Hybrid:: itself should not be instanced. Doing so will probably throw an error. To see the class's features in action, refer to link::Classes/HybridExample::.
 ::
 CLASSMETHODS::
 
@@ -23,13 +23,13 @@ private::processSynthDefs
 private::notInDictionary
 
 method::dictionary
-Gets the dictionary containing SynthDef objects that Hybrid is currently managing. 
+Gets the dictionary containing teletype::SynthDef:: that teletype::Hybrid:: is currently managing. 
+
+method::freeSynthDefs
+Clears the class's sub-dictionary, freeing its teletype::SynthDefs:: too.
 
 method::clearDictionary
-Frees all subDictionaries and the SynthDef objects they store.
-
-method::clearSynthDefs
-Clears the class's sub-dictionary, freeing its SynthDefs too.
+Frees all sub-dictionaries maintained by teletype::Hybrid::, freeing the teletype::SynthDefs:: they store.
 
 subsection::From Composite
 copymethod:: Composite *classFolder
@@ -43,7 +43,7 @@ private::makeSynthDefs
 private::addToDictionary
 
 method::formatName
-Formats a SynthDef's link::Classes/SynthDef#-name#name:: to include the link::Classes/Class#-name#name:: of the class. This is used internally to prevent clashes between names. However, it can be useful for calling Synths when scripting.
+Formats a teletype::SynthDef's:: link::Classes/SynthDef#-name#name:: to include the link::Classes/Class#-name#name:: of the class. This is used internally to prevent clashes between names. However, it can be useful for calling teletype::Synths:: when scripting.
 
 method:: server
 private::tag

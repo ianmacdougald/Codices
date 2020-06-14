@@ -2,7 +2,8 @@
 
 	Pbind(
 		\instrument, modules.synthDef0.name, 
-		\dur, 0.2, 
+		\dur, 0.1, 
+		\timescale, Pkey(\dur) * 4,
 		\degree, Pseq([0, 2, 4, 7], inf), 
 		\scale, Scale.minor, 
 		\mtranspose, Pstutter(8, Pseq([0, 4], inf)), 

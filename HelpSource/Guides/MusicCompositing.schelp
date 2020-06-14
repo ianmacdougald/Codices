@@ -5,15 +5,15 @@ categories:: Libraries>CodexIan
 section::Overview
 link::Classes/Composite:: defines a framework for developing and interacting with classes that encapsulate scriptable SuperCollider objects called modules. The purpose of this framework is to support an approach to music making that combines the specificity of a compiled class's interface with the open-ended potential of scripting, a mixture which I am calling music compositing.
 
-note::Composite and Hybrid should not be instanced on their own. Instead, they both are the bases of various subclasses that take advantage of their features; these can be instanced unless otherwise specified.::
+note::teletype::Composite:: and Hybrid should not be instanced on their own. Instead, they both are the bases of various subclasses that take advantage of their features; these can be instanced unless otherwise specified.::
 
 section::Composite
 
-Composite is the base that defines the basic behavior of all Composite-typed classes. This behavior can be broken down into two simple tasks—keeping track of modules and loading them. The latter process is entirely accomplished through the method link::Classes/Composite#-loadModules::; the former, however, merits more explanation. The modules accessed by Composite are stored in a specific configuration that is managed by the class and described below. 
+teletype::Composite:: is the base that defines the basic behavior of all teletype::Composite::-typed classes. This behavior can be broken down into two simple tasks—keeping track of modules and loading them. The latter process is entirely accomplished through the method link::Classes/Composite#-loadModules::; the former, however, merits more explanation. The modules accessed by teletype::Composite:: are stored in a specific configuration that is managed by the class and described below. 
 
 subsection::Module directory
 
-Modules are stored in layers of embedded folders; the outtermost layer is referred to as the module directory. The Module directory, which can be accessed through link::Classes/Composite#*directory::, is the folder that contains all of the modules of each Composite-typed class. It is organized like this: 
+Modules are stored in layers of embedded folders; the outtermost layer is referred to as the module directory. The module directory, which can be accessed through link::Classes/Composite#*directory::, is the folder that contains all of the modules of each teletype::Composite::-typed class. It is organized like this: 
 
 Module Directory
 tree::
@@ -41,7 +41,7 @@ tree::
 		::
 ::
 
-The class folders, module folders, and even the modules themselves can be generated dynamically by Composite given specific conditions. For instance, if a developer is creating a Composite-typed class that she would like to ship with default modules, all she has to do is simply define emphasis::.scd:: files within the same directory as the class's implementation or in a subdirectory. Then, when that class is instanced for the very first time, Composite will automatically generate a class folder and a module folder called teletype::default:: that will contain copies of those modules. This process will also repeat if the class folder is ever deleted.
+The class folders, module folders, and even the modules themselves can be generated dynamically by teletype::Composite:: given specific conditions. For instance, if a developer is creating a teletype::Composite::-typed class that she would like to ship with default modules, all she has to do is simply define emphasis::.scd:: files within the same directory as the class's implementation or in a subdirectory. Then, when that class is instanced for the very first time, teletype::Composite:: will automatically generate a class folder and a module folder called teletype::default:: that will contain copies of those modules. This process will also repeat if the class folder is ever deleted.
 
 note::Be sure to initialize the module directory if it is your first time using it. Once set, the directory path will persist across link::Classes/Interpreter:: sessions (see link::Classes/PathStorage::). By default, the directory is stored in the folder of this Quark, teletype::CodexIan::. 
 code:: 
@@ -55,17 +55,17 @@ Composite.directroy = "~/Example/Path/Here".standardizePath;
 
 subsection::Module folders
 
-The modules in a folder are accessed by either setting the argument teletype::moduleSet:: in link::Classes/Composite#*new#*new:: or setting the instance's link::Classes/Composite#-moduleSet#moduleSet::. The teletype::moduleSet:: can either be a symbol acting like a sort of key that represents a set of modules stored in the class's folder of modules or it can be an absolute path to one of those folders.
+The modules in a folder are accessed by either setting the argument teletype::moduleSet:: in link::Classes/Composite#*new#*new:: or setting the instance's link::Classes/Composite#-moduleSet#moduleSet::. The teletype::moduleSet:: can either be a symbol acting like a sort of key that represents a set of modules stored in the class's folder of modules or an absolute path to one of those folders.
 
 If the folder that the teletype::moduleSet:: points to does not yet exist, the folder will automatically be made and the modules inside it will be generated from link::Classes/Templater##templates::. As a result, if a new set of modules is made, the instance that requested them should not throw an error. Rather, the class should still function, albeit silently. Furthermore, if a new folder does not yet exist but a symbol (or path) referring to an existing folder is supplied for the argument teletype::from::, then the modules from that folder will be cloned to the new one. 
 
 subsection::Modules
-Modules are emphasis::.scd:: files containing scripts that return an arbitrary object. When link::Classes/Composite#-loadModules:: is called, these files are collected and subsequently link::Classes/String#-load#loaded:: into an link::Classes/Event:: that can be accessed from link::Classes/Composite#-modules::. The name of each respective module is taken from the name of its source file. For instance, the link::Classes/SynthDef:: loaded from emphasis::synthDef.scd:: will be stored in teletype::modules:: using the key teletype::\synthDef::. Moreover, if the name of the file were teletype::NoisyOscillator::, its associated object would be stored in teletype::modules:: with the key teletype::\noisyOscillator::.
+Modules are emphasis::.scd:: files containing scripts that return an arbitrary object. When link::Classes/Composite#-loadModules:: is called, these files are collected and subsequently link::Classes/String#-load#loaded:: into an link::Classes/Event:: that can be accessed from link::Classes/Composite#-modules::. The name of each respective module is taken from the name of its source file. For instance, the link::Classes/SynthDef:: loaded from emphasis::synthDef.scd:: will be stored in teletype::modules:: using the key teletype::\synthDef::. Moreover, if the name of the file were emphasis::NoisyOscillator.scd::, its associated object would be stored in teletype::modules:: with the key teletype::\noisyOscillator::.
 
-If modules currently loaded into an instance of a Composite-typed class are edited, one does not have to recompile teletype::sclang:: to access these updates. Simply reloading the modules using link::Classes/Composite#-loadModules:: will achieve this. Modules are automatically loaded when instancing a Composite-typed class and are automatically reloaded when sets of modules are exchanged via the teletype::moduleSet:: interface. 
+If modules currently loaded into an instance of a teletype::Composite::-typed class are edited, one does not have to recompile teletype::sclang:: to access these updates. Simply reloading the modules using link::Classes/Composite#-loadModules:: will achieve this. Modules are automatically loaded when instancing a teletype::Composite::-typed class and are automatically reloaded when sets of modules are exchanged via the teletype::moduleSet:: interface. 
 
 subsection::Development Example
-
+Developing a teletype::Composite::-typed class is relatively simple. No constructor is needed; the developer is only required to fill out the method teletype::makeTemplates:: specifying the templates and respective names of the modules for the class. This can be done by accessing the instancer of link::Classes/Templater:: stored in teletype::Composite::. This is demonstrated below.
 code::
 CompositeExample : Composite { 
 	var routine, pattern;
@@ -78,9 +78,9 @@ CompositeExample : Composite {
 	//This is done in the method makeTemplater. Composite holds an instance of Templater called templater for this purpose.
 	//If a specific template is not available, extend Templater to make it.
 	makeTemplates { 
+		templater.pattern( "sequence0" ); 
 		templater.pattern( "sequence1" ); 
-		templater.pattern( "sequence2" ); 
-		templater.pattern( "sequence3" );
+		templater.pattern( "sequence2" );
 	}
 
 	//This is an example of a kind of behavior one can develop—playing three patterns in a routine. 
@@ -88,14 +88,14 @@ CompositeExample : Composite {
 	//However, how they exist is entirely up to the user...
 	play { 
 		routine = fork{ 
-			pattern = modules.sequence1.play;
-			8.wait; 
+			pattern = modules.sequence0.play;
+			2.wait; 
 			pattern.stop; 
-			pattern = modules.sequence2.play;
-			32.wait; 
+			pattern = modules.sequence1.play;
+			2.wait; 
 			pattern.stop;
-			pattern = modules.sequence3.play;
-			32.wait; 
+			pattern = modules.sequence2.play;
+			2.wait; 
 			pattern.stop;
 		};
 	}
@@ -105,7 +105,6 @@ CompositeExample : Composite {
 		routine.stop; 
 		pattern.stop; 
 	}
-
 }
 ::
 
@@ -113,7 +112,7 @@ subsection::Usage Example
 code::
 x = CompositeExample.new; 
 
-//Insepct the modules
+//Insepct the modules.
 x.modules.postln; 
 
 (
@@ -133,14 +132,14 @@ PathName(path).folders.do({|item|
 )
 
 (
-//Inspecting default, we see that three .scd files exist corresponding with the templates defined in the class
+//Inspecting default, we see that three .scd files exist corresponding with the templates defined in the class.
 var path = Composite.directory+/+"CompositeExample"+/+"default"; 
 PathName(path).files.do({|item|
 	item.fileName.postln; 
 });
 )
 
-//If you want to make a new set of modules, that is easy: 
+//If you want to make a new set of modules, that is easy.
 x.moduleSet = \experimental; 
 
 //Inspect the modules.
@@ -154,7 +153,7 @@ PathName(path).files.do({|item|
 });
 )
 
-//You can switch back and forth between existing modules too: 
+//You can switch back and forth between existing modules too.
 x.moduleSet = \default; 
 
 (
@@ -183,4 +182,80 @@ There is a problem with this example. While teletype::CompositeExample:: works s
 A simple solution to these issues is implemented by link::Classes/Hybrid::.
 
 SECTION::Hybrid
-teletype::Hybrid:: extends the procedures of teletype::Composite:: to handle circumstances where a composite-typed class uses resources on both the client and the server. These composites are referred to as hybrids.
+teletype::Hybrid:: extends the procedures of teletype::Composite:: to handle circumstances where a teletype::Composite::-typed class uses resources on both the client and the server. Specifically, the class deals with loading and unloading teletype::SynthDefs::. These operations were designed with efficiency in mind: once a teletype::SynthDef:: is loaded onto the server, a reference to it is stored in a dictionary maintained by the class. The class checks this dictionary before loading teletype::SynthDefs::, ensuring that teletype::SynthDefs:: are added to the server only once per server session rather than every time a given hybrid is instanced.
+
+subsection::SynthDef naming
+teletype::Hybrid:: takes on the role of formatting teletype::SynthDef:: names for two purposes—to prevent overwriting resources critical to the function of a given subclass of teletype::Hybrid:: and to give multiple instances of the same teletype::Hybrid::-typed class simultaneous access to different teletype::moduleSets:: that use teletype::SynthDefs:: defined using the same name. In this way, teletype::Hybrid:: reformats teletype::SynthDef:: names as follows: strong::ClassName_ModuleSet_OriginalName::. 
+
+For example, if an example class defines a teletype::SynthDef:: with the name teletype::\helloWorld::, when the default teletype::moduleSet:: is loaded, that teletype::SynthDef's:: name will be reformatted, stored, and sent to the server with the symbol teletype::\ExampleClass_default_helloWorld::. If the teletype::moduleSet:: teletype::\experimental:: were cloned from the default set and loaded for the first time, its teletype::SynthDef's:: name would be reformatted, stored, and sent to the server with the symbol teletype::\ExampleClasas_experimental_helloWorld::. However, once these teletype::moduleSets:: are loaded, the class will not reload them for the duration of the server session unless they are cleared from the user by using link::Classes/Hybrid#*freeSynthDefs:: or link::Classes/Hybrid#*clearDictionary::. 
+
+If a teletype::SynthDef:: name is set with any of these component parts before formatting, that part will not be reformatted. For instance, the teletype::symbol \ExampleClass_SynthDef:: will be reformatted to teletype::\ExampleClass_default_SynthDef:: if called by a teletype::moduleSet:: with the key teletype::\default::. Moreover, if the teletype::SynthDef:: were defined with the name teletype::\ExampleClass_default_SynthDef::, it will not be reformatted when called with the default key. However, if it were called from the teletype::moduleSet \experimental::, it would be changed to teletype::\ExampleClass_experimental_default_SynthDef::.
+
+As a result, when defining teletype::SynthDefs:: in modules, the user does not need to worry about assigning unique names at all. Because all teletype::SynthDefs:: are accessible as modules, finding its name is as simple as follows: 
+code:: 
+	~composite.modules.synthDef.name.
+::
+This will work regardless of what teletype::moduleSet:: is active in a hybrid.
+
+section::Development example
+The only differences between the below implementation and the one above is the fact that this example inherits from teletype::Hybrid:: and defines three teletype::SynthDef:: modules. Now the class can function like anoy other hybrid.
+code::
+HybridExample : Hybrid {
+	var routine, pattern;
+
+	initHybrid {}
+
+	//Templater has been extended to make "patternFunctions", which are functions that return patterns. 
+	//This is necessary for passing in the SynthDef's name into the pattern
+	makeTemplates { 
+		templater.patternFunction( "sequence0" ); 
+		templater.patternFunction( "sequence1" ); 
+		templater.patternFunction( "sequence2" );
+		//Three SynthDefs...
+		templater.synthDef( "synthDef0" ); 
+		templater.synthDef( "synthDef1" );
+		templater.synthDef( "synthDef2" );
+	}
+
+	play { 
+		routine = fork{ 
+			pattern = modules.sequence0.play;
+			2.wait; 
+			pattern.stop; 
+			pattern = modules.sequence1.play;
+			2.wait; 
+			pattern.stop;
+			pattern = modules.sequence2.play;
+			2.wait; 
+			pattern.stop;
+		};
+	}
+
+	stop { 
+		routine.stop; 
+		pattern.stop; 
+	}
+}
+::
+section::Usage example
+Here is an outline of how to interact with the teletype::HybridExample:: class. It should make sounds. 
+
+code:: 
+x = HybridExample.new; 
+
+//Inspect the modules. 
+x.modules.postln; 
+
+//Inspect the dictionary of SynthDefs maintained by Hybrid.
+x.class.dictionary.postln; 
+
+//Clone a new moduleSet to observe the new SynthDef names.
+x.moduleSet_(\experimental, \default); 
+x.class.dictionary.postln; 
+x.modules.postln;
+
+//Play it to hear sounds.
+x.play;
+
+::
+

@@ -4,11 +4,11 @@ categories::Libraries>CodexIan>Composites
 related::Guides/MusicCompositing, Classes/Hybrid
 
 DESCRIPTION::
-Composite establishes a workflow both for developing and interacting with composite objects, namely those which are comprised of interconnected scriptable modules. Composite is responsible for maintaing a directory that each of its subclasses populates with their own modular collections. 
+teletype::Composite:: establishes a workflow both for developing and interacting with composite objects, namely those which are comprised of interconnected scriptable modules. Composite is responsible for maintaing a directory that each of its subclasses populates with their own modular collections. 
 
-Moreover, Composite defines an interface for easily manipulating these collections, allowing new modules to be generated from templates (see link::Classes/Templater::), cloned from existing collections, and also both loaded and reloaded without recompiling teletype::sclang::. In this way, each Composite-typed class is free to focus on defining interesting interactions between modules rather than dealing with the pesky details of their storage and organization.  
+Moreover, teletype::Composite:: defines an interface for easily manipulating these collections, allowing new modules to be generated from templates (see link::Classes/Templater::), cloned from existing collections, and also both loaded and reloaded without recompiling teletype::sclang::. In this way, each teletype::Composite::-typed class is free to focus on defining interesting interactions between modules rather than dealing with the pesky details of their storage and organization.  
 
-note::Composite is a development tool that should not be instantiated. Rather, it is meant to encapsulate behaviors on behalf of its subclasses. So instance those instead.
+note::teletype::Composite:: is a development tool that should not be instantiated. Rather, it is meant to encapsulate behaviors on behalf of its subclasses. So instance those instead.
 ::
 
 CLASSMETHODS::
@@ -17,10 +17,10 @@ method::new
 Creates a new instance.
 
 argument::moduleSet
-A symbol key representing the name of the set of modules to call. This key will correspond to a folder of modules within Composite's directory.
+A teletype::symbol:: key representing the name of the set of modules to call. This key will correspond to a folder of modules within teletype::Composite's:: directory.
 
 argument::from
-A symbol key representing the name of the folder to clone if the folder from moduleSet does not exist.
+A teletype::symbol:: key representing the name of the folder to clone if the folder from teletype::moduleSet:: does not exist.
 
 private::establish
 private::defaultDirectory
@@ -28,14 +28,14 @@ private::checkDefaults
 private::folderManager
 
 method::classFolder 
-Gets the directory of modules maintained by a given subclass of Composite. 
+Gets the directory of modules maintained by a given subclass of teletype::Composite::. 
 
 method::moduleSets
 Gets the names of the teletype::moduleSets:: that currently exist.
 
 method::directory
-Gets and (persistently) sets the directory of modules for all subclasses of Composite. For further details, see link::Classes/PathStorage::.
-note::Before using a subclass of Composite for the first time, be sure to configure the path to the modules directory either through Composite or one of its subclasses.::
+Gets and (persistently) sets the directory of modules for all subclasses of teletype::Composite::. For further details, see link::Classes/PathStorage::.
+note::Before using a subclass of teletype::Composite:: for the first time, be sure to configure the path to the modules directory either through teletype::Composite:: or one of its subclasses.::
 code::
 Composite.directory_("~/Documents/sc-modules".standardizePath);
 ::
@@ -61,9 +61,9 @@ Gets an event containing the loaded modules.
 private::getModuleName
 
 method::moduleSet
-Gets and sets the current moduleSet. 
+Gets and sets the current teletype::moduleSet::. 
 argument::newSet
-A symbol specifying the new set of modules to load. Setting teletype::moduleSet:: will in turn load the new resources. 
+A teletype::symbol:: specifying the new set of modules to load. Setting teletype::moduleSet:: will in turn load the new resources. 
 
 argument::from
-A symbol referring to an existing set of modules to copy if the new module name does not exist yet.
+A teletype::symbol:: referring to an existing set of modules to copy if the new module name does not exist yet.
