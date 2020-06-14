@@ -1,33 +1,36 @@
 HybridExample : Hybrid {
-	var synth;
+	var routine, pattern;
 
+	initHybrid {}
+
+	//Templater has been extended to make "patternFunctions", which are functions that return patterns. 
+	//This is necessary for passing in the SynthDef's name into the pattern
 	makeTemplates { 
-		templater.synthDef; 
+		templater.patternFunction( "sequence0" ); 
+		templater.patternFunction( "sequence1" ); 
+		templater.patternFunction( "sequence2" );
+		//Three SynthDefs...
+		templater.synthDef( "synthDef0" ); 
+		templater.synthDef( "synthDef1" );
+		templater.synthDef( "synthDef2" );
 	}
 
-	play { |args([\freq, 400]), target(server), addAction(\addToHead)|
-		var class = this.class;
-		this.free(1e-3);
-		synth = Synth(
-			class.dictionary[class.name].keys.asArray[0],
-			args, 
-			target, 
-			addAction
-		).register;
-	}
-
-	isPlaying {
-		^synth.isPlaying;
-	}
-
-	set { |...args|
-		if(this.isPlaying){
-			server.sendMsg(15, synth.nodeID, *(args.asOSCArgArray));
-			^this;
+	play { 
+		routine = fork{ 
+			pattern = modules.sequence0.play;
+			4.wait; 
+			pattern.stop; 
+			pattern = modules.sequence1.play;
+			8.wait; 
+			pattern.stop;
+			pattern = modules.sequence2.play;
+			8.wait; 
+			pattern.stop;
 		};
 	}
 
-	free {
-		if(this.isPlaying, {synth.free});
+	stop { 
+		routine.stop; 
+		pattern.stop; 
 	}
 }

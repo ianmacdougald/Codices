@@ -1,7 +1,7 @@
 TITLE::Hybrid
 summary::Base for developing composites that straddle client-server divide.
 categories::Libraries>CodexIan>Composites
-related::Classes/Composite, Classes/HybridExample, Guides/MusicCompositing
+related::Classes/Composite, Guides/MusicCompositing
 
 DESCRIPTION:: 
 
