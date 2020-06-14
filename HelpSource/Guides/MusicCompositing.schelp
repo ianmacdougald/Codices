@@ -177,6 +177,10 @@ PathName(path).folders.do({|item|
 });
 )
 ::
+subsection::Limits of example
+There is a problem with this example. While teletype::CompositeExample:: works silently from its templates of patterns, the class does not define the server resources that these patterns would refer to throughout their operation. While it might seem simple enough to template some ammending teletype::SynthDef:: modules, this in turn raises certain procedural questions. For instance, how would a composite coordinate server and client resources given the link::Guides/Sync-Async##asynchronicity:: between the two? How would it manage a situation in which two of its instances referred to two differnt teletype::moduleSets:: that ostensibly overwrote the same teletype::SynthDef::?
+
+A simple solution to these issues is implemented by link::Classes/Hybrid::.
 
 SECTION::Hybrid
-Hybrid is a subclass of Composite that extends its behaviors to assist 
+teletype::Hybrid:: extends the procedures of teletype::Composite:: to handle circumstances where a composite-typed class uses resources on both the client and the server. These composites are referred to as hybrids.
