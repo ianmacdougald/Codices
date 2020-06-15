@@ -2,6 +2,7 @@ TITLE::Templater
 summary::Create .scd files from templates of code. 
 categories::Libraries>CodexIan>Utilities
 related::Classes/FileIncrementer, Classes/Composite
+keyword:: template, codexian, compositing, utilities, codexian utilities
 
 DESCRIPTION::
 Templater creates emphasis::.scd:: files with code templates for the following classes: 

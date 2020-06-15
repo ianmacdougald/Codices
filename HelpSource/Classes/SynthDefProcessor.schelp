@@ -1,6 +1,7 @@
 TITLE::SynthDefProcessor
 summary::Manage the loading and unloading of SynthDefs from a server.
 categories::Libraries>CodexIan>Utilities
+keyword::codexian, utilities, synthdef, processor, codexian utlities
 
 DESCRIPTION::
 SynthDefProcessor is responsible for loading and unloading SynthDef objects from a given server. 
@@ -28,7 +29,7 @@ Gets and sets the server.
 EXAMPLES::
 code::
 (
-//1. Instance a SynthDefProcessor
+//1. Instance a SynthDefProcessor.
 Server.default = s = Server.local; 
 s.waitForBoot({
 	p = SynthDefProcessor.new; 
@@ -36,7 +37,7 @@ s.waitForBoot({
 )
 
 (
-//2. Define a SynthDef
+//2. Define a SynthDef.
 d = SynthDef(\someSynthDef, { 
 	Out.ar(\out.kr(0), SinOsc.ar(\freq.kr(400)));
 });
@@ -97,6 +98,7 @@ fork{
 		var name = format("TestSynth%", i).asSymbol; 
 		var freq = 440 * degree.next
 		.degreeToKey(Scale.major).midiratio;
+		format("SynthDef name is : %", name).postln;
 		Synth(name, [
 			\freq, freq, 
 			\timescale, dur * 2

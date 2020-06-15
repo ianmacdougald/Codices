@@ -2,6 +2,7 @@ TITLE::Composite
 summary::Development platform for creating composite classes of scriptable objects.
 categories::Libraries>CodexIan>Composites
 related::Guides/MusicCompositing, Classes/Hybrid
+keyword::composite, compositing, codexian, composition, codexian composite
 
 DESCRIPTION::
 teletype::Composite:: establishes a workflow both for developing and interacting with composite objects, namely those which are comprised of interconnected scriptable modules. Composite is responsible for maintaing a directory that each of its subclasses populates with their own modular collections. 

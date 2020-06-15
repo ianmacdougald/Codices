@@ -2,6 +2,7 @@ CLASS::FolderManager
 categories::Libraries>CodexIan>Path Management
 related::Classes/FileIncrementer, Classes/PathStorage
 summary::Maintains and copies both folders and their contents.
+keyword::codexian utilities, codexian, utilities
 DESCRIPTION::
 
 FolderManager is a utility which allows for copying subfolders within a directory specified relatively or folders pointed to by absolute paths.
@@ -33,33 +34,36 @@ method::folder
 Gets and sets the absolute path to a folder for use with relative paths.
 
 private::tagPath
+private::copy
+private::getFiles
+private::tagPathExists
 
 EXAMPLES::
 code::
-//1. Make an instance of FolderManager pointing to the Desktop folder
+//1. Make an instance of FolderManager pointing to the Desktop folder.
 f = FolderManager.new("~/Desktop".standardizePath);
 
 (
-//2. Make an arbitrary folder there and fill it with files
+//2. Make an arbitrary folder there and fill it with files.
 ~somePath = "~/Desktop/somePath".standardizePath.mkdir; 
-~templater = ModuleTemplater.new(~somePath); 
+~templater = Templater.new(~somePath); 
 ~templater.synthDef; 
 ~templater.event; 
 ~templater.function;
 )
 
-//3. Inspect the contents of the new directory
+//3. Inspect the contents of the new directory.
 PathName(~somePath).files.do({|item| item.fileName.postln});
 
 //4. Copy the contents of that directory into another within the Desktop folder
 //you can use a relative string or symbol or an absolute path. 
-//here, there is a mix of both
+//Here, there is a mix of both.
 f.mkdirCopy(~somePath, \another);
 
-//5. Check to see that they're the same
+//5. Check to see that they're the same.
 PathName(f.folder+/+"another").files.do({|item| item.fileName.postln});
 
-//6. Cleanup
+//6. Cleanup.
 File.deleteAll(~somePath);
 File.deleteAll(f.folder+/+"another");
 ::
