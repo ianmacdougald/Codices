@@ -1,8 +1,8 @@
 TITLE:: PathStorage
 summary:: configures default folder paths via persistent storage.
-categories:: Libraries>CodexIan>Path Management
+categories:: Libraries>CodexIan>Utilities>Path Management
 related:: Classes/IanAudioPath, Classes/FileIncrementer
-keyword:: path, storage, persistent, codexian, codexian path
+keyword:: persistent, codexian, codexian path, utilities, codexian utilities
 DESCRIPTION::
 
 PathStorage is used for managing paths to files or folders using persistent storage. As a result, information stored through the class's interface will persist across sessions of the link::Classes/Interpreter::.

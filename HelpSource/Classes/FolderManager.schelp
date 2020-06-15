@@ -1,8 +1,9 @@
 CLASS::FolderManager
-categories::Libraries>CodexIan>Path Management
+categories::Libraries>CodexIan>Utilities>Path Management
 related::Classes/FileIncrementer, Classes/PathStorage
 summary::Maintains and copies both folders and their contents.
-keyword::codexian utilities, codexian, utilities
+keyword::codexian utilities, codexian, utilities, codexian path
+
 DESCRIPTION::
 
 FolderManager is a utility which allows for copying subfolders within a directory specified relatively or folders pointed to by absolute paths.

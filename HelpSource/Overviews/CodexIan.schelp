@@ -1,0 +1,39 @@
+TITLE::CodexIan
+summary::Library developed by me, Ian, to support Musical Compositing.
+categories::Libraries>CodexIan
+
+Description:: 
+CodexIan is a library of classes and extensions for SuperCollider that establish a workflow for using modular composite objects in the service of music composition (or whatever else). In other words, the library is tasked with compositing music compositions, which just as well should be called musical musical compositing.
+
+section::Guides
+definitionlist::
+##link::Guides/MusicalCompositing::
+||A guide that describes the library's primary functions.
+::
+section::Composites
+definitionlist::
+##link::Classes/Composite::
+||The base class for all composite objects. 
+##link::Classes/Hybrid::
+||A subclass of teletype::Composite:: that handles hybrid objects.
+::
+
+section::Utilities
+These are classes that are used internally by the composites, but have broader uses too. 
+definitionlist::
+##link::Classes/SynthDefProcessor::
+||Processor for loading and unloading link::Classes/SynthDef##SynthDefs:: from the server. 
+##link::Classes/Templater::
+||Creates templates of emphasis::.scd:: files at a target location.  
+::
+
+subsection::Path Management
+These utilities deal specifically with managing paths on the system.
+definitionlist::
+##link::Classes/PathStorage::
+||Persistently stores paths that can be accessed via link::Classes/Symbol:: keys.
+##link::Classes/FolderManager::
+||Handles the cloning of folders within a given directory.
+##link::Classes/FileIncrementer::
+||Generates incrementally advanced file names within a given directory.
+::
