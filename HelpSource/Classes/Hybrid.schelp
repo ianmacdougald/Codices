@@ -2,7 +2,7 @@ TITLE::Hybrid
 summary::Base for developing composites that straddle client-server divide.
 categories::Libraries>CodexIan>Composites
 related::Classes/Composite, Guides/MusicalCompositing
-keywords::hybrid, compositing, codexian, composition, codexian composite
+keyword::hybrid, compositing, codexian, codexian hybrid, codexian composite
 
 DESCRIPTION:: 
 
@@ -24,13 +24,21 @@ private::processSynthDefs
 private::notInDictionary
 
 method::dictionary
-Gets the dictionary containing teletype::SynthDef:: that teletype::Hybrid:: is currently managing. 
+Gets the dictionary of teletype::SynthDefs::.
 
-method::freeSynthDefs
-Clears the class's sub-dictionary, freeing its teletype::SynthDefs:: too.
+method::hybridDictionary
+Gets the dictionary containing all of the subdictionaries teletype::Hybrid:: is currently storing. 
 
-method::clearDictionary
-Frees all sub-dictionaries maintained by teletype::Hybrid::, freeing the teletype::SynthDefs:: they store.
+method::remove 
+Removes a single SynthDef from the server. 
+argument::key 
+The name of the SynthDef to remove.
+
+method::removeAll
+Removes all of the class's teletype::SynthDefs::.
+
+method::clearHybrids
+Removes all of the teletype::SynthDefs:: from every other active hybrid. 
 
 subsection::From Composite
 copymethod:: Composite *classFolder

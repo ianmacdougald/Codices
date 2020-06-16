@@ -1,17 +1,25 @@
 Hybrid : Composite {
-	classvar <dictionary, processor, qa;
+	classvar dictionary, processor, qa;
 	var <>server;
 
 	*establish { 
 		super.establish;
 		dictionary ?? {dictionary = Dictionary.new}; 
 		processor ?? {processor = SynthDefProcessor.new};
-		qa ?? {ServerQuit.add({this.clearDictionary}); qa = 1};	
+		qa ?? {ServerQuit.add({this.removeAll}); qa = 1};	
 	}
 
-	*clearDictionary {
-		dictionary.do({|subD| processor.remove(subD.asArray)});
+	*clearHybrids { 
+		dictionary.do({ | dict | processor.remove(dict.asArray)}); 
 		dictionary.clear;
+	}
+
+	*removeAll { 
+		processor.remove(dictionary.removeAt(this.name).asArray);
+	}
+
+	*remove { | key | 
+		processor.remove(this.dictionary.removeAt(key));
 	}
 
 	initComposite {
@@ -93,6 +101,14 @@ Hybrid : Composite {
 		var toRemove = dictionary.removeAt(this.name);
 		toRemove !? {processor.remove(toRemove.asArray)};
 	}
+
+	*removeSynthDef { | key | 
+		processor.remove(this.dictionary.removeAt(key));
+	}
+
+	*hybridDictionary { ^dictionary; }
+
+	*dictionary { ^dictionary[this.name]; }
 
 	loadModules { 
 		super.loadModules; 
