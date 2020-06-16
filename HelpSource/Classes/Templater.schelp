@@ -127,28 +127,20 @@ File.deleteAll("~/Desktop/_secondTemplateTest".standardizePath);
 section::Extending Templater
 Because sitautions may arise in which it is necessary to have templates for objects not defined by default, Templater can be easily extended to include new templates. The procedure for doing so requires two steps—writing a new template and writing an extension method for Templater that makes it.
 
-By default, Templater looks for templates in the directory where the class is implemented. However, if new templates are written somewhere else, Templater must be directed to them. This is achieved via the method link::Classes/Templater#-setTemplateDir::. Once the class is set to look in the new folder, the targeted template can be made via link::Classes/Templater#-makeTemplate::. Subsequently, it is good practice to reset Templater back to its default state using link::Classes/Templater#-resetTemplateDir::.
+By default, Templater looks for templates in the directory where the class is implemented. However, if new templates are written somewhere else, Templater must be directed to them. This is achieved via the method link::Classes/Templater#-setTemplateDir::. Once the class is set to look in the new folder, the targeted template can be made via link::Classes/Templater#-makeTemplate::. Subsequently, it is good practice to reset Templater back to its default state using link::Classes/Templater#-resetTemplateDir::. For convenience, these procedures are encapsulated by the method link::Classes/Templater#-makeExtTemplate::. As such, it is only necessary to call this method inside the extension. 
 
 The following is an example of what this looks like.
 code::
 + Templater { 
 
-	//This method will generate a custom template from a user-defined directory of templates.
-	customTemplate { | templateName("custom") |
-		
-		//Set the class to look in the folder with the new templates.
-		this.setTemplateDir("/Folder/With/New/Templates");
-
-		//Make a template from that folder. 
-		//If the name of the template (without an extension) is not 
-		//a SuperCollider object, specify which template is referred to with a string.
-		this.makeTemplate(
+	//This method will generate a custom template from an external directory.
+	customTemplate { | templateName("custom") | 
+		this.makeExtTemplate(
+			"Folder/With/New/Templates", 
 			templateName, 
 			"nameOfTemplateFile_NoExtension"
-		);
-
-		//Reset Templater to look for templates in its default directory.
-		this.resetTemplateDir;
+		);	
 	}
+
 }
 ::

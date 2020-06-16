@@ -35,6 +35,13 @@ Templater {
 		this.makeTemplate(templateName, Array); 
 	}
 
+	makeExtTemplate { | path, templateName, object | 
+		this.setTemplateDir(path ?? { this.class.defaultPath });
+		{this.makeTemplate(templateName, object)}
+		.protect({this.resetTemplateDir}); 
+		this.resetTemplateDir;
+	}
+
 	makeTemplate { | templateName, object |
 		this.class.targetCopy(templateName, path, object);
 	}
