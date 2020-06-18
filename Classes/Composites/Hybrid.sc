@@ -18,7 +18,7 @@ Hybrid : Composite {
 		processor.remove(dictionary.removeAt(this.name).asArray);
 	}
 
-	*remove { | key | 
+	*removeAt { | key | 
 		processor.remove(this.dictionary.removeAt(key));
 	}
 
@@ -109,10 +109,5 @@ Hybrid : Composite {
 	*hybridDictionary { ^dictionary; }
 
 	*dictionary { ^dictionary[this.name]; }
-
-	loadModules { 
-		super.loadModules; 
-		this.initComposite;
-	}
 
 }

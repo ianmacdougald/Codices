@@ -7,6 +7,10 @@ Composite {
 		^super.newCopyArgs(moduleSet).getModules(from).initComposite;
 	}
 
+	*basicNew { | moduleSet(\default), from | 
+		^super.newCopyArgs(moduleSet);
+	}
+
 	*establish { 
 		directory ?? {directory = PathStorage.at(id) ?? { 
 			PathStorage.setAt(this.defaultDirectory, id);

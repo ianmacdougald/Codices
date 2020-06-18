@@ -29,7 +29,7 @@ Gets the dictionary of teletype::SynthDefs::.
 method::hybridDictionary
 Gets the dictionary containing all of the subdictionaries teletype::Hybrid:: is currently storing. 
 
-method::remove 
+method::removeAt
 Removes a single SynthDef from the server. 
 argument::key 
 The name of the SynthDef to remove.
