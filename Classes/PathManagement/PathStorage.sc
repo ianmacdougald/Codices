@@ -2,13 +2,12 @@ PathStorage  {
 	classvar quarkPath;
 	classvar dictionary;
 
+
 	*storagePath {
 		^(this.pathToQuark +/+ format("%.YAML", this.name))
 	}
 
-	*parse {
-		^this.storagePath.parseYAMLFile;
-	}
+	*parse { ^this.storagePath.parseYAMLFile; }
 
 	*write { |item|
 		var fd = File.open(this.storagePath, "w+");
@@ -16,12 +15,16 @@ PathStorage  {
 		fd.close;
 	}
 
-	*pathToQuark {
-		quarkPath = quarkPath ?? {
-			Main.packages.asDict.at('CodexIan');
-		};
-		^quarkPath;
+	*initClass {
+		Class.initClassTree(Main);
+		Class.initClassTree(Quarks);
+		Class.initClassTree(Dictionary);
+		Class.initClassTree(Collection);
+		quarkPath = Main.packages.asDict.at('CodexIan');
+		this.checkDictionary;
 	}
+
+	*pathToQuark { ^quarkPath; }
 
 	*checkDictionary {
 		if(dictionary.isNil){
@@ -34,7 +37,6 @@ PathStorage  {
 	}
 
 	*setAt { |newpath, key|
-		this.checkDictionary;
 		if((dictionary[key]==newpath).not, {
 			dictionary.add(key->(newpath+/+""));
 			this.write(dictionary);
@@ -42,19 +44,12 @@ PathStorage  {
 		^dictionary[key];
 	}
 
-	*at { |key|
-		this.checkDictionary;
-		^dictionary[key];
-	}
+	*at { |key| ^dictionary[key]; }
 
 	*removeAt { |key|
-		this.checkDictionary; 
-		dictionary.removeAt(key); 
+		dictionary.removeAt(key);
 		this.write(dictionary);
 	}
 
-	*keys { 
-		this.checkDictionary; 
-		^dictionary.keys;
-	}
+	*keys { ^dictionary.keys; }
 }

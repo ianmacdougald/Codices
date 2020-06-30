@@ -1,24 +1,27 @@
 Hybrid : Composite {
-	classvar dictionary, processor, qa;
+	classvar dictionary, processor;
 	var <>server;
 
-	*establish { 
-		super.establish;
-		dictionary ?? {dictionary = Dictionary.new}; 
-		processor ?? {processor = SynthDefProcessor.new};
-		qa ?? {ServerQuit.add({this.removeAll}); qa = 1};	
+	*initClass {
+		Class.initClassTree(Dictionary);
+		Class.initClassTree(SynthDefProcessor);
+		dictionary = Dictionary.new;
+		processor = SynthDefProcessor.new;
+		StartUp.add ({
+			ServerQuit.add({this.removeAll});
+		});
 	}
 
-	*clearHybrids { 
-		dictionary.do({ | dict | processor.remove(dict.asArray)}); 
+	*clearHybrids {
+		dictionary.do({ | dict | processor.remove(dict.asArray)});
 		dictionary.clear;
 	}
 
-	*removeAll { 
+	*removeAll {
 		processor.remove(dictionary.removeAt(this.name).asArray);
 	}
 
-	*removeAt { | key | 
+	*removeAt { | key |
 		processor.remove(this.dictionary.removeAt(key));
 	}
 
@@ -57,7 +60,7 @@ Hybrid : Composite {
 		}
 		{object.isKindOf(SynthDef)}{
 			object.name = this.formatName(object.name).asSymbol;
-			if(this.checkDictionary(object), { 
+			if(this.checkDictionary(object), {
 				synthDefs = synthDefs.add(object);
 			});
 		};
@@ -66,14 +69,14 @@ Hybrid : Composite {
 
 	checkDictionary { |synthDef|
 		var class = this.class;
-		if(class.notInDictionary(synthDef), { 
+		if(class.notInDictionary(synthDef), {
 			class.addToDictionary(synthDef);
 			^true;
-		}); 
+		});
 		^false;
 	}
 
-	*notInDictionary { |synthDefName| 
+	*notInDictionary { |synthDefName|
 		^dictionary[this.name][synthDefName].isNil;
 	}
 
@@ -87,7 +90,7 @@ Hybrid : Composite {
 
 	tag {|tag, name|
 		tag = tag.asString; name = name.asString;
-		if(name.contains(tag).not, { 
+		if(name.contains(tag).not, {
 			name = format("%_%", tag, name);
 		});
 		^name;
@@ -102,7 +105,7 @@ Hybrid : Composite {
 		toRemove !? {processor.remove(toRemove.asArray)};
 	}
 
-	*removeSynthDef { | key | 
+	*removeSynthDef { | key |
 		processor.remove(this.dictionary.removeAt(key));
 	}
 

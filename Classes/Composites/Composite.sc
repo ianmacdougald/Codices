@@ -1,90 +1,115 @@
 Composite {
-	classvar <directory, <folderManager, id = 'sc-modules';
-	var <moduleSet, <modules, templater;
+	classvar <directory, id = 'sc-modules', <dictionary;
+	var <moduleSet, <modules, <templater;
 
 	*new { | moduleSet(\default), from |
-		this.establish;
-		^super.newCopyArgs(moduleSet).getModules(from).initComposite;
+		this.checkDefaults;
+		^super.newCopyArgs(moduleSet).processModules(from).initComposite;
 	}
 
-	*basicNew { | moduleSet(\default), from | 
+	*basicNew { | moduleSet(\default), from |
 		^super.newCopyArgs(moduleSet);
 	}
 
-	*establish { 
-		directory ?? {directory = PathStorage.at(id) ?? { 
+	*initClass {
+		Class.initClassTree(Dictionary);
+		Class.initClassTree(PathStorage);
+		Class.initClassTree(FolderManager);
+		Class.initClassTree(ModuleDictionary);
+		directory = PathStorage.at(id) ?? {
 			PathStorage.setAt(this.defaultDirectory, id);
-		}}; 
-		folderManager ?? {
-			folderManager = FolderManager.new(this.classFolder); 
-		}; 
-		this.checkDefaults;
+		};
+		dictionary = ModuleDictionary.new;
+		//folderManager = FolderManager.new(this.directory);
 	}
 
-	*defaultDirectory { 
+	*defaultDirectory {
 		^(Main.packages.asDict.at('CodexIan')+/+id);
 	}
-	
+
 	*checkDefaults {
-		var scripts = this.filenameString.path.getScriptPaths;
-		if(this.classFolder.exists.not and: {scripts.isEmpty.not}, { 
-			folderManager.copyFilesTo(
-				scripts, 
-				(this.classFolder+/+"default").mkdir
-			);
-		}); 
+		var defaults = this.defaultModulePath; 
+		var folder = this.classFolder+/+"default";
+		if(defaults.exists and: { folder.exists.not }, { 
+			defaults.copyScriptsTo(folder.mkdir)
+		});
 	}
 
-	getModules { |from|
+	*defaultModulePath { ^""; }
+
+	processModules { | from |
+		var klass = this.class, dict = klass.dictionary;
 		templater = Templater(this.moduleFolder);
-		this.processFolders(from);
-		this.loadModules;
+		if(dict.notInDictionary(klass.name, moduleSet), {
+			from !? {
+				this.copyFrom(from);
+				forkIfNeeded { this.processFolders(from); };
+			} ?? {
+				this.processFolders;
+				dict.addEntry(klass.name, moduleSet, this.loadModules);
+			};
+		});
+		modules = dict.modulesAt(klass.name, moduleSet).copy;
+	}
+
+	copyFrom { | from |
+		var klass = this.class, dict = klass.dictionary;
+		if(dict.notInDictionary(klass.name, from), {
+			dict.addEntry(klass.name, from, this.loadFrom(from));
+		});
+		dict.copyEntry(klass.name, from, moduleSet);
 	}
 
 	initComposite {}
 
-	moduleFolder { 
-		^(this.class.classFolder+/+moduleSet);
-	}
+	moduleFolder { ^(this.class.classFolder+/+moduleSet); }
 
-	*classFolder { 
-		^(this.directory +/+ this.name);
-	}
+	folderFrom { | from | ^(this.class.classFolder+/+from); }
 
-	processFolders { |from|
-		if(this.moduleFolder.exists.not, { 
-			var fm = this.class.folderManager;
-			from !? {fm.mkdirCopy(from, moduleSet)} ?? {
-				this.moduleFolder.mkdir;
-				this.makeTemplates;
-			};
+	*classFolder { ^(this.directory +/+ this.name); }
+
+	processFolders { | from |
+		if(this.moduleFolder.exists.not, {  
+			from !? {
+				(this.class.classFolder+/+from)
+				.copyScriptsTo(this.moduleFolder);
+			} ?? { this.makeTemplates; };
 		});
 	}
 
-	makeTemplates { 
+	makeTemplates {
 		this.subclassResponsibility(thisMethod);
 	}
 
-	loadModules { 
-		modules = ();
-		this.moduleFolder.getScriptPaths.do({|script|
-			modules.add(this.getModuleName(script) -> script.load);
-		});
+	loadFrom { | from | ^this.getModules(this.folderFrom(from)); }
+
+	loadModules { ^this.getModules(this.moduleFolder); }
+
+	getModules { | folder |
+		^folder.getScriptPaths.collect({ | script |
+			[this.getModuleName(script), script.load];
+		}).flat.asPairs(Event);
 	}
 
-	getModuleName { |input|
-		 ^PathName(input)
+	reloadModules {
+		var klass = this.class, dict = klass.dictionary;
+		dict.removeModules(klass.name, moduleSet);
+		this.getModules;
+	}
+
+	getModuleName { | input |
+		^PathName(input)
 		.fileNameWithoutExtension
-		.lowerFirstChar.asSymbol; 
+		.lowerFirstChar.asSymbol;
 	}
 
-	*directory_{|newPath|
+	*directory_{| newPath |
 		directory = PathStorage.setAt(newPath, id);
 	}
 
-	moduleSet_{|newSet, from|
-		moduleSet = newSet; 
-		this.getModules(from);
+	moduleSet_{| newSet, from |
+		moduleSet = newSet;
+		this.processModules(from);
 		this.initComposite;
 	}
 

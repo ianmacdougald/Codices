@@ -1,6 +1,11 @@
 HybridExample : Hybrid {
 	var routine, pattern;
 
+	*defaultModulesPath { 
+		^this.filenameString.dirname
+		+/+"ExampleModules"; 
+	}
+
 	initHybrid {}
 
 	//Templater has been extended to make "patternFunctions", which are functions that return patterns. 

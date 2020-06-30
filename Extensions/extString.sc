@@ -21,16 +21,41 @@
 		^this.replace(this.at(0), this.at(0).toLower);
 	}
 
-	exists { 
-		^File.exists(this);	
-	}
-
-	path { 
-		^PathName(this).pathOnly;
-	}
+	exists { ^File.exists(this); }
 
 	increment { 
-		^FileIncrementer(PathName(this).fileName, this.path).increment;
+		^FileIncrementer(PathName(this).fileName, this.dirname).increment;
+	}
+
+	getFilePaths { 
+		^PathName(this).files.collect(_.fullPath);
+	}
+
+	getFileNames { 
+		^PathName(this).files.collect(_.fileName);
+	}
+
+	copyFilesTo { | newDirectory | 
+		this.getFilePaths.do { | path |
+			var name = PathName(path).fileName;
+			File.copy(path, newDirectory+/+name);
+		}
+	}
+
+	copyScriptsTo { | newDirectory | 
+		var scripts = this.getScriptPaths; 
+		if(scripts.notEmpty, {  
+			scripts.do { | path | 
+				var name = PathName(path).fileName; 
+				File.copy(path, newDirectory+/+name);
+			}
+		});
+	}
+
+	copyFolder { | newFolder |
+		if(newFolder.exists.not, { 
+			this.copyFilesTo(newFolder.mkdir);
+		}, { "Warning: String: copy failed; target exists.".postln; });
 	}
 }
 

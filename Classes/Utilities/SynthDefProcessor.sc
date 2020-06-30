@@ -1,5 +1,5 @@
 SynthDefProcessor_Base {
-	var <>server, routine, <synthDefList; 
+	var <>server, routine, <synthDefList;
 
 	*new { |server(Server.default)|
 		^super.newCopyArgs(server).init;
@@ -55,7 +55,7 @@ SynthDefProcessor_Base {
 	}
 
 	pop {
-		^try{synthDefList.removeAt(0)} 
+		^try{synthDefList.removeAt(0)}
 	}
 
 	popAction {
@@ -108,7 +108,7 @@ SynthDefRemover : SynthDefProcessor_Base {
 	action { |synthDef|
 		synthDef !? {SynthDef.removeAt(synthDef.name)};
 	}
-	
+
 	recheckAction { |def|
 		var bool = def.isAdded;
 		if(bool){
@@ -123,6 +123,13 @@ SynthDefProcessor {
 
 	*new{|server(Server.default)|
 		^super.newCopyArgs(server).init;
+	}
+
+	*initClass {
+		Class.initClassTree(SynthDefAdder);
+		Class.initClassTree(SynthDefRemover);
+		Class.initClassTree(Server);
+		Class.initClassTree(SynthDef);
 	}
 
 	init {
@@ -145,7 +152,7 @@ SynthDefProcessor {
 }
 
 + SynthDef {
-	
+
 	isAdded {
 		^(SynthDescLib.global.synthDescs[name].notNil);
 	}
