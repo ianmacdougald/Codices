@@ -4,10 +4,11 @@ Composite {
 
 	*new { | moduleSet(\default), from |
 		this.checkDefaults;
-		^super.newCopyArgs(moduleSet).processModules(from).initComposite;
+		^super.newCopyArgs(moduleSet)
+		.processModules(from).initComposite;
 	}
 
-	*basicNew { | moduleSet(\default), from |
+	*basicNew { | moduleSet(\default) |
 		^super.newCopyArgs(moduleSet);
 	}
 
@@ -20,7 +21,6 @@ Composite {
 			PathStorage.setAt(this.defaultDirectory, id);
 		};
 		dictionary = ModuleDictionary.new;
-		//folderManager = FolderManager.new(this.directory);
 	}
 
 	*defaultDirectory {
@@ -37,27 +37,32 @@ Composite {
 
 	*defaultModulePath { ^""; }
 
-	processModules { | from |
-		var klass = this.class, dict = klass.dictionary;
-		templater = Templater(this.moduleFolder);
-		if(dict.notInDictionary(klass.name, moduleSet), {
-			from !? {
-				this.copyFrom(from);
-				forkIfNeeded { this.processFolders(from); };
-			} ?? {
-				this.processFolders;
-				dict.addEntry(klass.name, moduleSet, this.loadModules);
-			};
-		});
-		modules = dict.modulesAt(klass.name, moduleSet).copy;
+	processModules { | from | 
+		var class = this.class, dict = class.dictionary; 
+		dict.at(class.name) ?? { dict.newDictionary(class.name) };
+		if(dict.notAt(class.name, moduleSet), { this.getFrom(from) });
+		this.loadModules;
 	}
 
-	copyFrom { | from |
-		var klass = this.class, dict = klass.dictionary;
-		if(dict.notInDictionary(klass.name, from), {
-			dict.addEntry(klass.name, from, this.loadFrom(from));
+	getFrom { | from |
+		if(from.notNil, { 
+			this.copyModules(from);
+			forkIfNeeded { this.processFolders(from); }
+		}, { this.processFolders; });
+	}
+
+	switchTemplater { | folder | 
+		templater !? { 
+			templater.path = folder;
+		} ?? { templater = Templater(folder); }
+	}
+
+	copyModules { | from |
+		var class = this.class, dict = class.dictionary;
+		if(dict.notAt(class.name, from), {
+			dict.addModules(class.name, from, this.loadFrom(from));
 		});
-		dict.copyEntry(klass.name, from, moduleSet);
+		dict.copyEntry(class.name, from, moduleSet);
 	}
 
 	initComposite {}
@@ -70,10 +75,14 @@ Composite {
 
 	processFolders { | from |
 		if(this.moduleFolder.exists.not, {  
+			this.moduleFolder.mkdir;
 			from !? {
 				(this.class.classFolder+/+from)
 				.copyScriptsTo(this.moduleFolder);
-			} ?? { this.makeTemplates; };
+			} ?? { 
+				this.switchTemplater(this.moduleFolder);
+				this.makeTemplates; 
+			};
 		});
 	}
 
@@ -83,7 +92,16 @@ Composite {
 
 	loadFrom { | from | ^this.getModules(this.folderFrom(from)); }
 
-	loadModules { ^this.getModules(this.moduleFolder); }
+	loadModules { 
+		var class = this.class, dict = class.dictionary; 
+		dict.modulesAt(class.name, moduleSet) ?? { 
+			dict.addModules(
+				class.name, 
+				moduleSet, 
+				this.getModules(this.moduleFolder);
+			);
+		};
+	}
 
 	getModules { | folder |
 		^folder.getScriptPaths.collect({ | script |
@@ -92,8 +110,8 @@ Composite {
 	}
 
 	reloadModules {
-		var klass = this.class, dict = klass.dictionary;
-		dict.removeModules(klass.name, moduleSet);
+		var class = this.class, dict = class.dictionary;
+		dict.removeModules(class.name, moduleSet);
 		this.getModules;
 	}
 
