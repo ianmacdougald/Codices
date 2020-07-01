@@ -8,10 +8,6 @@ Composite {
 		.loadModules(from).initComposite;
 	}
 
-	*basicNew { | moduleSet(\default) |
-		^super.newCopyArgs(moduleSet);
-	}
-
 	*initClass {
 		Class.initClassTree(Dictionary);
 		Class.initClassTree(PathStorage);
@@ -30,7 +26,7 @@ Composite {
 		var defaults = this.defaultModulePath; 
 		var folder = this.classFolder+/+"default";
 		if(defaults.exists and: { folder.exists.not }, { 
-			defaults.copyScriptsTo(folder.mkdir)
+			defaults.copyScriptsTo(folder.mkdir);
 		});
 	}
 
@@ -39,25 +35,33 @@ Composite {
 	loadModules { | from | 
 		var class = this.class, dict = class.dictionary; 
 		dict.at(class.name) ?? { dict.newDictionary(class.name) };
-		if(dict.notAt(class.name, moduleSet), { 
-			this.getFrom(from); 
-		}, { this.getModules; });
-		modules = dict.modulesAt(class.name, moduleSet);
+		this.getModules(from);
+		modules = dict.modulesAt(class.name, moduleSet).copy;
 	}
 
-	getFrom { | from |
+	getModules { | from | 
+		var class = this.class, dict = class.dictionary;
+		if(dict.notAt(class.name, moduleSet), {
+			if(this.shouldGet(from), { this.addModules });
+		});
+	}
+
+	addModules { 
+		this.class.dictionary.addModules(
+			this.class.name, 
+			moduleSet, 
+			this.loadScripts(this.moduleFolder);
+		);
+	}
+
+	shouldGet { | from |
 		if(from.notNil, { 
 			this.copyModules(from);
 			forkIfNeeded { this.processFolders(from); }
-		}, { this.processFolders; });
+			^false;
+		}, { this.processFolders; ^true});
 	}
-
-	switchTemplater { | folder | 
-		templater !? { 
-			templater.path = folder;
-		} ?? { templater = Templater(folder); }
-	}
-
+	
 	copyModules { | from |
 		var class = this.class, dict = class.dictionary;
 		if(dict.notAt(class.name, from), {
@@ -87,31 +91,29 @@ Composite {
 		});
 	}
 
+	switchTemplater { | folder | 
+		templater !? { templater.path = folder; } 
+		?? { templater = Templater(folder); };
+	}
+
 	makeTemplates {
 		this.subclassResponsibility(thisMethod);
 	}
 
 	loadFrom { | from | ^this.loadScripts(this.folderFrom(from)); }
 
-	getModules { 
-		var class = this.class, dict = class.dictionary; 
-		dict.getModules(
-			class.name, 
-			moduleSet, 
-			this.loadScripts(this.moduleFolder);
-		);
-	}
-
 	loadScripts { | folder |
-		^folder.getScriptPaths.collect({ | script |
-			[this.getModuleName(script), script.load];
-		}).flat.asPairs(Event);
+		var return = (); 
+		folder.getScriptPaths.do({ | script | 
+			return.add(this.getModuleName(script) -> script.load);
+		});
+		^return;
 	}
 
 	reloadScripts {
 		var class = this.class, dict = class.dictionary;
 		dict.removeModules(class.name, moduleSet);
-		this.loadScripts;
+		this.loadModules;
 	}
 
 	getModuleName { | input |
@@ -126,7 +128,7 @@ Composite {
 
 	moduleSet_{| newSet, from |
 		moduleSet = newSet;
-		this.processModules(from);
+		this.loadModules(from);
 		this.initComposite;
 	}
 

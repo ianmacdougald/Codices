@@ -10,7 +10,7 @@
 		});
 	}
 
-	getScriptPaths { 
+	getScriptPaths {
 		^this.getPaths.select({|item|
 			this.isValidScript(item);
 		});
@@ -34,7 +34,7 @@
 		];
 	}
 
-	getBuffers { 
+	getBuffers {
 		^this.getAudioPaths.collect(_.asBuffer);
 	}
 
