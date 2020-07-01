@@ -15,7 +15,6 @@ Composite {
 	*initClass {
 		Class.initClassTree(Dictionary);
 		Class.initClassTree(PathStorage);
-		Class.initClassTree(FolderManager);
 		Class.initClassTree(ModuleDictionary);
 		directory = PathStorage.at(id) ?? {
 			PathStorage.setAt(this.defaultDirectory, id);
