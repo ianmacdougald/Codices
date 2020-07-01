@@ -6,39 +6,39 @@ Templater {
 		moduleFolder ?? {Error("No path set.").throw};
 		^super.newCopyArgs(moduleFolder.asString);
 	}
-	
-	synthDef { | templateName("synthDef") | 
+
+	synthDef { | templateName("synthDef") |
 		this.makeTemplate(templateName, SynthDef);
-	} 
-	
+	}
+
 	pattern { | templateName("pattern") |
 		this.makeTemplate(templateName, Pattern);
 	}
-	
-	function { | templateName("function") | 
+
+	function { | templateName("function") |
 		this.makeTemplate(templateName, Function);
 	}
-	
-	synth { | templateName("synth") | 
+
+	synth { | templateName("synth") |
 		this.makeTemplate(templateName, Node);
-	} 
-	
+	}
+
 	event { | templateName("event") |
 		this.makeTemplate(templateName, Event);
 	}
-	
+
 	blank { | templateName("module") |
 		this.makeTemplate(templateName);
-	} 
-	
-	array { | templateName("array") |
-		this.makeTemplate(templateName, Array); 
 	}
 
-	makeExtTemplate { | path, templateName, object | 
+	array { | templateName("array") |
+		this.makeTemplate(templateName, Array);
+	}
+
+	makeExtTemplate { | path, templateName, object |
 		this.setTemplateDir(path ?? { this.class.defaultPath });
 		{this.makeTemplate(templateName, object)}
-		.protect({this.resetTemplateDir}); 
+		.protect({this.resetTemplateDir});
 		this.resetTemplateDir;
 	}
 
@@ -46,7 +46,7 @@ Templater {
 		this.class.targetCopy(templateName, path, object);
 	}
 
-	resetTemplateDir { 
+	resetTemplateDir {
 		this.class.templateDir = this.class.defaultPath;
 	}
 
@@ -54,7 +54,7 @@ Templater {
 		this.class.templateDir_(newPath);
 	}
 
-	*targetCopy { | templateName, path, object| 
+	*targetCopy { | templateName, path, object|
 		var targetPath = path+/+templateName.asString++".scd";
 		try({this.copyFile(object, targetPath)}, {
 			this.copyFile(object, targetPath.increment);

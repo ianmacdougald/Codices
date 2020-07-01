@@ -5,7 +5,7 @@ Composite {
 	*new { | moduleSet(\default), from |
 		this.checkDefaults;
 		^super.newCopyArgs(moduleSet)
-		.processModules(from).initComposite;
+		.loadModules(from).initComposite;
 	}
 
 	*basicNew { | moduleSet(\default) |
@@ -37,11 +37,13 @@ Composite {
 
 	*defaultModulePath { ^""; }
 
-	processModules { | from | 
+	loadModules { | from | 
 		var class = this.class, dict = class.dictionary; 
 		dict.at(class.name) ?? { dict.newDictionary(class.name) };
-		if(dict.notAt(class.name, moduleSet), { this.getFrom(from) });
-		this.loadModules;
+		if(dict.notAt(class.name, moduleSet), { 
+			this.getFrom(from); 
+		}, { this.getModules; });
+		modules = dict.modulesAt(class.name, moduleSet);
 	}
 
 	getFrom { | from |
@@ -60,7 +62,7 @@ Composite {
 	copyModules { | from |
 		var class = this.class, dict = class.dictionary;
 		if(dict.notAt(class.name, from), {
-			dict.addModules(class.name, from, this.loadFrom(from));
+			dict.getModules(class.name, from, this.loadFrom(from));
 		});
 		dict.copyEntry(class.name, from, moduleSet);
 	}
@@ -90,29 +92,27 @@ Composite {
 		this.subclassResponsibility(thisMethod);
 	}
 
-	loadFrom { | from | ^this.getModules(this.folderFrom(from)); }
+	loadFrom { | from | ^this.loadScripts(this.folderFrom(from)); }
 
-	loadModules { 
+	getModules { 
 		var class = this.class, dict = class.dictionary; 
-		dict.modulesAt(class.name, moduleSet) ?? { 
-			dict.addModules(
-				class.name, 
-				moduleSet, 
-				this.getModules(this.moduleFolder);
-			);
-		};
+		dict.getModules(
+			class.name, 
+			moduleSet, 
+			this.loadScripts(this.moduleFolder);
+		);
 	}
 
-	getModules { | folder |
+	loadScripts { | folder |
 		^folder.getScriptPaths.collect({ | script |
 			[this.getModuleName(script), script.load];
 		}).flat.asPairs(Event);
 	}
 
-	reloadModules {
+	reloadScripts {
 		var class = this.class, dict = class.dictionary;
 		dict.removeModules(class.name, moduleSet);
-		this.getModules;
+		this.loadScripts;
 	}
 
 	getModuleName { | input |

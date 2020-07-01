@@ -4,8 +4,9 @@ Folderer {
 
 	copyFile { | from, to | File.copy(from, to); }
 
-
 	exists { | path | ^path.pathMatch.isEmpty.not; }
+
+
 
 	copyFolder { | from, to |
 		var newPath = this.getFullPath(to);

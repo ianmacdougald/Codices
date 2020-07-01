@@ -5,12 +5,8 @@ ModuleDictionary {
 
 	makeDictionary { dictionary = Dictionary.new; }
 
-	isAt { | key, subkey |
-		^dictionary[key][subkey].notNil;
-	}
-
 	notAt { | key, subkey | 
-		^this.isAt(key, subkey).not;
+		^dictionary[key][subkey].isNil;
 	}
 
 	newDictionary { | key |
@@ -40,19 +36,15 @@ ModuleDictionary {
 		^dictionary.removeAt(key);
 	}
 
-	at { | key | ^dictionary.at(key); }
+	at { | key | ^dictionary[key]; }
 
 	clear { dictionary.clear; }
 
-	modulesAt { | key, subkey | ^dictionary[key].at(subkey); }
+	modulesAt { | key, subkey | ^dictionary[key][subkey]; }
 
 	copyEntry { | key, toCopy, newEntry |
 		if(this.notAt(key, newEntry), {
 			dictionary[key].add(newEntry -> dictionary[key][toCopy].copy);
-			// this.addSubDictionary(key, newEntry);
-			/*dictionary[key][toCopy].keysValuesDo({ | key, value |
-				dictionary[key][newEntry].add(key -> value.copy);
-			});*/
 		});
 	}
 
