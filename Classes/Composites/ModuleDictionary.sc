@@ -5,7 +5,8 @@ ModuleDictionary {
 
 	makeDictionary { dictionary = Dictionary.new; }
 
-	notAt { | key, subkey | 
+	notAt { | key, subkey |
+		this.newDictionary(key);
 		^dictionary[key][subkey].isNil;
 	}
 
@@ -19,7 +20,7 @@ ModuleDictionary {
 		dictionary[key].add(subkey -> item);
 	}
 
-	addModules { | key, subkey, item |
+	add { | key, subkey, item |
 		if(this.notAt(key, subkey), {
 			this.addToDictionary(key, subkey, item);
 		});
@@ -44,7 +45,7 @@ ModuleDictionary {
 
 	copyEntry { | key, toCopy, newEntry |
 		if(this.notAt(key, newEntry), {
-			dictionary[key].add(newEntry -> dictionary[key][toCopy].copy);
+			dictionary[key].add(newEntry -> dictionary[key][toCopy]);
 		});
 	}
 

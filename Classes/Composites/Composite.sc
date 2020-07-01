@@ -11,7 +11,6 @@ Composite {
 	*initClass {
 		Class.initClassTree(Dictionary);
 		Class.initClassTree(PathStorage);
-		Class.initClassTree(ModuleDictionary);
 		directory = PathStorage.at(id) ?? {
 			PathStorage.setAt(this.defaultDirectory, id);
 		};
@@ -25,7 +24,7 @@ Composite {
 	*checkDefaults {
 		var defaults = this.defaultModulePath; 
 		var folder = this.classFolder+/+"default";
-		if(defaults.exists and: { folder.exists.not }, { 
+		if(defaults.exists && folder.exists.not, { 
 			defaults.copyScriptsTo(folder.mkdir);
 		});
 	}
@@ -34,30 +33,24 @@ Composite {
 
 	loadModules { | from | 
 		var class = this.class, dict = class.dictionary; 
-		dict.at(class.name) ?? { dict.newDictionary(class.name) };
 		this.getModules(from);
-		modules = dict.modulesAt(class.name, moduleSet).copy;
+		modules = dict.modulesAt(class.name, moduleSet);
 	}
 
 	getModules { | from | 
 		var class = this.class, dict = class.dictionary;
 		if(dict.notAt(class.name, moduleSet), {
-			if(this.shouldGet(from), { this.addModules });
+			if(this.shouldGet(from), { 
+				dict.add(class.name, moduleSet, 
+					this.loadScripts(this.moduleFolder));
+			});
 		});
-	}
-
-	addModules { 
-		this.class.dictionary.addModules(
-			this.class.name, 
-			moduleSet, 
-			this.loadScripts(this.moduleFolder);
-		);
 	}
 
 	shouldGet { | from |
 		if(from.notNil, { 
 			this.copyModules(from);
-			forkIfNeeded { this.processFolders(from); }
+			forkIfNeeded { this.processFolders(from) };
 			^false;
 		}, { this.processFolders; ^true});
 	}
@@ -81,22 +74,20 @@ Composite {
 	processFolders { | from |
 		if(this.moduleFolder.exists.not, {  
 			this.moduleFolder.mkdir;
-			from !? {
-				(this.class.classFolder+/+from)
-				.copyScriptsTo(this.moduleFolder);
-			} ?? { 
-				this.switchTemplater(this.moduleFolder);
-				this.makeTemplates; 
-			};
+			from !? { this.copyFrom } ?? { this.makeTemplates };
 		});
 	}
 
-	switchTemplater { | folder | 
-		templater !? { templater.path = folder; } 
-		?? { templater = Templater(folder); };
+	copyFrom { | from | 
+		this.folderFrom(from).copyScriptsTo(this.moduleFolder);
 	}
 
-	makeTemplates {
+	makeTemplates { 
+		templater = Templater(this.moduleFolder);
+		this.addTemplates;
+	}
+
+	addTemplates {
 		this.subclassResponsibility(thisMethod);
 	}
 
