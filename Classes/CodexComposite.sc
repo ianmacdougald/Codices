@@ -34,7 +34,7 @@ CodexComposite {
 			this.copyModules(from);
 			forkIfNeeded { this.processFolders(set, from) };
 			^false;
-		}, { this.processFolders(set); ^true});
+		}, { this.processFolders(set); ^true });
 	}
 
 	*copyModules { | from, to |
@@ -70,7 +70,7 @@ CodexComposite {
 		var folder = this.asPath(set);
 		if(folder.exists.not, {
 			folder.mkdir;
-			from !? { this.copyFiles(from); } ?? { this.template(folder); };
+			from !? { this.copyFiles(from, folder) } ?? { this.template(folder) };
 		});
 	}
 
@@ -78,7 +78,7 @@ CodexComposite {
 		from = this.asPath(from);
 		if(from.exists, {
 			from.copyScriptsTo(to);
-		}, { this.processTemplates(to); });
+		}, { this.processTemplates(to) });
 	}
 
 	*template { | where |
