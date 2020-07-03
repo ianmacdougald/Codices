@@ -1,28 +1,27 @@
 Hybrid : Composite {
-	classvar dictionary, processor;
+	classvar synthDefs, processor;
 	var <>server;
 
 	*initClass {
-		Class.initClassTree(Dictionary);
-		Class.initClassTree(SynthDefProcessor);
-		dictionary = Dictionary.new;
 		processor = SynthDefProcessor.new;
+		synthDefs = Dictionary.new;
 		StartUp.add ({
 			ServerQuit.add({this.removeAll});
 		});
+		this.checkDefaults;
 	}
 
 	*clearHybrids {
-		dictionary.do({ | dict | processor.remove(dict.asArray)});
-		dictionary.clear;
+		synthDefs.do({ | dict | processor.remove(dict.asArray)});
+		synthDefs.clear;
 	}
 
 	*removeAll {
-		processor.remove(dictionary.removeAt(this.name).asArray);
+		processor.remove(synthDefs.removeAt(this.name).asArray);
 	}
 
 	*removeAt { | key |
-		processor.remove(this.dictionary.removeAt(key));
+		processor.remove(this.synthDefs.removeAt(key));
 	}
 
 	initComposite {
@@ -36,12 +35,12 @@ Hybrid : Composite {
 
 	initHybrid {}
 
-	*subDictionaryExists {|className|
-		^dictionary[this.name].notNil;
+	*subDictionaryExists {
+		^synthDefs[this.name].notNil;
 	}
 
 	*addSubDictionary {
-		dictionary[this.name] = Dictionary.new;
+		synthDefs[this.name] = Dictionary.new;
 	}
 
 	makeSynthDefs {
@@ -77,11 +76,11 @@ Hybrid : Composite {
 	}
 
 	*notInDictionary { |synthDefName|
-		^dictionary[this.name][synthDefName].isNil;
+		^synthDefs[this.name][synthDefName].isNil;
 	}
 
 	*addToDictionary { |synthDef|
-		dictionary[this.name].add(synthDef.name -> synthDef);
+		synthDefs[this.name].add(synthDef.name -> synthDef);
 	}
 
 	formatName { |string|
@@ -101,16 +100,16 @@ Hybrid : Composite {
 	}
 
 	*freeSynthDefs {
-		var toRemove = dictionary.removeAt(this.name);
+		var toRemove = synthDefs.removeAt(this.name);
 		toRemove !? {processor.remove(toRemove.asArray)};
 	}
 
 	*removeSynthDef { | key |
-		processor.remove(this.dictionary.removeAt(key));
+		processor.remove(this.synthDefs.removeAt(key));
 	}
 
-	*hybridDictionary { ^dictionary; }
+	*allSynthDefs { ^synthDefs; }
 
-	*dictionary { ^dictionary[this.name]; }
+	*synthDefs { ^synthDefs[this.name]; }
 
 }

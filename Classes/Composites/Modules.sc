@@ -59,4 +59,6 @@ Modules {
 		dictionary.printItemsOn(stream);
 		stream << " ]" ;
 	}
+
+	do { | function | dictionary.do({ | item, index| function.value(item, index) }); }
 }

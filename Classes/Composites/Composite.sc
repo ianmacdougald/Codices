@@ -8,6 +8,10 @@ Composite {
 			PathStorage.setAt(this.defaultDirectory, id);
 		};
 		modules = Modules.new;
+		this.allSubclasses.do({ | class |
+			Class.initClassTree(class);
+			class.checkDefaults;
+		});
 	}
 
 	*new { | moduleSet(\default), from |
@@ -62,13 +66,11 @@ Composite {
 	}
 
 	*processFolders { | set, from |
-		if(set!=\default, {
-			var folder = this.asPath(set);
-			if(folder.exists.not, {
-				folder.mkdir;
-				from !? { this.copyFiles(from); } ?? { this.template(folder); };
-			});
-		}, { this.checkDefaults; });
+		var folder = this.asPath(set);
+		if(folder.exists.not, {
+			folder.mkdir;
+			from !? { this.copyFiles(from); } ?? { this.template(folder); };
+		});
 	}
 
 	*copyFiles { | from, to |
@@ -89,7 +91,7 @@ Composite {
 	}
 
 	*defaultDirectory {
-		^(Main.packages.asDict.at('CodexIan')+/+id);
+		^(Platform.userExtensionDir.dirname+/+id);
 	}
 
 	*checkDefaults {

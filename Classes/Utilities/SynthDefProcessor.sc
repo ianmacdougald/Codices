@@ -1,4 +1,4 @@
-SynthDefProcessor_Base {
+SynthDefRoutinizer {
 	var <>server, routine, <synthDefList;
 
 	*new { |server(Server.default)|
@@ -7,6 +7,7 @@ SynthDefProcessor_Base {
 
 	init {
 		synthDefList = List.new;
+		ServerBoot.add({ routine = this.makeRoutine; });
 	}
 
 	run {
@@ -54,9 +55,7 @@ SynthDefProcessor_Base {
 		^input;
 	}
 
-	pop {
-		^try{synthDefList.removeAt(0)}
-	}
+	pop { ^try({synthDefList.removeAt(0)}, {^nil}); }
 
 	popAction {
 		var def = this.pop;
@@ -85,7 +84,7 @@ SynthDefProcessor_Base {
 
 }
 
-SynthDefAdder : SynthDefProcessor_Base {
+SynthDefAdder : SynthDefRoutinizer {
 
 	*new{ |server(Server.default)| ^super.new(server); }
 
@@ -101,9 +100,9 @@ SynthDefAdder : SynthDefProcessor_Base {
 
 }
 
-SynthDefRemover : SynthDefProcessor_Base {
+SynthDefRemover : SynthDefRoutinizer {
 
-	*new {|server(Server.default)| ^super.new(server); }
+	*new { | server(Server.default) | ^super.new(server); }
 
 	action { |synthDef|
 		synthDef !? {SynthDef.removeAt(synthDef.name)};
@@ -121,13 +120,11 @@ SynthDefRemover : SynthDefProcessor_Base {
 SynthDefProcessor {
 	var <server, adder, remover;
 
-	*new{|server(Server.default)|
+	*new{ | server(Server.default) |
 		^super.newCopyArgs(server).init;
 	}
 
 	*initClass {
-		Class.initClassTree(SynthDefAdder);
-		Class.initClassTree(SynthDefRemover);
 		Class.initClassTree(Server);
 		Class.initClassTree(SynthDef);
 	}
