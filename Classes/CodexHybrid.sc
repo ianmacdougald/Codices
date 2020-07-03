@@ -4,82 +4,55 @@ CodexHybrid : CodexComposite {
 
 	*initClass {
 		processor = CodexProcessor.new;
-		synthDefs = Dictionary.new;
+		synthDefs = CodexCache.new;
 		StartUp.add ({
 			ServerQuit.add({this.removeAll});
 		});
 	}
 
-	*clearHybrids {
-		synthDefs.do({ | dict | processor.remove(dict.asArray)});
-		synthDefs.clear;
+	*clearSynthDefs {
+		var toRemove = List.new;
+		this.synthDefs.do({ | dict | toRemove.add(dict.asArray); }).clear;
+		processor.remove(toRemove.flat);
 	}
 
-	*removeAll {
-		processor.remove(synthDefs.removeAt(this.name).asArray);
+	*clearAllSynthDefs {
+		var toRemove = List.new;
+		synthDefs.do({ | dict | toRemove.add(dict.asArray); }).clear;
+		processor.remove(toRemove.flat);
 	}
 
-	*removeAt { | key |
+/*	*removeAt { | key |
 		processor.remove(this.synthDefs.removeAt(key));
-	}
+	}*/
 
 	initComposite {
+		var class = this.class;
 		server = Server.default;
-		if(this.class.subDictionaryExists.not, {
-			this.class.addSubDictionary;
+		if(class.allSynthDefs.notAt(class.name, moduleSet), {
+			this.makeSynthDefs;
 		});
-		this.makeSynthDefs;
 		this.initHybrid;
 	}
 
 	initHybrid {}
 
-	*subDictionaryExists {
-		^synthDefs[this.name].notNil;
-	}
-
-	*addSubDictionary {
-		synthDefs[this.name] = Dictionary.new;
-	}
-
 	makeSynthDefs {
-		var toProcess = [];
-		modules.do({|module|
-			toProcess = toProcess.add(this.checkModule(module));
-		});
-		this.class.processSynthDefs(toProcess.flat);
+		var class = this.class, defs = class.allSynthDefs;
+		var toProcess = this.getSynthDefs;
+		class.processSynthDefs(toProcess);
+		defs.addToDictionary(class.name, moduleSet, toProcess);
 	}
 
-	checkModule { |object|
-		var synthDefs = [];
-		case
-		{object.isCollection and: {object.isString.not}}{
-			object.do({|item| ^this.checkModule(item)});
-		}
-		{object.isKindOf(SynthDef)}{
-			object.name = this.formatName(object.name).asSymbol;
-			if(this.checkDictionary(object), {
-				synthDefs = synthDefs.add(object);
+	getSynthDefs {
+		^modules.select({ | item |
+			var return = false;
+			if(item.isKindOf(SynthDef), {
+				item.name = this.formatName(item.name).asSymbol;
+				return = true;
 			});
-		};
-		^synthDefs;
-	}
-
-	checkDictionary { |synthDef|
-		var class = this.class;
-		if(class.notInDictionary(synthDef), {
-			class.addToDictionary(synthDef);
-			^true;
-		});
-		^false;
-	}
-
-	*notInDictionary { |synthDefName|
-		^synthDefs[this.name][synthDefName].isNil;
-	}
-
-	*addToDictionary { |synthDef|
-		synthDefs[this.name].add(synthDef.name -> synthDef);
+			return;
+		}).asArray.flat;
 	}
 
 	formatName { |string|
@@ -94,7 +67,7 @@ CodexHybrid : CodexComposite {
 		^name;
 	}
 
-	*processSynthDefs { |synthDef|
+	*processSynthDefs { | synthDef |
 		processor.add(synthDef);
 	}
 
@@ -104,7 +77,7 @@ CodexHybrid : CodexComposite {
 	}
 
 	*removeSynthDef { | key |
-		processor.remove(this.synthDefs.removeAt(key));
+		processor.remove(synthDefs.removeAt(key));
 	}
 
 	*allSynthDefs { ^synthDefs; }
