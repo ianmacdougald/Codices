@@ -20,13 +20,19 @@ CodexComposite {
 		.loadModules(from).initComposite;
 	}
 
-	*getModules { | moduleSet, from |
-		if(modules.notAt(this.name, moduleSet), {
-			if(this.shouldAdd(moduleSet, from), {
-				this.addModules(moduleSet);
-			});
+	*getModules { | set, from |
+		if(this.notAt(set), {
+			this.organizeModules(set, from);
 		});
-		^modules.modulesAt(this.name, moduleSet)
+		^modules.modulesAt(this.name, set)
+	}
+
+	*notAt { | set | ^modules.notAt(this.name, set); }
+
+	*organizeModules { | set, from |
+		if(this.shouldAdd(set, from), {
+			this.addModules(set);
+		});
 	}
 
 	*shouldAdd { | set, from |
@@ -82,6 +88,7 @@ CodexComposite {
 	}
 
 	*template { | where |
+		"templating".postln;
 		this.makeTemplates(CodexTemplater(this.asPath(where)));
 	}
 
@@ -119,7 +126,7 @@ CodexComposite {
 		this.loadModules;
 	}
 
-	moduleSet_{| newSet, from |
+	moduleSet_{ | newSet, from |
 		moduleSet = newSet;
 		this.loadModules(from);
 		this.initComposite;
@@ -133,5 +140,4 @@ CodexComposite {
 	*directory_{| newPath |
 		directory = CodexPaths.setAt(newPath, id);
 	}
-
 }

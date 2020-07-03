@@ -25,7 +25,7 @@
 	exists { ^this.pathMatch.isEmpty.not }
 
 	increment {
-		^FileIncrementer(PathName(this).fileName, this.dirname).increment;
+		^CodexIncrementer(PathName(this).fileName, this.dirname).increment;
 	}
 
 	getFilePaths {
