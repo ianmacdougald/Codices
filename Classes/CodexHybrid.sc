@@ -1,20 +1,20 @@
 CodexHybrid : CodexComposite {
-	classvar processor, <symbCache;
+	classvar processor, <symbolsCache;
 	var <>server;
 
 	*initClass {
-		symbCache = CodexCache.new;
+		symbolsCache = CodexCache.new;
 		processor = CodexProcessor.new;
 	}
 
 	*notAt { | set |
 		var return = super.notAt(set);
-		if(return, { symbCache.add(this.name, set, set) });
+		if(return, { symbolsCache.add(this.name, set, set) });
 		^return;
 	}
 
 	initComposite {
-		var class = this.class, cache = class.symbCache;
+		var class = this.class, cache = class.symbolsCache;
 		if(cache.removeModules(class.name, moduleSet).notNil, {
 			this.processSynthDefs;
 		});

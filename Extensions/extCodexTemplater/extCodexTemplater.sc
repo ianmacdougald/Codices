@@ -1,12 +1,12 @@
-+ CodexTemplater { 
++ CodexTemplater {
 
-	patternFunction { | templateName("patternFunction") | 
+	patternFunction { | templateName("patternFunction") |
 		var path = Main.packages.asDict.at('CodexIan')
-		+/+"Extensions/extTemplater";
+		+/+"Extensions/extCodexTemplater";
 		this.makeExtTemplate(
 			path,
-			templateName, 
-			"patternFunction", 
+			templateName,
+			"patternFunction",
 		);
 	}
 

@@ -3,8 +3,14 @@
 { | modules |
 
 	Pbind(
-		\instrument, modules.synthDef.name,
 
+		\instrument, Pfunc({
+			modules[
+				format("synthDef%", 3.rand).asSymbol
+			].name.postln;
+		}),
+
+		\dur, 0.5,
 
 	);
 

@@ -21,32 +21,24 @@ CodexComposite {
 	}
 
 	*getModules { | set, from |
-		if(this.notAt(set), {
-			this.organizeModules(set, from);
+		if(this.notAt(set) and: { this.shouldAdd(set, from) }, {
+			this.addModules(set);
 		});
-		^modules.modulesAt(this.name, set)
+		^modules.modulesAt(this.name, set);
 	}
 
 	*notAt { | set | ^modules.notAt(this.name, set); }
 
-	*organizeModules { | set, from |
-		if(this.shouldAdd(set, from), {
-			this.addModules(set);
-		});
-	}
-
 	*shouldAdd { | set, from |
 		if(from.notNil, {
-			this.copyModules(from);
+			this.copyModules(set, from);
 			forkIfNeeded { this.processFolders(set, from) };
 			^false;
 		}, { this.processFolders(set); ^true });
 	}
 
-	*copyModules { | from, to |
-		if(modules.notAt(this.name, from), {
-			modules.addModules(this.name, from, this.loadScripts(from));
-		});
+	*copyModules { | to, from |
+		if(this.notAt(from), { this.addModules(from) });
 		modules.copyEntry(this.name, from, to);
 	}
 
@@ -88,7 +80,6 @@ CodexComposite {
 	}
 
 	*template { | where |
-		"templating".postln;
 		this.makeTemplates(CodexTemplater(this.asPath(where)));
 	}
 
@@ -123,7 +114,7 @@ CodexComposite {
 	reloadScripts {
 		var class = this.class, dict = class.modules;
 		dict.removeModules(class.name, moduleSet);
-		this.loadModules;
+		this.moduleSet = moduleSet;
 	}
 
 	moduleSet_{ | newSet, from |

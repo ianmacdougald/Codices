@@ -1,6 +1,6 @@
 //Define SynthDef here...
 
-SynthDef('nil', { 
+SynthDef(\template, { 
 	
 	//write your codew here...
 	
