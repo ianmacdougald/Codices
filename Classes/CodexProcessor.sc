@@ -1,4 +1,4 @@
-SynthDefRoutinizer {
+CodexProcessorRoutine {
 	var <>server, routine, <synthDefList;
 
 	*new { |server(Server.default)|
@@ -84,7 +84,7 @@ SynthDefRoutinizer {
 
 }
 
-SynthDefAdder : SynthDefRoutinizer {
+CodexAdder : CodexRoutinizer {
 
 	*new{ |server(Server.default)| ^super.new(server); }
 
@@ -100,7 +100,7 @@ SynthDefAdder : SynthDefRoutinizer {
 
 }
 
-SynthDefRemover : SynthDefRoutinizer {
+CodexRemover : CodexRoutinizer {
 
 	*new { | server(Server.default) | ^super.new(server); }
 
@@ -117,7 +117,7 @@ SynthDefRemover : SynthDefRoutinizer {
 	}
 }
 
-SynthDefProcessor {
+CodexProcessor {
 	var <server, adder, remover;
 
 	*new{ | server(Server.default) |
@@ -130,8 +130,8 @@ SynthDefProcessor {
 	}
 
 	init {
-		adder = SynthDefAdder.new(server);
-		remover = SynthDefRemover.new(server);
+		adder = CodexAdder.new(server);
+		remover = CodexRemover.new(server);
 	}
 
 	add { |synthDefs|

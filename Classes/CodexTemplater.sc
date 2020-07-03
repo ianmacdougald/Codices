@@ -1,4 +1,4 @@
-Templater {
+CodexTemplater {
 	classvar <>templateDir;
 	var <>path;
 

@@ -1,14 +1,14 @@
-TITLE::SynthDefProcessor
+TITLE::CodexProcessor
 summary::Manage the loading and unloading of SynthDefs from a server.
 categories::Libraries>CodexIan>Utilities
 keyword::codexian, utilities, synthdef, processor, codexian utlities
 
 DESCRIPTION::
-SynthDefProcessor is responsible for loading and unloading SynthDef objects from a given server. 
+CodexProcessor is responsible for loading and unloading SynthDef objects from a given server. 
 
 CLASSMETHODS::
 method::new
-Creates a new instance of SynthDefProcessor
+Creates a new instance of CodexProcessor
 
 INSTANCEMETHODS::
 private::init
@@ -29,10 +29,10 @@ Gets and sets the server.
 EXAMPLES::
 code::
 (
-//1. Instance a SynthDefProcessor.
+//1. Instance a CodexProcessor.
 Server.default = s = Server.local; 
 s.waitForBoot({
-	p = SynthDefProcessor.new; 
+	p = CodexProcessor.new; 
 });
 )
 
@@ -58,13 +58,13 @@ p.remove(d);
 x = Synth(\someSynthDef); 
 ::
 
-SynthDefProcessorr can also accept collections of SynthDef objects to process all at once. 
+CodexProcessorr can also accept collections of SynthDef objects to process all at once. 
 code:: 
 (
-//1. Instance a SynthDefProcessor.
+//1. Instance a CodexProcessor.
 Server.default = s = Server.local; 
 s.waitForBoot({ 
-	p = SynthDefProcessor.new; 
+	p = CodexProcessor.new; 
 });
 )
 

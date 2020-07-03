@@ -1,11 +1,11 @@
-TITLE:: PathStorage
+TITLE:: CodexStorage
 summary:: configures default folder paths via persistent storage.
 categories:: Libraries>CodexIan>Utilities>Path Management
 related:: Classes/IanAudioPath, Classes/FileIncrementer
 keyword:: persistent, codexian, codexian path, utilities, codexian utilities
 DESCRIPTION::
 
-PathStorage is used for managing paths to files or folders using persistent storage. As a result, information stored through the class's interface will persist across sessions of the link::Classes/Interpreter::.
+CodexStorage is used for managing paths to files or folders using persistent storage. As a result, information stored through the class's interface will persist across sessions of the link::Classes/Interpreter::.
 
 CLASSMETHODS::
 
@@ -43,32 +43,32 @@ private::storagePath
 EXAMPLES::
 code::
 //Set a path using the key \test.
-PathStorage.setAt("~/Documents/Example/Path".standardizePath, \test); 
+CodexStorage.setAt("~/Documents/Example/Path".standardizePath, \test); 
 
 //Get the path from the same key.
-PathStorage.at(\test).postln; 
+CodexStorage.at(\test).postln; 
 
 //If you want...reboot the interpreter (wiping SC's memory) and try again.
 //The path should have persisted.
-PathStorage.at(\test).postln; 
+CodexStorage.at(\test).postln; 
 
 //Change the path and reboot again to see that configurations stick.
-PathStorage.setAt("~/Whatever/Path".standardizePath, \test);
+CodexStorage.setAt("~/Whatever/Path".standardizePath, \test);
 
 //Add a new key.
-PathStorage.setAt("~/New/Path".standardizePath, \test2); 
+CodexStorage.setAt("~/New/Path".standardizePath, \test2); 
 
 //Get the keys associated with the paths stored.
-PathStorage.keys.postln; 
+CodexStorage.keys.postln; 
 
 //Remove the test paths from storage.
-PathStorage.removeAt(\test);
-PathStorage.removeAt(\test2);
+CodexStorage.removeAt(\test);
+CodexStorage.removeAt(\test2);
 
 //See, they're gone!
-PathStorage.keys.postln; 
+CodexStorage.keys.postln; 
 
 //Test.
-PathStorage.at(\test); 
-PathStorage.at(\test2);
+CodexStorage.at(\test); 
+CodexStorage.at(\test2);
 ::

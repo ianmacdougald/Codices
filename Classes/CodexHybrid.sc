@@ -1,14 +1,13 @@
-Hybrid : Composite {
+CodexHybrid : CodexComposite {
 	classvar synthDefs, processor;
 	var <>server;
 
 	*initClass {
-		processor = SynthDefProcessor.new;
+		processor = CodexProcessor.new;
 		synthDefs = Dictionary.new;
 		StartUp.add ({
 			ServerQuit.add({this.removeAll});
 		});
-		this.checkDefaults;
 	}
 
 	*clearHybrids {

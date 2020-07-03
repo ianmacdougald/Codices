@@ -1,4 +1,4 @@
-Modules {
+CodexCache {
 	var dictionary;
 
 	*new { ^super.new.init; }

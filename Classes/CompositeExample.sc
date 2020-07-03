@@ -1,4 +1,4 @@
-CompositeExample : Composite {
+CompositeExample : CodexComposite {
 	var routine, pattern;
 
 	//If you want to initialize variables but don't want to rewrite Composite's constructor,

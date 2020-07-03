@@ -1,11 +1,11 @@
-TITLE::Templater
+TITLE::CodexTemplater
 summary::Create .scd files from templates of code. 
 categories::Libraries>CodexIan>Utilities
 related::Classes/FileIncrementer, Classes/Composite
 keyword:: template, codexian, compositing, utilities, codexian utilities
 
 DESCRIPTION::
-Templater creates emphasis::.scd:: files with code templates for the following classes: 
+CodexTemplater creates emphasis::.scd:: files with code templates for the following classes: 
 
 list::
 	## link::Classes/SynthDef::
@@ -16,13 +16,13 @@ list::
 	## link::Classes/Array::
 ::
 
-However, if a situation arises in which a composite needs templates from different objects or combinations of objects, like a function that returns an array of events, Templater can be easily link::#Extending Templater#extended::.
+However, if a situation arises in which a composite needs templates from different objects or combinations of objects, like a function that returns an array of events, CodexTemplater can be easily link::#Extending CodexTemplater#extended::.
 
-Templater was originally designed to work within the link::Classes/Composite:: framework. To see it in action, refer to this link::Guides/MusicCompositing##guide::.
+CodexTemplater was originally designed to work within the link::Classes/Composite:: framework. To see it in action, refer to this link::Guides/MusicCompositing##guide::.
 CLASSMETHODS::
 
 method::new
-Creates a new instance of Templater.
+Creates a new instance of CodexTemplater.
 
 argument::moduleFolder
 A string that refers to the folder in which templates will be generated. 
@@ -77,8 +77,8 @@ var path, templater;
 //1. Set up a path.
 path = "~/Desktop/_templateTest".standardizePath.mkdir; 
 
-//2. Load the path into a Templater.
-templater = Templater.new(path); 
+//2. Load the path into a CodexTemplater.
+templater = CodexTemplater.new(path); 
 
 //3. Make templates for SynthDef.
 templater.synthDef; 
@@ -107,8 +107,8 @@ var path, templater;
 //1. Set up a path. 
 path = "~Desktop/_secondTemplateTest".standardizePath.mkdir; 
 
-//2. Load the path into a Templater.
-templater = Templater.new(path); 
+//2. Load the path into a CodexTemplater.
+templater = CodexTemplater.new(path); 
 
 //3. Make templates of a Patttern. 
 templater.pattern("dupTest"); 
@@ -124,14 +124,14 @@ PathName(path).files.do{|item|
 //5. Clean up. 
 File.deleteAll("~/Desktop/_secondTemplateTest".standardizePath);
 ::
-section::Extending Templater
-Because sitautions may arise in which it is necessary to have templates for objects not defined by default, Templater can be easily extended to include new templates. The procedure for doing so requires two steps—writing a new template and writing an extension method for Templater that makes it.
+section::Extending CodexTemplater
+Because sitautions may arise in which it is necessary to have templates for objects not defined by default, CodexTemplater can be easily extended to include new templates. The procedure for doing so requires two steps—writing a new template and writing an extension method for CodexTemplater that makes it.
 
-By default, Templater looks for templates in the directory where the class is implemented. However, if new templates are written somewhere else, Templater must be directed to them. This is achieved via the method link::Classes/Templater#-setTemplateDir::. Once the class is set to look in the new folder, the targeted template can be made via link::Classes/Templater#-makeTemplate::. Subsequently, it is good practice to reset Templater back to its default state using link::Classes/Templater#-resetTemplateDir::. For convenience, these procedures are encapsulated by the method link::Classes/Templater#-makeExtTemplate::. As such, it is only necessary to call this method inside the extension. 
+By default, CodexTemplater looks for templates in the directory where the class is implemented. However, if new templates are written somewhere else, CodexTemplater must be directed to them. This is achieved via the method link::Classes/CodexTemplater#-setTemplateDir::. Once the class is set to look in the new folder, the targeted template can be made via link::Classes/CodexTemplater#-makeTemplate::. Subsequently, it is good practice to reset CodexTemplater back to its default state using link::Classes/CodexTemplater#-resetTemplateDir::. For convenience, these procedures are encapsulated by the method link::Classes/CodexTemplater#-makeExtTemplate::. As such, it is only necessary to call this method inside the extension. 
 
 The following is an example of what this looks like.
 code::
-+ Templater { 
++ CodexTemplater { 
 
 	//This method will generate a custom template from an external directory.
 	customTemplate { | templateName("custom") | 

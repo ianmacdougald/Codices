@@ -1,7 +1,6 @@
-PathStorage  {
+CodexPaths  {
 	classvar quarkPath;
 	classvar dictionary;
-
 
 	*storagePath {
 		^(this.pathToQuark +/+ format("%.YAML", this.name))

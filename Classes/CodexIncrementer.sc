@@ -1,4 +1,4 @@
-FileIncrementer {
+CodexIncrementer {
 	var fileTemplate, <>folder, <>extension;
 	var <currentIncrement, previousFileName;
 
@@ -54,6 +54,6 @@ FileIncrementer {
 
 + PathName {
 	increment {
-		^FileIncrementer.new(this.fileName, this.pathOnly).increment;
+		^CodexIncrementer.new(this.fileName, this.pathOnly).increment;
 	}
 }

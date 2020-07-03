@@ -1,13 +1,13 @@
-Composite {
+CodexComposite {
 	classvar <directory, id = 'sc-modules', <modules;
 	var <moduleSet, <modules;
 
 	*initClass {
 		Class.initClassTree(Dictionary);
-		directory = PathStorage.at(id) ?? {
-			PathStorage.setAt(this.defaultDirectory, id);
+		directory = CodexPaths.at(id) ?? {
+			CodexPaths.setAt(this.defaultDirectory, id);
 		};
-		modules = Modules.new;
+		modules = CodexCache.new;
 		this.allSubclasses.do({ | class |
 			Class.initClassTree(class);
 			class.checkDefaults;
@@ -81,7 +81,7 @@ Composite {
 	}
 
 	*template { | where |
-		this.makeTemplates(Templater(this.asPath(where)));
+		this.makeTemplates(CodexTemplater(this.asPath(where)));
 	}
 
 	*makeTemplates { | templater | }
@@ -130,7 +130,7 @@ Composite {
 	}
 
 	*directory_{| newPath |
-		directory = PathStorage.setAt(newPath, id);
+		directory = CodexPaths.setAt(newPath, id);
 	}
 
 }

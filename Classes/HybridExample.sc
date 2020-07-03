@@ -1,4 +1,4 @@
-HybridExample : Hybrid {
+HybridExample : CodexHybrid {
 	var routine, pattern;
 
 	*defaultModulesPath {
