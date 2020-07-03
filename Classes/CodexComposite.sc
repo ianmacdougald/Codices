@@ -4,6 +4,7 @@ CodexComposite {
 
 	*initClass {
 		Class.initClassTree(Dictionary);
+		Class.initClassTree(CodexPaths);
 		directory = CodexPaths.at(id) ?? {
 			CodexPaths.setAt(this.defaultDirectory, id);
 		};

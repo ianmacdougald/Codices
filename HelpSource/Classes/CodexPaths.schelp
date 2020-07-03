@@ -1,7 +1,7 @@
-TITLE:: CodexStorage
+TITLE:: CodexPaths
 summary:: configures default folder paths via persistent storage.
-categories:: Libraries>CodexIan>Utilities>Path Management
-related:: Classes/IanAudioPath, Classes/FileIncrementer
+categories:: Libraries>CodexIan
+related:: Classes/IanAudioPath, Classes/CodexIncrementer
 keyword:: persistent, codexian, codexian path, utilities, codexian utilities
 DESCRIPTION::
 

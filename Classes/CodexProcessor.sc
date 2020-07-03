@@ -1,4 +1,4 @@
-CodexProcessorRoutine {
+CodexRoutinizer {
 	var <>server, routine, <synthDefList;
 
 	*new { |server(Server.default)|

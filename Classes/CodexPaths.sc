@@ -1,12 +1,7 @@
 CodexPaths  {
-	classvar quarkPath;
-	classvar dictionary;
+	classvar dictionary, <storagePath;
 
-	*storagePath {
-		^(this.pathToQuark +/+ format("%.YAML", this.name))
-	}
-
-	*parse { ^this.storagePath.parseYAMLFile; }
+	*parse { ^storagePath.parseYAMLFile; }
 
 	*write { |item|
 		var fd = File.open(this.storagePath, "w+");
@@ -19,11 +14,9 @@ CodexPaths  {
 		Class.initClassTree(Quarks);
 		Class.initClassTree(Dictionary);
 		Class.initClassTree(Collection);
-		quarkPath = Main.packages.asDict.at('CodexIan');
+		storagePath = Main.packages.asDict.at('CodexIan')+/+format("%.yaml", this.name);
 		this.checkDictionary;
 	}
-
-	*pathToQuark { ^quarkPath; }
 
 	*checkDictionary {
 		if(dictionary.isNil){
