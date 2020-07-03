@@ -71,17 +71,21 @@ CodexHybrid : CodexComposite {
 		processor.add(synthDef);
 	}
 
-	*freeSynthDefs {
-		var toRemove = synthDefs.removeAt(this.name);
-		toRemove !? {processor.remove(toRemove.asArray)};
-	}
-
-	*removeSynthDef { | key |
-		processor.remove(synthDefs.removeAt(key));
+	*removeSynthDefs { | key |
+		processor.remove(synthDefs.removeModules(this.name, key));
 	}
 
 	*allSynthDefs { ^synthDefs; }
 
 	*synthDefs { ^synthDefs[this.name]; }
+
+	synthDefs { ^synthDefs[this.class.name][moduleSet]; }
+
+	clearSynthDefs { this.class.removeSynthDefs(moduleSet); }
+
+	reloadScripts {
+		this.clearSynthDefs;
+		super.reloadScripts;
+	}
 
 }
