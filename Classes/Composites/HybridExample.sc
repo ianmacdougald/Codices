@@ -1,41 +1,41 @@
 HybridExample : Hybrid {
 	var routine, pattern;
 
-	*defaultModulesPath { 
+	*defaultModulesPath {
 		^this.filenameString.dirname
-		+/+"ExampleModules"; 
+		+/+"ExampleModules";
 	}
 
 	initHybrid {}
 
-	//Templater has been extended to make "patternFunctions", which are functions that return patterns. 
+	//Templater has been extended to make "patternFunctions", which are functions that return patterns.
 	//This is necessary for passing in the SynthDef's name into the pattern
-	makeTemplates { 
-		templater.patternFunction( "sequence0" ); 
-		templater.patternFunction( "sequence1" ); 
+	*makeTemplates { | templater |
+		templater.patternFunction( "sequence0" );
+		templater.patternFunction( "sequence1" );
 		templater.patternFunction( "sequence2" );
 		//Three SynthDefs...
-		templater.synthDef( "synthDef0" ); 
+		templater.synthDef( "synthDef0" );
 		templater.synthDef( "synthDef1" );
 		templater.synthDef( "synthDef2" );
 	}
 
-	play { 
-		routine = fork{ 
+	play {
+		routine = fork{
 			pattern = modules.sequence0.play;
-			2.wait; 
-			pattern.stop; 
+			2.wait;
+			pattern.stop;
 			pattern = modules.sequence1.play;
-			2.wait; 
+			2.wait;
 			pattern.stop;
 			pattern = modules.sequence2.play;
-			2.wait; 
+			2.wait;
 			pattern.stop;
 		};
 	}
 
-	stop { 
-		routine.stop; 
-		pattern.stop; 
+	stop {
+		routine.stop;
+		pattern.stop;
 	}
 }

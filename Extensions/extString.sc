@@ -17,50 +17,51 @@
 		});
 	}
 
-	lowerFirstChar { 
+	lowerFirstChar {
 		^this.replace(this.at(0), this.at(0).toLower);
 	}
 
-	exists { ^File.exists(this); }
+	// exists { ^File.exists(this); }
+	exists { ^this.pathMatch.isEmpty.not }
 
-	increment { 
+	increment {
 		^FileIncrementer(PathName(this).fileName, this.dirname).increment;
 	}
 
-	getFilePaths { 
+	getFilePaths {
 		^PathName(this).files.collect(_.fullPath);
 	}
 
-	getFileNames { 
+	getFileNames {
 		^PathName(this).files.collect(_.fileName);
 	}
 
-	copyFilesTo { | newDirectory | 
+	copyFilesTo { | newDirectory |
 		this.getFilePaths.do { | path |
 			var name = PathName(path).fileName;
 			File.copy(path, newDirectory+/+name);
 		}
 	}
 
-	copyScriptsTo { | newDirectory | 
-		var scripts = this.getScriptPaths; 
-		if(scripts.notEmpty, {  
-			scripts.do { | path | 
-				var name = PathName(path).fileName; 
+	copyScriptsTo { | newDirectory |
+		var scripts = this.getScriptPaths;
+		if(scripts.notEmpty, {
+			scripts.do { | path |
+				var name = PathName(path).fileName;
 				File.copy(path, newDirectory+/+name);
 			}
 		});
 	}
 
 	copyFolder { | newFolder |
-		if(newFolder.exists.not, { 
+		if(newFolder.exists.not, {
 			this.copyFilesTo(newFolder.mkdir);
 		}, { "Warning: String: copy failed; target exists.".postln; });
 	}
 }
 
-+ Object { 
-	lowerFirstChar { 
++ Object {
+	lowerFirstChar {
 		^this.asString.lowerFirstChar;
 	}
 }

@@ -1,20 +1,91 @@
 Composite {
-	classvar <directory, id = 'sc-modules', <dictionary;
-	var <moduleSet, <modules, <templater;
+	classvar <directory, id = 'sc-modules', <modules;
+	var <moduleSet, <modules;
+
+	*initClass {
+		Class.initClassTree(Dictionary);
+		directory = PathStorage.at(id) ?? {
+			PathStorage.setAt(this.defaultDirectory, id);
+		};
+		modules = Modules.new;
+	}
 
 	*new { | moduleSet(\default), from |
-		this.checkDefaults;
 		^super.newCopyArgs(moduleSet)
 		.loadModules(from).initComposite;
 	}
 
-	*initClass {
-		Class.initClassTree(Dictionary);
-		Class.initClassTree(PathStorage);
-		directory = PathStorage.at(id) ?? {
-			PathStorage.setAt(this.defaultDirectory, id);
-		};
-		dictionary = ModuleDictionary.new;
+	*getModules { | moduleSet, from |
+		if(modules.notAt(this.name, moduleSet), {
+			if(this.shouldAdd(moduleSet, from), {
+				this.addModules(moduleSet);
+			});
+		});
+		^modules.modulesAt(this.name, moduleSet)
+	}
+
+	*shouldAdd { | set, from |
+		if(from.notNil, {
+			this.copyModules(from);
+			forkIfNeeded { this.processFolders(set, from) };
+			^false;
+		}, { this.processFolders(set); ^true});
+	}
+
+	*copyModules { | from, to |
+		if(modules.notAt(this.name, from), {
+			modules.addModules(this.name, from, this.loadScripts(from));
+		});
+		modules.copyEntry(this.name, from, to);
+	}
+
+	*loadScripts { | at |
+		var return = ();
+		this.asPath(at).getScriptPaths.do({ | script |
+			return.add(this.scriptKey(script) -> script.load);
+		});
+		^return;
+	}
+
+	*asPath { | input |
+		input = input.asString;
+		if(PathName(input).isRelativePath, {
+			^(this.classFolder+/+input);
+		}, { ^input; });
+	}
+
+	*classFolder { ^(this.directory +/+ this.name); }
+
+	*scriptKey { | input |
+		^PathName(input).fileNameWithoutExtension
+		.lowerFirstChar.asSymbol;
+	}
+
+	*processFolders { | set, from |
+		if(set!=\default, {
+			var folder = this.asPath(set);
+			if(folder.exists.not, {
+				folder.mkdir;
+				from !? { this.copyFiles(from); } ?? { this.template(folder); };
+			});
+		}, { this.checkDefaults; });
+	}
+
+	*copyFiles { | from, to |
+		from = this.asPath(from);
+		if(from.exists, {
+			from.copyScriptsTo(to);
+		}, { this.processTemplates(to); });
+	}
+
+	*template { | where |
+		this.makeTemplates(Templater(this.asPath(where)));
+	}
+
+	*makeTemplates { | templater | }
+
+	*addModules { | moduleSymbol |
+		modules.add(this.name, moduleSymbol, this.loadScripts(moduleSymbol));
 	}
 
 	*defaultDirectory {
@@ -22,99 +93,27 @@ Composite {
 	}
 
 	*checkDefaults {
-		var defaults = this.defaultModulePath; 
+		var defaults = this.defaultModulesPath;
 		var folder = this.classFolder+/+"default";
-		if(defaults.exists && folder.exists.not, { 
+		if(defaults.exists && folder.exists.not, {
 			defaults.copyScriptsTo(folder.mkdir);
 		});
 	}
 
-	*defaultModulePath { ^""; }
+	*defaultModulesPath { ^""; }
 
-	loadModules { | from | 
-		var class = this.class, dict = class.dictionary; 
-		this.getModules(from);
-		modules = dict.modulesAt(class.name, moduleSet);
-	}
-
-	getModules { | from | 
-		var class = this.class, dict = class.dictionary;
-		if(dict.notAt(class.name, moduleSet), {
-			if(this.shouldGet(from), { 
-				dict.add(class.name, moduleSet, 
-					this.loadScripts(this.moduleFolder));
-			});
-		});
-	}
-
-	shouldGet { | from |
-		if(from.notNil, { 
-			this.copyModules(from);
-			forkIfNeeded { this.processFolders(from) };
-			^false;
-		}, { this.processFolders; ^true});
-	}
-	
-	copyModules { | from |
-		var class = this.class, dict = class.dictionary;
-		if(dict.notAt(class.name, from), {
-			dict.getModules(class.name, from, this.loadFrom(from));
-		});
-		dict.copyEntry(class.name, from, moduleSet);
+	loadModules { | from |
+		modules = this.class.getModules(moduleSet, from);
 	}
 
 	initComposite {}
 
 	moduleFolder { ^(this.class.classFolder+/+moduleSet); }
 
-	folderFrom { | from | ^(this.class.classFolder+/+from); }
-
-	*classFolder { ^(this.directory +/+ this.name); }
-
-	processFolders { | from |
-		if(this.moduleFolder.exists.not, {  
-			this.moduleFolder.mkdir;
-			from !? { this.copyFrom } ?? { this.makeTemplates };
-		});
-	}
-
-	copyFrom { | from | 
-		this.folderFrom(from).copyScriptsTo(this.moduleFolder);
-	}
-
-	makeTemplates { 
-		templater = Templater(this.moduleFolder);
-		this.addTemplates;
-	}
-
-	addTemplates {
-		this.subclassResponsibility(thisMethod);
-	}
-
-	loadFrom { | from | ^this.loadScripts(this.folderFrom(from)); }
-
-	loadScripts { | folder |
-		var return = (); 
-		folder.getScriptPaths.do({ | script | 
-			return.add(this.getModuleName(script) -> script.load);
-		});
-		^return;
-	}
-
 	reloadScripts {
-		var class = this.class, dict = class.dictionary;
+		var class = this.class, dict = class.modules;
 		dict.removeModules(class.name, moduleSet);
 		this.loadModules;
-	}
-
-	getModuleName { | input |
-		^PathName(input)
-		.fileNameWithoutExtension
-		.lowerFirstChar.asSymbol;
-	}
-
-	*directory_{| newPath |
-		directory = PathStorage.setAt(newPath, id);
 	}
 
 	moduleSet_{| newSet, from |
@@ -127,4 +126,9 @@ Composite {
 		^PathName(this.classFolder).folders
 		.collectAs({|m|m.folderName.asSymbol}, Set);
 	}
+
+	*directory_{| newPath |
+		directory = PathStorage.setAt(newPath, id);
+	}
+
 }

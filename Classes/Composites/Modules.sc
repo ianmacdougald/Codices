@@ -1,9 +1,9 @@
-ModuleDictionary {
+Modules {
 	var dictionary;
 
-	*new { ^super.new.makeDictionary; }
+	*new { ^super.new.init; }
 
-	makeDictionary { dictionary = Dictionary.new; }
+	init { dictionary = Dictionary.new; }
 
 	notAt { | key, subkey |
 		this.newDictionary(key);
