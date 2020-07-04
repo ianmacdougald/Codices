@@ -27,10 +27,7 @@ CodexCache {
 	}
 
 	removeModules {  | key, subkey |
-		if(this.notAt(key, subkey).not, {
-			^dictionary[key].removeAt(subkey);
-		});
-		^nil;
+		try { ^dictionary[key].removeAt(subkey) }{ ^nil; }
 	}
 
 	removeAt { | key |

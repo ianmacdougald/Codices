@@ -2,6 +2,6 @@
 
 SynthDef(\template, { 
 	
-	//write your codew here...
+	//write your code here...
 	
 });

@@ -41,11 +41,11 @@ CodexHybrid : CodexComposite {
 		});
 	}
 
-	formatName { |string|
+	formatName { | string |
 		^this.tag(this.class.name, this.tag(moduleSet, string));
 	}
 
-	tag {|tag, name|
+	tag { | tag, name |
 		tag = tag.asString; name = name.asString;
 		if(name.contains(tag).not, {
 			name = format("%_%", tag, name);
