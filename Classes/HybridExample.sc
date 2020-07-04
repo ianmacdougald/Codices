@@ -26,11 +26,13 @@ HybridExample : CodexHybrid {
 			2.wait;
 			pattern.stop;
 			pattern = modules.sequence1.play;
-			2.wait;
+			8.wait;
 			pattern.stop;
 			pattern = modules.sequence2.play;
-			2.wait;
+			8.wait;
 			pattern.stop;
+			0.1.wait;
+			"All done".postln;
 		};
 	}
 
