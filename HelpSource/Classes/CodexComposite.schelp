@@ -1,15 +1,13 @@
 TITLE::CodexComposite
 summary::Development platform for creating composite classes of scriptable objects.
-categories::Libraries>CodexIan>CodexComposites
-related::Guides/MusicalCompositing, Classes/Hybrid
+categories::Libraries>CodexIan
+related::Guides/MusicalCompositing, Classes/CodexHybrid
 keyword::composite, compositing, codexian, composition
 
 DESCRIPTION::
-teletype::CodexComposite:: establishes a workflow both for developing and interacting with composite objects, namely those which are comprised of interconnected scriptable modules. CodexComposite is responsible for maintaing a directory that each of its subclasses populates with their own modular collections. 
+CodexComposite establishes a workflow both for developing and interacting with objects that are comprised of interconnected scriptable modules. The class organizes collections of modules into folders within a directory that it maintains, and the class provides a simple interface for manipulating these collections—by loading them, unloading them, cloning them, and generating them from templates (see link::Classes/CodexTemplater::). In this way, each composite-typed class is free to focus on defining interesting behaviors for its respective modules rather than dealing with the pesky details of their storage and organization. 
 
-Moreover, teletype::CodexComposite:: defines an interface for easily manipulating these collections, allowing new modules to be generated from templates (see link::Classes/Templater::), cloned from existing collections, and also both loaded and reloaded without recompiling teletype::sclang::. In this way, each teletype::CodexComposite::-typed class is free to focus on defining interesting interactions between modules rather than dealing with the pesky details of their storage and organization.  
-
-note::teletype::CodexComposite:: is a development tool that should not be instantiated. Rather, it is meant to encapsulate behaviors on behalf of its subclasses. So instance those instead.
+note::CodexComposite is a development tool that should not be instantiated. Rather, it is meant to encapsulate behaviors on behalf of its subclasses. So instance those instead.
 ::
 
 CLASSMETHODS::
@@ -18,43 +16,51 @@ method::new
 Creates a new instance.
 
 argument::moduleSet
-A teletype::symbol:: key representing the name of the set of modules to call. This key will correspond to a folder of modules within teletype::CodexComposite's:: directory.
+A symbol key representing the name of the set of modules to call. This key will correspond to a folder of modules within CodexComposite's directory.
 
 argument::from
-A teletype::symbol:: key representing the name of the folder to clone if the folder from teletype::moduleSet:: does not exist.
-
-private::establish
-private::defaultDirectory
-private::checkDefaults
-private::folderManager
-
-method::classFolder 
-Gets the directory of modules maintained by a given subclass of teletype::CodexComposite::. 
-
-method::moduleSets
-Gets the names of the teletype::moduleSets:: that currently exist.
+A symbol key representing the name of the folder to clone if the folder from moduleSet does not exist.
 
 method::directory
-Gets and (persistently) sets the directory of modules for all subclasses of teletype::CodexComposite::. For further details, see link::Classes/PathStorage::.
-note::Before using a subclass of teletype::CodexComposite:: for the first time, be sure to configure the path to the modules directory either through teletype::CodexComposite:: or one of its subclasses.::
+Gets and (persistently) sets the path to the directory of modules for all subclasses of CodexComposite. For further details, see link::Classes/CodexPaths::.
+note::Before using a subclass of CodexComposite for the first time, be sure to configure the path to the modules directory. This can be done either through the interface of CodexComposite or through those of any of its subclasses. Any change will affect all subclasses of CodexComposite. 
 code::
 CodexComposite.directory_("~/Documents/sc-modules".standardizePath);
 ::
 
-INSTANCEMETHODS::
+private::defaultDirectory
+private::checkDefaults
+
+method::classFolder 
+Gets the path to the folder where all of the collections of modules for a given composite-typed class are stored.
+
+method::moduleSets
+Gets the names of the moduleSets that currently exist for the given composite.
+
+private::modules
+private::addModules
+private::asPath
+private::copyFiles
+private::copyModules
+private::defaultModulesPath
 private::getModules
-private::initCodexComposite
-private::getModuleSet
-
-method::moduleFolder
-Gets the current directory of modules loaded into the instance. 
-
-private::processFolders
-private::makeModuleFolder
+private::loadScripts
 private::makeTemplates
+private::notAt
+private::processFolders
+private::scriptKey
+private::shouldAdd
+private::template
 
-method::loadModules
-Loads (or reloads) the modules pointed to by the instance's module folder. 
+INSTANCEMETHODS::
+method::moduleFolder
+Gets the path to the folder where the modules currently loaded into the instance are stored.
+
+private::loadModules
+private::initComposite
+
+method::reloadScripts
+Removes the current set of modules from the class's cache, reloading them from their origin scripts.
 
 method::modules
 Gets an event containing the loaded modules. 
@@ -62,9 +68,9 @@ Gets an event containing the loaded modules.
 private::getModuleName
 
 method::moduleSet
-Gets and sets the current teletype::moduleSet::. 
+Gets and sets the current moduleSet. 
 argument::newSet
-A teletype::symbol:: specifying the new set of modules to load. Setting teletype::moduleSet:: will in turn load the new resources. 
+A symbol specifying the new set of modules to load. Setting moduleSet will in turn load the new resources. 
 
 argument::from
-A teletype::symbol:: referring to an existing set of modules to copy if the new module name does not exist yet.
+A symbol referring to an existing set of modules to copy if the new module name does not exist yet.

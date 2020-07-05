@@ -17,6 +17,12 @@
 		});
 	}
 
+	asBuffers { | server(Server.default), startFrame(0), 
+		numFrames(-1), action, bufnum | 
+		^Buffer.read(server, this, startFrame, 
+			numFrames, action, bufnum);
+	}
+
 	lowerFirstChar {
 		^this.replace(this.at(0), this.at(0).toLower);
 	}
