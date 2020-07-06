@@ -1,6 +1,6 @@
 TITLE::Musical Compositing 
 summary:: Guide to working with the CodexComposites and CodexHybrids 
-categories:: Libraries>CodexIan>CodexComposites
+categories:: Libraries>CodexIan
 
 section::Overview
 link::Classes/CodexComposite:: defines a framework for developing and interacting with classes that encapsulate scriptable SuperCollider objects called modules. The purpose of this framework is to support an approach to music making that combines the specificity of a compiled class's interface with the open-ended potential of scripting, a mixture which I am calling music compositing.

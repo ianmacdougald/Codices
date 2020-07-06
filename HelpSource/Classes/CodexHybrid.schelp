@@ -1,6 +1,6 @@
 TITLE::CodexHybrid
 summary::Base for developing composites that straddle client-server divide.
-categories::Libraries>CodexIan>CodexComposites
+categories::Libraries>CodexIan
 related::Classes/CodexComposite, Guides/MusicalCompositing
 keyword::hybrid, compositing, codexian, codexian hybrid 
 

@@ -22,9 +22,11 @@ section::Utilities
 These are classes that are used internally by the composites, but have broader uses too. 
 definitionlist::
 ##link::Classes/CodexProcessor::
-||Processor for loading and unloading link::Classes/SynthDef##SynthDefs:: from the server. 
+||Manages the loading and unloading link::Classes/SynthDef##SynthDefs:: from the server. 
 ##link::Classes/CodexTemplater::
 ||Creates templates of emphasis::.scd:: files at a target location.  
+##link::Classes/CodexCache::
+||Manages a cache for storing the modules of subclasses of CodexComposite.
 ::
 
 subsection::Path Management
