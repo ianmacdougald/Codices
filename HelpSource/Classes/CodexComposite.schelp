@@ -27,6 +27,7 @@ note::Before using a subclass of CodexComposite for the first time, be sure to c
 code::
 CodexComposite.directory_("~/Documents/sc-modules".standardizePath);
 ::
+::
 
 private::defaultDirectory
 private::checkDefaults

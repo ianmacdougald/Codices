@@ -53,7 +53,7 @@ CodexHybrid : CodexComposite {
 		^name;
 	}
 
-	synthDefs { ^this.findSynthDefs.collect(_.name); }
+	synthDefs { ^this.findSynthDefs.collect(_.name).as(Set); }
 
 	reloadScripts {
 		this.removeSynthDefs;

@@ -2,67 +2,45 @@ TITLE::CodexHybrid
 summary::Base for developing composites that straddle client-server divide.
 categories::Libraries>CodexIan>CodexComposites
 related::Classes/CodexComposite, Guides/MusicalCompositing
-keyword::hybrid, compositing, codexian, codexian hybrid, codexian composite
+keyword::hybrid, compositing, codexian, codexian hybrid 
 
 DESCRIPTION:: 
 
-teletype::CodexHybrid:: aims to streamline the development of hybrid composite classes, namely those that straddle SuperCollider's link::Guides/ClientVsServer##client-server architecture.:: Specifically, CodexHybrid manages the loading and unloading of link::Classes/SynthDef##SynthDefs:: so that other CodexHybrid-typed classes can easily call related link::Classes/Synth##Synths:: with minimal issues relating to link::Guides/Sync-Async##asynchronicity between the client and the server::. It does this by combining the procedures of link::Classes/CodexComposite:: with the services of link::Classes/SynthDefProcessor::.
+CodexHybrid aims to streamline the development of hybrid composite classes, namely those that straddle SuperCollider's link::Guides/ClientVsServer##client-server architecture.:: Specifically, CodexHybrid manages the loading and unloading of link::Classes/SynthDef##SynthDefs:: so that other CodexHybrid-typed classes can easily call related link::Classes/Synth##Synths:: with minimal issues relating to link::Guides/Sync-Async##asynchronicity between the client and the server::. It does this by combining the procedures of link::Classes/CodexComposite:: with the services of link::Classes/SynthDefProcessor::.
 
-note::Like teletype::CodexComposite::, teletype::CodexHybrid:: itself should not be instanced. Doing so will probably throw an error. To see the class's features in action, refer to link::Classes/CodexHybridExample::.
+note::Like CodexComposite, CodexHybrid itself should not be instanced. Doing so will probably throw an error. To see the class's features in action, refer to link::Classes/HybridExample::.
 ::
 CLASSMETHODS::
 
 copymethod::CodexComposite *new
 private::new
+private::notAt
+private::processOff
+private::processOn
+private::symbolsCache
 
-private::initCodexHybrid
-private::subDictionaryExists
-private::addSubDictionary
-private::addToDictionary
-private::formatString
-private::processSynthDefs
-private::notInDictionary
-
-method::dictionary
-Gets the dictionary of teletype::SynthDefs::.
-
-method::hybridDictionary
-Gets the dictionary containing all of the subdictionaries teletype::CodexHybrid:: is currently storing. 
-
-method::removeAt
-Removes a single SynthDef from the server. 
-argument::key 
-The name of the SynthDef to remove.
-
-method::removeAll
-Removes all of the class's teletype::SynthDefs::.
-
-method::clearCodexHybrids
-Removes all of the teletype::SynthDefs:: from every other active hybrid. 
-
-subsection::From CodexComposite
-copymethod:: CodexComposite *classFolder
-copymethod:: CodexComposite *moduleSets
-copymethod:: CodexComposite *directory
-private::establish
 INSTANCEMETHODS::
 
-private::initCodexHybrid
-private::makeSynthDefs
-private::addToDictionary
+private::initHybrid
+private::processSynthDefs
+private::findSynthDefs
+private::nameSynthDefs
+private::tag
 
-method::formatName
-Formats a teletype::SynthDef's:: link::Classes/SynthDef#-name#name:: to include the link::Classes/Class#-name#name:: of the class. This is used internally to prevent clashes between names. However, it can be useful for calling teletype::Synths:: when scripting.
-
+private::formatName
+method::synthDefs
+Gets a collection of the symbol names of the SynthDef managed by the class. 
 method:: server
 private::tag
 private::checkDictionary
 private::checkModule
-private::loadModules
+private::initHybrid
+private::removeSynthDefs
+private::initComposite
 
 subsection::From CodexComposite
 copymethod:: CodexComposite -moduleFolder
-copymethod:: CodexComposite -loadModules
+private::reloadScripts
+copymethod:: CodexComposite -reloadScripts
 copyMethod:: CodexComposite -modules
 copyMethod:: CodexComposite -moduleSet
-private::initCodexComposite
