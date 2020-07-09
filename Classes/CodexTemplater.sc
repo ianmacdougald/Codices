@@ -62,7 +62,7 @@ CodexTemplater {
 	}
 
 	*defaultPath {
-		^(PathName(this.filenameString).pathOnly+/+"templates");
+		^(PathName(this.filenameString).pathOnly+/+"Templates");
 	}
 
 	*copyFile { |type("blank"), filename|

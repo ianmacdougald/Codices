@@ -40,13 +40,13 @@ CodexHybrid : CodexComposite {
 	}
 
 	formatName { | string |
-		string = this.stripTag(string).postln;
+		string = this.stripTag(string);
 		^this.tag(this.class.name, this.tag(moduleSet, string));
 	}
 
-	stripTag { | string | 
+	stripTag { | string |
 		var found = string.findAll($_);
-		found !? { if(found.size>=2, { ^string[(found[1]+1)..] }) } ; 
+		found !? { if(found.size>=2, { ^string[(found[1]+1)..] }) } ;
 		^string;
 	}
 
