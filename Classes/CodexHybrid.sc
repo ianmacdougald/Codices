@@ -2,10 +2,7 @@ CodexHybrid : CodexComposite {
 	classvar processor, <symbolsCache;
 	var <>server;
 
-	*initClass {
-		symbolsCache = CodexCache.new;
-		processor = CodexProcessor.new;
-	}
+	*initClass { symbolsCache = CodexCache.new; }
 
 	*notAt { | set |
 		var return = super.notAt(set);
@@ -16,6 +13,7 @@ CodexHybrid : CodexComposite {
 	initComposite {
 		var class = this.class, cache = class.symbolsCache;
 		if(cache.removeModules(class.name, moduleSet).notNil, {
+			processor = processor ?? { CodexProcessor(server) };
 			this.processSynthDefs;
 		});
 		this.initHybrid;
@@ -23,11 +21,11 @@ CodexHybrid : CodexComposite {
 
 	processSynthDefs  { this.class.processOn(this.nameSynthDefs) }
 
-	*processOn { | synthDefs | processor.add(synthDefs) }
+	*processOn { | synthDefs | processor.send(synthDefs) }
 
-	*processOff { | synthDefs | processor.remove(synthDefs); }
+	*processOff { | synthDefs | processor.remove(synthDefs) }
 
-	removeSynthDefs { this.class.processOff(this.findSynthDefs); }
+	removeSynthDefs { this.class.processOff(this.findSynthDefs) }
 
 	initHybrid {}
 
@@ -37,12 +35,19 @@ CodexHybrid : CodexComposite {
 
 	nameSynthDefs {
 		^this.findSynthDefs.collect({ | def |
-			def.name = this.formatName(def.name).asSymbol;
+			def.name = this.formatName(def.name.asString).asSymbol;
 		});
 	}
 
 	formatName { | string |
+		string = this.stripTag(string).postln;
 		^this.tag(this.class.name, this.tag(moduleSet, string));
+	}
+
+	stripTag { | string | 
+		var found = string.findAll($_);
+		found !? { if(found.size>=2, { ^string[(found[1]+1)..] }) } ; 
+		^string;
 	}
 
 	tag { | tag, name |
