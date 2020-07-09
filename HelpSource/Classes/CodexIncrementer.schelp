@@ -12,7 +12,7 @@ method::new
 argument::fileTemplate
 A string representing the filename that this class should increment
 argument::folder
-A string representing the folderpath where the class will look for increments of the file template.
+A string representing the path to the folder where the class will look for increments of the file template.
 
 INSTANCEMETHODS::
 method::increment

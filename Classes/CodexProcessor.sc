@@ -63,21 +63,24 @@ CodexRoutinizer {
 		^def;
 	}
 
-	recheckAction{|synthDef|
-		this.subclassResponsibility(thisMethod);
+	recheckAction { | synthDef |
+		var bool = this.bool(synthDef);
+		if(bool){ this.action(synthDef) };
+		^bool.not;
 	}
 
-	action{ |synthDef|
-		this.subclassResponsibility(thisMethod);
-	}
+	bool { | synthDef | this.subclassResponsibility(thisMethod) }
+
+	action{ | synthDef | this.subclassResponsibility(thisMethod) }
 
 	makeRoutine {
 		^forkIfNeeded({
 			var previousDef = this.popAction;
 			while({synthDefList.isEmpty.not}, {
-				if(this.recheckAction(previousDef)){
-					previousDef = this.popAction;
-				}{server.latency.wait};
+				//if(this.recheckAction(previousDef)){
+					//previousDef = this.popAction;
+				//}{server.latency.wait};
+				previousDef = this.popAction;
 			});
 		});
 	}
@@ -86,39 +89,27 @@ CodexRoutinizer {
 
 CodexAdder : CodexRoutinizer {
 
-	*new{ |server(Server.default)| ^super.new(server); }
+	action { | synthDef | synthDef.add;  }
 
-	action { |synthDef| synthDef.add; }
-
-	recheckAction { |def|
-		var bool = def.isAdded.not;
-		if(bool){
-			this.action(def);
-		};
-		^bool.not;
-	}
+	bool { | synthDef | ^synthDef.isAdded.not }
 
 }
 
-CodexRemover : CodexRoutinizer {
+CodexSender : CodexAdder {
+	action { | synthDef | synthDef.send(server) }
+}
 
-	*new { | server(Server.default) | ^super.new(server); }
+CodexRemover : CodexRoutinizer {
 
 	action { |synthDef|
 		synthDef !? {SynthDef.removeAt(synthDef.name)};
 	}
 
-	recheckAction { |def|
-		var bool = def.isAdded;
-		if(bool){
-			this.action(def);
-		};
-		^bool.not;
-	}
+	bool { | synthDef | ^synthDef.isAdded }
 }
 
 CodexProcessor {
-	var <server, adder, remover;
+	var <server, adder, remover, sender;
 
 	*new{ | server(Server.default) |
 		^super.newCopyArgs(server).init;
@@ -130,19 +121,18 @@ CodexProcessor {
 	}
 
 	init {
-		adder = CodexAdder.new(server);
-		remover = CodexRemover.new(server);
+		adder = CodexAdder(server);
+		remover = CodexRemover(server);
+		sender = CodexSender(server);
 	}
 
-	add { |synthDefs|
-		adder.process(synthDefs);
-	}
+	add { | synthDefs | adder.process(synthDefs) }
 
-	remove { |synthDefs|
-		remover.process(synthDefs);
-	}
+	send { | synthDefs | sender.process(synthDefs) }
 
-	server_{|newServer|
+	remove { | synthDefs | remover.process(synthDefs) }
+
+	server_{ | newServer |
 		remover.server = adder.server = server = newServer;
 	}
 
@@ -150,8 +140,6 @@ CodexProcessor {
 
 + SynthDef {
 
-	isAdded {
-		^(SynthDescLib.global.synthDescs[name].notNil);
-	}
+	isAdded { ^(SynthDescLib.global.synthDescs[name].notNil) }
 
 }

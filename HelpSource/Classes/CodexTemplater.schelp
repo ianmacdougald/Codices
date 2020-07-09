@@ -1,19 +1,19 @@
 TITLE::CodexTemplater
-summary::Create .scd files from templates of code. 
+summary::Create .scd files from templates of code.
 categories::Libraries>CodexIan
 related::Classes/FileIncrementer, Classes/Composite
 keyword:: template, codexian, compositing, utilities, codexian utilities
 
 DESCRIPTION::
-CodexTemplater creates emphasis::.scd:: files with code templates for the following classes: 
+CodexTemplater creates emphasis::.scd:: files with code templates for the following classes:
 
 list::
-	## link::Classes/SynthDef::
-	## link::Classes/Pattern::
-	## link::Classes/Function::
-	## link::Classes/Synth:: 
-	## link::Classes/Event::
-	## link::Classes/Array::
+## link::Classes/SynthDef::
+## link::Classes/Pattern::
+## link::Classes/Function::
+## link::Classes/Synth::
+## link::Classes/Event::
+## link::Classes/Array::
 ::
 
 However, if a situation arises in which a composite needs templates from different objects or combinations of objects, like a function that returns an array of events, CodexTemplater can be easily link::#Extending CodexTemplater#extended::.
@@ -25,7 +25,7 @@ method::new
 Creates a new instance of CodexTemplater.
 
 argument::moduleFolder
-A string that refers to the folder in which templates will be generated. 
+A string that refers to the folder in which templates will be generated.
 
 private::modulePathString
 private::moduleTemplateDir
@@ -39,7 +39,7 @@ private::defaultPath
 INSTANCEMETHODS::
 private::makeTemplate
 method::setTemplateDir
-Sets the path where the class looks for templates to copy. 
+Sets the path where the class looks for templates to copy.
 method::resetTemplateDir
 Resets the path where the class looks for templates to copy to the default location.
 
@@ -57,42 +57,51 @@ method::function
 Creates a template of a Function object.
 
 method::synth
-Creates a template of a Synth object. 
+Creates a template of a Synth object.
 
 method::event
-Creates a template of an Event object. 
+Creates a template of an Event object.
 
-method::array 
-Creates a template of an Array object. 
+method::array
+Creates a template of an Array object.
 
 method::blank
 Creates an empty emphasis::.scd:: file
+
+method::makeExtTemplate
+Makes an arbitrary template from a folder anywhere on the machine.
+argument::templateName
+The name of the template to be generated.
+argument::object
+A string containing the name of the file (without the extension) containing the template.
+argument::
+A path to the folder containing the object.
 
 EXAMPLES::
 
 code::
 (
-var path, templater; 
+var path, templater;
 
 //1. Set up a path.
-path = "~/Desktop/_templateTest".standardizePath.mkdir; 
+path = "~/Desktop/_templateTest".standardizePath.mkdir;
 
 //2. Load the path into a CodexTemplater.
-templater = CodexTemplater.new(path); 
+templater = CodexTemplater.new(path);
 
 //3. Make templates for SynthDef.
-templater.synthDef; 
-templater.synthDef("anotherSynthDef"); 
+templater.synthDef;
+templater.synthDef("anotherSynthDef");
 
 //4. Make templates for Function.
-templater.function; 
-templater.function("anotherFunction"); 
+templater.function;
+templater.function("anotherFunction");
 
-//5. Inspect the file names. 
+//5. Inspect the file names.
 //(Look at and delete the folder from the desktop too.)
 PathName(path).files.do{|item|
-	item.fileName.postln; 
-}; 
+	item.fileName.postln;
+};
 )
 
 //6. Clean up.
@@ -104,42 +113,41 @@ code::
 (
 var path, templater;
 
-//1. Set up a path. 
-path = "~Desktop/_secondTemplateTest".standardizePath.mkdir; 
+//1. Set up a path.
+path = "~/Desktop/_secondTemplateTest".standardizePath.mkdir;
 
 //2. Load the path into a CodexTemplater.
-templater = CodexTemplater.new(path); 
+templater = CodexTemplater.new(path);
 
-//3. Make templates of a Patttern. 
-templater.pattern("dupTest"); 
+//3. Make templates of a Patttern.
 templater.pattern("dupTest");
 templater.pattern("dupTest");
+templater.pattern("dupTest");
 
-//4. Inspect the file names. 
+//4. Inspect the file names.
 PathName(path).files.do{|item|
 	item.fileName.postln;
-}; 
-)	
+};
+)
 
-//5. Clean up. 
+//5. Clean up.
 File.deleteAll("~/Desktop/_secondTemplateTest".standardizePath);
 ::
 section::Extending CodexTemplater
 Because sitautions may arise in which it is necessary to have templates for objects not defined by default, CodexTemplater can be easily extended to include new templates. The procedure for doing so requires two steps—writing a new template and writing an extension method for CodexTemplater that makes it.
 
-By default, CodexTemplater looks for templates in the directory where the class is implemented. However, if new templates are written somewhere else, CodexTemplater must be directed to them. This is achieved via the method link::Classes/CodexTemplater#-setTemplateDir::. Once the class is set to look in the new folder, the targeted template can be made via link::Classes/CodexTemplater#-makeTemplate::. Subsequently, it is good practice to reset CodexTemplater back to its default state using link::Classes/CodexTemplater#-resetTemplateDir::. For convenience, these procedures are encapsulated by the method link::Classes/CodexTemplater#-makeExtTemplate::. As such, it is only necessary to call this method inside the extension. 
+By default, CodexTemplater looks for templates in the directory where the class is implemented. However, if new templates are written somewhere else, CodexTemplater must be directed to them. This is done by calling the method link::Classes/CodexTemplater#-makeExtTemplate:: as demonstrated below:
 
-The following is an example of what this looks like.
 code::
-+ CodexTemplater { 
++ CodexTemplater {
 
-	//This method will generate a custom template from an external directory.
-	customTemplate { | templateName("custom") | 
+	//This method will generate an arbitrary template from anywhere on the machine.
+	customTemplate { | templateName("custom") |
 		this.makeExtTemplate(
-			"Folder/With/New/Templates", 
-			templateName, 
-			"nameOfTemplateFile_NoExtension"
-		);	
+			templateName,
+			"nameOfTemplateFile_NoExtension",
+			"Folder/With/New/Templates",
+		);
 	}
 
 }
