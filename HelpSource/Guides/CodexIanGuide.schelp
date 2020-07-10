@@ -1,13 +1,14 @@
-TITLE::Musical Compositing
+TITLE::CodexIan Guide
 summary:: Guide to working with the CodexComposites and CodexHybrids
 categories:: Libraries>CodexIan
 
 section::Overview
-link::Classes/CodexComposite:: defines a framework for developing and interacting with classes that encapsulate scriptable SuperCollider objects called modules. The purpose of this framework is to support an approach to music making that combines the specificity of a compiled class's interface with the open-ended potential of scripting, a mixture which I am calling music compositing.
+CodexIan is a library of classes designed to support an approach to music making in sclang that combines the specificity of a compiled class's interface with the open-ended potential of scripting. The basic idea is that a class written using the framework of this library only has to describe high-level interactions between swappable components whose definitions are arbitrary. For instance, a class that might sequence patterns in a routine could be written to simply define the routine leave the patterns to be loaded from external scripts called modules. As a result, the patterns of this example might be redefined at any point and put to use without the need for recompiling sclang. link::Classes/CodexComposite:: coordinates these operations and maintains a directory of collections of modules, which it can load, unload, clone, and template on behalf of its subclasses. link::Classes/CodexHybrid::, which inherits from CodexComposite, handles the specific case of loading and unloading link::Classes/SynthDef:: modules. A description of how to work with both classes is described in the following guide.
 
-note::teletype::CodexComposite:: and CodexHybrid should not be instanced on their own. Instead, they both are the bases of various subclasses that take advantage of their features; these can be instanced unless otherwise specified.::
+section::Modules directory
 
-section::CodexComposite
+
+
 
 teletype::CodexComposite:: is the base that defines the basic behavior of all teletype::CodexComposite::-typed classes. This behavior can be broken down into two simple tasks—keeping track of modules and loading them. The latter process is entirely accomplished through the method link::Classes/CodexComposite#-loadModules::; the former, however, merits more explanation. The modules accessed by teletype::CodexComposite:: are stored in a specific configuration that is managed by the class and described below.
 
