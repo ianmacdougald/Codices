@@ -133,7 +133,8 @@ PathName(path).files.do{|item|
 //5. Clean up.
 File.deleteAll("~/Desktop/_secondTemplateTest".standardizePath);
 ::
-section::Extending CodexTemplater
+section::Extending CodexTemplater 
+anchor::ExtendingCodexTemplater::
 Because sitautions may arise in which it is necessary to have templates for objects not defined by default, CodexTemplater can be easily extended to include new templates. The procedure for doing so requires two steps—writing a new template and writing an extension method for CodexTemplater that makes it.
 
 By default, CodexTemplater looks for templates in the directory where the class is implemented. However, if new templates are written somewhere else, CodexTemplater must be directed to them. This is done by calling the method link::Classes/CodexTemplater#-makeExtTemplate:: as demonstrated below:
