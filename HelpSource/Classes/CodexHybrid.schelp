@@ -1,7 +1,7 @@
 TITLE::CodexHybrid
 summary::Base for developing composites that straddle client-server divide.
 categories::Libraries>CodexIan
-related::Classes/CodexComposite, Guides/MusicalCompositing
+related::Classes/CodexComposite, Guides/CodexIan
 keyword::hybrid, compositing, codexian, codexian hybrid 
 
 DESCRIPTION:: 
@@ -17,7 +17,7 @@ private::new
 private::notAt
 private::processOff
 private::processOn
-private::symbolsCache
+private::todo
 
 INSTANCEMETHODS::
 
@@ -26,6 +26,7 @@ private::processSynthDefs
 private::findSynthDefs
 private::nameSynthDefs
 private::tag
+private::stripTag
 
 private::formatName
 method::synthDefs

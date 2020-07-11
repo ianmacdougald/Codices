@@ -1,18 +1,17 @@
 CodexHybrid : CodexComposite {
-	classvar processor, <symbolsCache;
+	classvar processor, <todo;
 	var <>server;
 
-	*initClass { symbolsCache = CodexCache.new; }
+	*initClass { todo = CodexCache.new; }
 
 	*notAt { | set |
 		var return = super.notAt(set);
-		if(return, { symbolsCache.add(this.name, set, set) });
+		if(return, { todo.add(this.name, set, set) });
 		^return;
 	}
 
 	initComposite {
-		var class = this.class, cache = class.symbolsCache;
-		if(cache.removeModules(class.name, moduleSet).notNil, {
+		if(this.class.todo.removeModules(this.name, moduleSet).notNil, {
 			processor = processor ?? { CodexProcessor(server) };
 			this.processSynthDefs;
 		});
@@ -41,7 +40,7 @@ CodexHybrid : CodexComposite {
 
 	formatName { | string |
 		string = this.stripTag(string);
-		^this.tag(this.class.name, this.tag(moduleSet, string));
+		^this.tag(this.name, this.tag(moduleSet, string));
 	}
 
 	stripTag { | string |

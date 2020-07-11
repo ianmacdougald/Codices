@@ -131,4 +131,6 @@ CodexComposite {
 	*directory_{| newPath |
 		directory = CodexPaths.setAt(newPath, id);
 	}
+
+	name { ^this.class.name; }
 }

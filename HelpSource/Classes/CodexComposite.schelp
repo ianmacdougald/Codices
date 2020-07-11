@@ -1,7 +1,7 @@
 TITLE::CodexComposite
 summary::Development platform for creating composite classes of scriptable objects.
 categories::Libraries>CodexIan
-related::Guides/MusicalCompositing, Classes/CodexHybrid
+related::Classes/CodexHybrid, Guides/CodexIan
 keyword::composite, compositing, codexian, composition
 
 DESCRIPTION::
@@ -75,3 +75,5 @@ A symbol specifying the new set of modules to load. Setting moduleSet will in tu
 
 argument::from
 A symbol referring to an existing set of modules to copy if the new module name does not exist yet.
+
+private::name

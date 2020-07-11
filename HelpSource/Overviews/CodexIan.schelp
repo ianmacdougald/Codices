@@ -1,37 +1,29 @@
-TITLE::CodexIan
+TITLE::CodexIan Overview
 summary::Library developed by me, Ian, to support Musical Compositing.
 categories::Libraries>CodexIan
+related::Guides/CodexIan
+keyword::hybrid, composite, composition
 
 Description:: 
-CodexIan is a library of classes and extensions for SuperCollider that establish a workflow for using modular composite objects in the service of music composition (or whatever else). In other words, the library is tasked with compositing music compositions, which just as well should be called musical musical compositing.
+CodexIan is a library of classes and extensions for SuperCollider that establish a workflow for using modular composite objects in the service of music composition (or whatever else). In other words, the library is tasked with compositing music compositions, which just as well should be called musical compositing.
 
-section::Guides
+section::Guide
 definitionlist::
-##link::Guides/MusicalCompositing::
+##link::Guides/CodexIan::
 ||A guide that describes the library's primary functions.
 ::
-section::CodexComposites
+section::Classes
 definitionlist::
 ##link::Classes/CodexComposite::
 ||The base class for all composite objects. 
 ##link::Classes/CodexHybrid::
-||A subclass of teletype::CodexComposite:: that handles hybrid objects.
-::
-
-section::Utilities
-These are classes that are used internally by the composites, but have broader uses too. 
-definitionlist::
+||A subclass of CodexComposite that manages link::Classes/SynthDef:: modules.
 ##link::Classes/CodexProcessor::
-||Manages the loading and unloading link::Classes/SynthDef##SynthDefs:: from the server. 
+||Manages the loading and unloading of SynthDefs from the server. 
 ##link::Classes/CodexTemplater::
-||Creates templates of emphasis::.scd:: files at a target location.  
+||Creates templates of teletype::.scd:: files at a target location.  
 ##link::Classes/CodexCache::
-||Manages a cache for storing the modules of subclasses of CodexComposite.
-::
-
-subsection::Path Management
-These utilities deal specifically with managing paths on the system.
-definitionlist::
+||Manages a cache of modules on behalf of subclasses of CodexComposite.
 ##link::Classes/CodexPaths::
 ||Persistently stores paths that can be accessed via link::Classes/Symbol:: keys.
 ##link::Classes/CodexIncrementer::
