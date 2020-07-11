@@ -117,6 +117,8 @@ CodexComposite {
 		this.moduleSet = moduleSet;
 	}
 
+	reloadModules { this.moduleSet = moduleSet }
+
 	moduleSet_{ | newSet, from |
 		moduleSet = newSet;
 		this.loadModules(from);
