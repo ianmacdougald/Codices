@@ -3,18 +3,22 @@ summary:: Guide to working with the CodexComposites and CodexHybrids
 categories:: Libraries>CodexIan
 
 section::Overview
-CodexIan is a library of classes designed to support an approach to music making in sclang that combines the specificity of a compiled class's interface with the open-ended potential of scripting. The basic idea is that a class written using the framework of this library only has to describe high-level interactions between swappable components whose definitions are arbitrary. For instance, a class that might sequence patterns in a routine could be written to simply define the routine leave the patterns to be loaded from external scripts called modules. As a result, the patterns of this example might be redefined at any point and put to use without the need for recompiling sclang. link::Classes/CodexComposite:: coordinates these operations and maintains a directory of collections of modules, which it can load, unload, clone, and template on behalf of its subclasses. link::Classes/CodexHybrid::, which inherits from CodexComposite, handles the specific case of loading and unloading link::Classes/SynthDef:: modules. A description of how to work with both classes is described in the following guide.
+CodexIan is a library of classes designed to support an approach to music making in sclang that combines the specificity of a compiled class's interface with the open-ended potential of scripting. The basic idea for the library is that a class written using its features only has to describe high-level interactions between swappable components whose definitions are arbitrary. For instance, a class written to sequence patterns in a routine might implement only the routine and the leave the patterns to be loaded from external scripts called modules. As a result, the patterns of this example can be redefined at any point and put to use without the need for recompiling sclang. link::Classes/CodexComposite:: coordinates these operations and maintains a directory of collections of modules, which it can load, unload, clone, and template on behalf of its subclasses. link::Classes/CodexHybrid::, which inherits from CodexComposite, handles sending and removing link::Classes/SynthDef:: modules from a given server. A description of how to work with both classes is described in the following guide.
 
-section::Modules directory
+section::Module directories
 
+Each class that inherits from CodexComposite will have its modules stored in a central directory on the machine. The modules themselves are organized in layers of subfolders that are specified on a per-class-per-collection basis. The path to the directory can be gotten and set through through link::Classes/Composite#*directory::. If the path to the directory of modules is reset, the new configuration will persist across sessions of the link::Classes/Interpreter:: (see link::Classes/CodexPaths::).
 
+note::Be sure to configure the path to the modules directory. By default, the module directory is stored in the folder of this quark. 
+code:: 
+//Check where the directory is. 
+CodexComposite.directory.postln; 
 
-
-teletype::CodexComposite:: is the base that defines the basic behavior of all teletype::CodexComposite::-typed classes. This behavior can be broken down into two simple tasks—keeping track of modules and loading them. The latter process is entirely accomplished through the method link::Classes/CodexComposite#-loadModules::; the former, however, merits more explanation. The modules accessed by teletype::CodexComposite:: are stored in a specific configuration that is managed by the class and described below.
-
-subsection::Module directory
-
-Modules are stored in layers of embedded folders; the outtermost layer is referred to as the module directory. The module directory, which can be accessed through link::Classes/CodexComposite#*directory::, is the folder that contains all of the modules of each teletype::CodexComposite::-typed class. It is organized like this:
+//Replace this path with something you prefer.
+CodexComposite.directory = "~/Documents/sc-modules".standardizePath;
+::
+::
+An outline of the directory looks like this: 
 
 Module Directory
 tree::
@@ -42,70 +46,51 @@ tree::
 		::
 ::
 
-The class folders, module folders, and even the modules themselves can be generated dynamically by teletype::CodexComposite:: given specific conditions. For instance, if you are writing a class that inherits from CodexComposite and would like that class to ship with default modules, overwrite the method link::Classes/CodexComposite#*defaultModulesPath:: to return a string to the path of the default modules. Then, when your class is succesfully compiled for the first time, a folder will be generated in the directory with the namne of your class, and your modules will be copied to a subfolder called "default". This process will also repeat if the class folder is ever deleted.
-
-note::Be sure to initialize the module directory if it is your first time using it. Once set, the directory path will persist across link::Classes/Interpreter:: sessions (see link::Classes/PathStorage::). By default, the directory is stored in the folder of this Quark, teletype::CodexIan::.
-code::
-//Check where the directory is.
-CodexComposite.directory.postln;
-
-//Set the directory.
-CodexComposite.directroy = "~/Example/Path/Here".standardizePath;
-::
-::
+subsection::Class folders
+Class folders are generated automatically. However, the circumstances of when that happens varies depending on the implementation of the class whose modules a given class folder is storing. For instance, if you are developing a class that inherits from CodexComposite and want it to ship with a set of default modules, overwriting the method link::Classes/CodexComposite#*defaultModulesPath:: so that it returns a path to your defaults will make CodexComposite create a class folder entry in the directory as well as a subfolder called "default" containing copies of those modules. This will happen the first time your new class is compiled with that overloaded method and every subsequent time sclang is recompiled when either the class folder or the default modules' folder does not exist. That said, if no default modules are specified, the first time a class is instanced, an entry will be made in the directory for the class and a modules folder filled with templates will be generated.
 
 subsection::Module folders
-
-The modules in a folder are accessed by either setting the argument teletype::moduleSet:: in link::Classes/CodexComposite#*new#*new:: or setting the instance's link::Classes/CodexComposite#-moduleSet#moduleSet::. The teletype::moduleSet:: can either be a symbol acting like a sort of key that represents a set of modules stored in the class's folder of modules or an absolute path to one of those folders.
-
-If the folder that the teletype::moduleSet:: points to does not yet exist, the folder will automatically be made and the modules inside it will be generated from link::Classes/Templater##templates::. As a result, if a new set of modules is made, the instance that requested them should not throw an error. Rather, the class should still function, albeit silently. Furthermore, if a new folder does not yet exist but a symbol (or path) referring to an existing folder is supplied for the argument teletype::from::, then the modules from that folder will be cloned to the new one.
+Modules are stored as teletype::.scd:: files in subfolders of each class folder where each of these subfolders contains variations of the modules templated by the class. In this way, a class expects that modules representing specific sclang objects exists but not how they exist. As such, a pattern contained within a file called teletype::sequence.scd:: in a folder called teletype::default:: can be implemented differently than pattern within a file of the same name but in a folder called teletype::experimental:: so long as both files return an object of the same type. In other words, each folder of modules contains variations of the same basic set of files. Furthermore, there is no practical limit to the number of variations of collections of modules that can exist per class. An instance of a subclass of CodexComposite is told to load one of these collections in two ways. The first is achieved by supplying either a relative name to the teletype::moduleSet:: argument of link::Classes/CodexComposite#*new:: in the form of a symbol or string, and the second by setting the value of the field link::Classes/CodexComposite#-moduleSet::. In either circumstance, the user has an opportunity to point to a different set of modules using the argument teletype::from::. In the case where the new set of modules does not already exist and the second set does, the first set will be cloned from the second. If no second collection of modules is specified or does not exist, the new collection of modules will be generated from link::Classes/CodexTemplater##templates::.
 
 subsection::Modules
-Modules are emphasis::.scd:: files containing scripts that return an arbitrary object. When link::Classes/CodexComposite#-loadModules:: is called, these files are collected and subsequently link::Classes/String#-load#loaded:: into an link::Classes/Event:: that can be accessed from link::Classes/CodexComposite#-modules::. The name of each respective module is taken from the name of its source file. For instance, the link::Classes/SynthDef:: loaded from emphasis::synthDef.scd:: will be stored in teletype::modules:: using the key teletype::\synthDef::. Moreover, if the name of the file were emphasis::NoisyOscillator.scd::, its associated object would be stored in teletype::modules:: with the key teletype::\noisyOscillator::.
+As stated above, modules are teletype::.scd:: files containing scripts that return an arbitrary object. When a collection of modules is requested for the first time, these scripts are loaded into sclang, collected as an link::Classes/Event::, and stored in an instance of link::Classes/CodexCache::. Copies of these modules are then made available to the instance and can be accessed via link::Classes/CodexComposite#-modules::. The name of each respective module is taken from the name of its source file. For instance, a pattern loaded from teletype::sequence.scd:: will be stored in the modular event using the key \sequence. Moreover, if the name of the file were teletype::SillySequence.scd::, its associated module would be stored in the modular event under the key \sillySequence.
 
-If modules currently loaded into an instance of a teletype::CodexComposite::-typed class are edited, one does not have to recompile teletype::sclang:: to access these updates. Simply reloading the modules using link::Classes/CodexComposite#-loadModules:: will achieve this. Modules are automatically loaded when instancing a teletype::CodexComposite::-typed class and are automatically reloaded when sets of modules are exchanged via the teletype::moduleSet:: interface.
+If the source file of a module is edited during the course of using a subclass of CodexComposite, simply calling link::Classes/CodexComposite#-reloadScripts# will reload the scripts both into the cache and into the instance. As a result, all new instances of that same subclass using the same set of modules will reflect these updates. Furthermore, it is not necssary to recompile sclang.
 
-subsection::Development Example
-Developing a teletype::CodexComposite::-typed class is relatively simple. No constructor is needed; the developer is only required to fill out the method teletype::makeTemplates:: specifying the templates and respective names of the modules for the class. This can be done by accessing the instancer of link::Classes/Templater:: stored in teletype::CodexComposite::. This is demonstrated below.
+
+section::Development Example
+Developing a class that inherits from CodexComposite is relatively simple. No constructor is need. The only requirement is that the developer fill out the method link::Classes/CodexComposite#*makeTemplates::, which takes in an instance of link::Classes/CodexTemplater:: as an instance. It is in this method where the modules are defined. For instance, if you are making a class that requires a pattern that will be accessed in the event of modules via the key \sequence, telling the templater instance must be told to make a pattern template with the name "sequence". This is demonstrated below.
+
 code::
 CompositeExample : CodexComposite {
-	var routine, pattern;
-
-	//If you want to initialize variables but don't want to rewrite CodexComposite's constructor,
-	//use the otherwise empty method initCodexComposite.
-	initCodexComposite {}
+	var player;
+	
+	//initComposite is called immediately after modules are loaded into the class. 
+	//Initialize instance variables here if you don't want to rewrite the constructor.
+	initComposite {}
 
 	//The only actual requirement for developing CodexComposite-typed classes is to define the modules that make up the composite.
 	//This is done in the method makeTemplater. CodexComposite holds an instance of Templater called templater for this purpose.
 	//If a specific template is not available, extend Templater to make it.
-	makeTemplates {
-		templater.pattern( "sequence0" );
-		templater.pattern( "sequence1" );
-		templater.pattern( "sequence2" );
+	*makeTemplates { | templater | 
+		templater.pattern( "sequence" );
 	}
 
-	//This is an example of a kind of behavior one can develop—playing three patterns in a routine.
-	//Note that the class assumes that the modules defined in makeTemplates exist with the same names and with the same types.
-	//However, how they exist is entirely up to the user...
-	play {
-		routine = fork{
-			pattern = modules.sequence0.play;
-			2.wait;
-			pattern.stop;
-			pattern = modules.sequence1.play;
-			2.wait;
-			pattern.stop;
-			pattern = modules.sequence2.play;
-			2.wait;
-			pattern.stop;
-		};
+	//Here is an example of how to interact with the modules. 
+	//The class expects that the collection of modules will have an item \sequence because it was specified by the templater. 
+	//Because it expects that that item is a pattern, it can have .play called on it. 
+	//It can, therefore, also be stopped.
+	play { 
+		player = modules.sequence.play;
 	}
 
-	//This would stop the speculative routine defined above.
-	stop {
-		routine.stop;
-		pattern.stop;
+	stop { 
+		player !? { 
+			player.stop; 
+			player = nil;
+		}
 	}
+
 }
 ::
 
@@ -133,7 +118,7 @@ PathName(path).folders.do({|item|
 )
 
 (
-//Inspecting default, we see that three .scd files exist corresponding with the templates defined in the class.
+//Inspecting default, we see that there is a .scd file corresponding with the template defined in the class.
 var path = CodexComposite.directory+/+"CompositeExample"+/+"default";
 PathName(path).files.do({|item|
 	item.fileName.postln;
@@ -165,8 +150,8 @@ PathName(path).folders.do({|item|
 });
 )
 
-//If you want to make a new folder that starts where another has left off,
-//use the following syntax:
+//If you want to make a new folder cloned from the experimental one... 
+//edit the file in the \experimental folder, and clone it as follows: 
 x.moduleSet_(\exp2, \experimental);
 
 (

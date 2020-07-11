@@ -1,39 +1,30 @@
 CompositeExample : CodexComposite {
-	var routine, pattern;
-
-	//If you want to initialize variables but don't want to rewrite Composite's constructor,
-	//use the otherwise empty method initComposite.
+	var player;
+	
+	//initComposite is called immediately after modules are loaded into the class. 
+	//Initialize instance variables here if you don't want to rewrite the constructor.
 	initComposite {}
 
-	//The only actual requirement for developing Composite-typed classes is to define the modules that make up the composite.
-	//This is done in the method makeTemplater. Composite holds an instance of Templater called templater for this purpose.
+	//The only actual requirement for developing CodexComposite-typed classes is to define the modules that make up the composite.
+	//This is done in the method makeTemplater. CodexComposite holds an instance of Templater called templater for this purpose.
 	//If a specific template is not available, extend Templater to make it.
-	*makeTemplates { | templater |
-		templater.pattern( "sequence0" );
-		templater.pattern( "sequence1" );
-		templater.pattern( "sequence2" );
+	*makeTemplates { | templater | 
+		templater.pattern( "sequence" );
 	}
 
-	//This is an example of a kind of behavior one can develop—playing three patterns in a routine.
-	//Note that the class assumes that the modules defined in makeTemplates exist with the same names and with the same types.
-	//However, how they exist is entirely up to the user...
-	play {
-		routine = fork{
-			pattern = modules.sequence0.play;
-			2.wait;
-			pattern.stop;
-			pattern = modules.sequence1.play;
-			2.wait;
-			pattern.stop;
-			pattern = modules.sequence2.play;
-			2.wait;
-			pattern.stop;
-		};
+	//Here is an example of how to interact with the modules. 
+	//The class expects that the collection of modules will have an item \sequence because it was specified by the templater. 
+	//Because it expects that that item is a pattern, it can have .play called on it. 
+	//It can, therefore, also be stopped.
+	play { 
+		player = modules.sequence.play;
 	}
 
-	//This would stop the speculative routine defined above.
-	stop {
-		routine.stop;
-		pattern.stop;
+	stop { 
+		player !? { 
+			player.stop; 
+			player = nil;
+		}
 	}
+
 }
