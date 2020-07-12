@@ -235,7 +235,7 @@ HybridExample : CodexHybrid {
 }
 ::
 section::Usage example
-Here is an outline of how to interact with the teletype::HybridExample:: class. It should make sounds.
+Here is an outline of how to interact with the HybridExample class. It should make sounds.
 
 code::
 x = HybridExample.new;
