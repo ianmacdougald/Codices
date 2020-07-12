@@ -25,7 +25,11 @@ method::directory
 Gets and (persistently) sets the path to the directory of modules for all subclasses of CodexComposite. For further details, see link::Classes/CodexPaths::.
 note::Before using a subclass of CodexComposite for the first time, be sure to configure the path to the modules directory. This can be done either through the interface of CodexComposite or through those of any of its subclasses. Any change will affect all subclasses of CodexComposite. 
 code::
-CodexComposite.directory_("~/Documents/sc-modules".standardizePath);
+//Check where the directory is. 
+CodexComposite.directory.postln; 
+
+//Replace this path with something you prefer.
+CodexComposite.directory = "~/Documents/sc-modules".standardizePath;
 ::
 ::
 
@@ -38,7 +42,8 @@ Gets the path to the folder where all of the collections of modules for a given 
 method::moduleSets
 Gets the names of the moduleSets that currently exist for the given composite.
 
-private::modules
+method::cache
+Gets the instance of link::Classes/CodexCache:: that stores the loaded scripts for all subclasses.
 private::addModules
 private::asPath
 private::copyFiles

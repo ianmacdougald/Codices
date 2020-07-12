@@ -1,5 +1,5 @@
 CodexComposite {
-	classvar <directory, id = 'sc-modules', <modules;
+	classvar <directory, id = 'sc-modules', <cache;
 	var <moduleSet, <modules;
 
 	*initClass {
@@ -8,7 +8,7 @@ CodexComposite {
 		directory = CodexPaths.at(id) ?? {
 			CodexPaths.setAt(this.defaultDirectory, id);
 		};
-		modules = CodexCache.new;
+		cache = CodexCache.new;
 		this.allSubclasses.do({ | class |
 			Class.initClassTree(class);
 			class.checkDefaults;
@@ -24,10 +24,10 @@ CodexComposite {
 		if(this.notAt(set) and: { this.shouldAdd(set, from) }, {
 			this.addModules(set);
 		});
-		^modules.modulesAt(this.name, set);
+		^cache.modulesAt(this.name, set);
 	}
 
-	*notAt { | set | ^modules.notAt(this.name, set); }
+	*notAt { | set | ^cache.notAt(this.name, set); }
 
 	*shouldAdd { | set, from |
 		if(from.notNil, {
@@ -39,7 +39,7 @@ CodexComposite {
 
 	*copyModules { | to, from |
 		if(this.notAt(from), { this.addModules(from) });
-		modules.copyEntry(this.name, from, to);
+		cache.copyEntry(this.name, from, to);
 	}
 
 	*loadScripts { | at |
@@ -86,7 +86,7 @@ CodexComposite {
 	*makeTemplates { | templater | }
 
 	*addModules { | moduleSymbol |
-		modules.add(this.name, moduleSymbol, this.loadScripts(moduleSymbol));
+		cache.add(this.name, moduleSymbol, this.loadScripts(moduleSymbol));
 	}
 
 	*defaultDirectory {
