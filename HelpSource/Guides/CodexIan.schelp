@@ -217,6 +217,7 @@ HybridExample : CodexHybrid {
 				pattern.stop;
 				pattern = nil;
 				0.1.wait;
+				routine = nil;
 				"Hybrid Example : All done".postln;
 			};
 		};
