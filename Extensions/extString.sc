@@ -1,46 +1,49 @@
 + String {
 
-	normalizePathAudio{|level(1.0), server(Server.default), sampleFormat("int24")|
-		if(this.isPath, {
-			var buffer, pathname = PathName(this);
-			if(level <= 0.0, {level = level.dbamp});
-			buffer = Buffer.read(server, this, action: {
-				buffer.normalize(level);
-				File.delete(this);
-				buffer.write(
-					this,
-					pathname.extension,
-					"int24",
-				);
-				buffer.free;
-			});
+	normalizePathAudio{ | level(1.0), server(Server.default), 
+		sampleFormat("int24") |
+		var buffer, pathname = PathName(this);
+		if(level <= 0.0, {level = level.dbamp});
+		Buffer.read(server, this, action: { | buffer |
+			buffer.normalize(level);
+			File.delete(this);
+			buffer.write(
+				this,
+				pathname.extension,
+				sampleFormat,
+			);
+			buffer.free;
 		});
 	}
 
-	asBuffers { | server(Server.default), startFrame(0), 
+	asBuffer { | server(Server.default), startFrame(0), 
 		numFrames(-1), action, bufnum | 
 		^Buffer.read(server, this, startFrame, 
 			numFrames, action, bufnum);
 	}
 
-	lowerFirstChar {
-		^this.replace(this.at(0), this.at(0).toLower);
+	getBuffers { | server, startFrame, numFrames, action | 
+		^this.getAudioPaths.collect(
+			_.asBuffer(server, startFrame, numFrames, action)
+		);
 	}
+
+	lowerFirstChar { ^this.replace(this.at(0), this.at(0).toLower) }
 
 	// exists { ^File.exists(this); }
 	exists { ^this.pathMatch.isEmpty.not }
 
 	increment {
-		^CodexIncrementer(PathName(this).fileName, this.dirname).increment;
+		var path = PathName(this);
+		^CodexIncrementer(
+			path.fileName, 
+			path.pathOnly
+		).increment;
 	}
 
-	getFilePaths {
-		^PathName(this).files.collect(_.fullPath);
-	}
+	getFilePaths { ^PathName(this).files.collect(_.fullPath) }
 
-	getFileNames {
-		^PathName(this).files.collect(_.fileName);
-	}
+	getFileNames { ^PathName(this).files.collect(_.fileName) }
 
 	copyFilesTo { | newDirectory |
 		this.getFilePaths.do { | path |
@@ -73,7 +76,5 @@
 }
 
 + Symbol {
-	isPath {
-		^this.asString.isPath;
-	}
+	isPath { ^this.asString.isPath }
 }

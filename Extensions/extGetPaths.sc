@@ -1,26 +1,21 @@
 + String{
-
-	getPaths {
-		^PathName(this).getPaths;
-	}
+	getPaths { ^PathName(this).getPaths }
 
 	getAudioPaths {
-		^this.getPaths.select({|item|
+		^this.getPaths.select({ | item |
 			this.isValidAudioPath(item);
 		});
 	}
 
 	getScriptPaths {
-		^this.getPaths.select({|item|
+		^this.getPaths.select({ | item |
 			this.isValidScript(item);
 		});
 	}
 
-	isValidScript { |input|
-		^(PathName(input).extension=="scd");
-	}
+	isValidScript { | input | ^(PathName(input).extension=="scd") }
 
-	isValidAudioPath { |input|
+	isValidAudioPath { | input |
 		var ext = PathName(input).extension;
 		^this.class.validAudioPaths.find([ext]).notNil;
 	}
@@ -34,22 +29,14 @@
 		];
 	}
 
-	getBuffers {
-		^this.getAudioPaths.collect(_.asBuffer);
-	}
-
+	getBuffers { ^this.getAudioPaths.collect(_.asBuffer) }
 }
 
 + Buffer{
-
-	getPaths {
-		^PathName(this.path).getPaths;
-	}
-
+	getPaths { ^PathName(this.path).getPaths }
 }
 
 + PathName{
-
 	getPaths {
 		var entries;
 		if(this.isFile, {
@@ -58,14 +45,10 @@
 		^this.entries.getPaths;
 	}
 
-	getAudioPaths {
-		fullPath.getAudioPaths;
-	}
-
+	getAudioPaths { ^fullPath.getAudioPaths }
 }
 
 + Array {
-
 	getPaths {
 		var strings = [];
 		this.do{|item, index|
@@ -81,13 +64,8 @@
 		};
 		^strings.as(this.class);
 	}
-
 }
 
-+ Object{
-
-	getPaths{
-		^nil;
-	}
-
++ Object {
+	getPaths{ ^nil }
 }

@@ -1,5 +1,4 @@
 + Dictionary {
-
 	asYAMLString {
 		var string = "";
 		this.keysValuesDo({|key, value, index|
@@ -15,7 +14,6 @@
 		});
 		^newDictionary;
 	}
-
 }
 
 + Object {
@@ -26,13 +24,7 @@
 }
 
 + IdentityDictionary {
-
 	withSymbolKeys {
-		var newDictionary = IdentityDictionary.new;
-		this.keysValuesDo({|key, value|
-			newDictionary.add(key.asSymbol -> value);
-		});
-		^newDictionary;
+		^super.withSymbolKeys.as(this.class);
 	}
-
 }

@@ -1,5 +1,3 @@
 + Object { 
-	filenameString { 
-		^this.filenameSymbol.asString
-	}
+	filenameString { ^this.filenameSymbol.asString }
 }
