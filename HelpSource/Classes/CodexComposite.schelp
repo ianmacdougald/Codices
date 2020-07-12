@@ -60,11 +60,13 @@ Gets the path to the folder where the modules currently loaded into the instance
 private::loadModules
 private::initComposite
 
-method::reloadScripts
-Removes the current set of modules from the class's cache, reloading them from their origin scripts.
-
 method::modules
-Gets an event containing the loaded modules. 
+Gets an link::Classes/Event:: containing the loaded modules. 
+
+method::reloadScripts
+Reloads modules into the cache from scripts, and makes copies them into link::#-modules::. 
+method::reloadModules
+Copies modules from the cache into link::#-modules::.
 
 private::getModuleName
 
