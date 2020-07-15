@@ -1,18 +1,24 @@
 CodexRoutinizer {
 	var <>server, routine, <synthDefList;
 
-	*new { |server(Server.default)|
+	*new { | server(Server.default) |
 		^super.newCopyArgs(server).init;
 	}
 
 	init {
 		synthDefList = List.new;
-		ServerBoot.add({ routine = this.makeRoutine; });
+		ServerBoot.add({
+			if(synthDefList.notEmpty, {
+				routine = this.makeRoutine;
+			});
+		});
 	}
 
 	run {
-		this.stop;
-		routine = this.makeRoutine;
+		if(server.hasBooted, {
+			this.stop;
+			routine = this.makeRoutine;
+		});
 	}
 
 	stop {
@@ -21,7 +27,7 @@ CodexRoutinizer {
 		};
 	}
 
-	load { |synthDef|
+	load { | synthDef |
 		this.loadSynthDefCollection(
 			this.testCollection(synthDef)
 		);
@@ -32,30 +38,24 @@ CodexRoutinizer {
 		this.run;
 	}
 
-	isRunning {
-		^routine.isPlaying;
-	}
+	isRunning { ^routine.isPlaying }
 
 	loadSynthDefCollection { |collection|
-		collection.do{
-			|item| this.addSynthDef(item)
-		};
+		collection.do{ | item | this.addSynthDef(item) }
 	}
 
-	addSynthDef { |synthDef|
+	addSynthDef { | synthDef |
 		if(synthDef.isKindOf(SynthDef), {
 			synthDefList.add(synthDef);
 		});
 	}
 
-	testCollection { |input|
-		if(input.isCollection.not){
-			input = [input];
-		};
+	testCollection { | input |
+		if(input.isCollection.not, { input = [input] });
 		^input;
 	}
 
-	pop { ^try({synthDefList.removeAt(0)}, {^nil}); }
+	pop { ^try({synthDefList.removeAt(0)}, {^nil}) }
 
 	popAction {
 		var def = this.pop;
@@ -78,21 +78,18 @@ CodexRoutinizer {
 			var previousDef = this.popAction;
 			while({synthDefList.isEmpty.not}, {
 				//if(this.recheckAction(previousDef)){
-					//previousDef = this.popAction;
+				//previousDef = this.popAction;
 				//}{server.latency.wait};
 				previousDef = this.popAction;
 			});
 		});
 	}
-
 }
 
 CodexAdder : CodexRoutinizer {
-
 	action { | synthDef | synthDef.add;  }
 
 	bool { | synthDef | ^synthDef.isAdded.not }
-
 }
 
 CodexSender : CodexAdder {
@@ -100,7 +97,6 @@ CodexSender : CodexAdder {
 }
 
 CodexRemover : CodexRoutinizer {
-
 	action { |synthDef|
 		synthDef !? {SynthDef.removeAt(synthDef.name)};
 	}
@@ -128,18 +124,33 @@ CodexProcessor {
 
 	add { | synthDefs | adder.process(synthDefs) }
 
+	sendTo { | synthDefs, targetServer(Server.default) |
+		forkIfNeeded({
+			var tmp = server;
+			sender.server = targetServer;
+			this.send(synthDefs);
+			sender.server = tmp;
+		});
+	}
+
 	send { | synthDefs | sender.process(synthDefs) }
+
+	removeFrom { | synthDefs, targetServer(Server.default) |
+		forkIfNeeded({
+			var tmp = server;
+			remover.server = targetServer;
+			this.remove(synthDefs);
+			remover.server = server;
+		})
+	}
 
 	remove { | synthDefs | remover.process(synthDefs) }
 
 	server_{ | newServer |
 		remover.server = adder.server = server = newServer;
 	}
-
 }
 
-+ SynthDef {
-
+/*+ SynthDef {
 	isAdded { ^(SynthDescLib.global.synthDescs[name].notNil) }
-
-}
+}*/

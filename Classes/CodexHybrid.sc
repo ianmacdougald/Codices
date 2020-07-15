@@ -1,8 +1,12 @@
 CodexHybrid : CodexComposite {
-	classvar processor, <todo;
-	var <>server;
+	classvar <todo, <processor;
+	var server;
 
-	*initClass { todo = CodexCache.new; }
+	*initClass {
+		Class.initClassTree(CodexProcessor);
+		todo = CodexCache.new;
+		processor = CodexProcessor.new;
+	}
 
 	*notAt { | set |
 		var return = super.notAt(set);
@@ -11,20 +15,32 @@ CodexHybrid : CodexComposite {
 	}
 
 	initComposite {
+		server = Server.default;
 		if(this.class.todo.removeModules(this.name, moduleSet).notNil, {
-			processor = processor ?? { CodexProcessor(server) };
 			this.processSynthDefs;
 		});
 		this.initHybrid;
 	}
 
-	processSynthDefs  { this.class.processOn(this.nameSynthDefs) }
+	server_{ | newServer |
+		server = newServer;
+		this.processSynthDefs;
+	}
 
-	*processOn { | synthDefs | processor.send(synthDefs) }
+	server {
+		^(server ?? { server = Server.default; server } !? { server });
+	}
 
-	*processOff { | synthDefs | processor.remove(synthDefs) }
+	processSynthDefs { processor.add(this.nameSynthDefs) }
 
-	removeSynthDefs { this.class.processOff(this.findSynthDefs) }
+	removeSynthDefs { processor.remove(this.findSynthDefs) }
+/*	processSynthDefs  { this.processOn(this.nameSynthDefs) }
+
+	processOn { | synthDefs | processor.add(synthDefs) }
+
+	processOff { | synthDefs | processor.remove(synthDefs) }
+
+	removeSynthDefs { this.processOff(this.findSynthDefs) }*/
 
 	initHybrid {}
 
@@ -57,7 +73,7 @@ CodexHybrid : CodexComposite {
 		^name;
 	}
 
-	synthDefs { ^this.findSynthDefs.collect(_.name).as(Set); }
+	synthDefs { ^this.findSynthDefs.collect(_.name).as(Set) }
 
 	reloadScripts {
 		this.removeSynthDefs;
