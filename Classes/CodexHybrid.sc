@@ -1,5 +1,5 @@
 CodexHybrid : CodexComposite {
-	classvar <todo, <processor;
+	classvar todo, processor;
 	var server;
 
 	*initClass {
@@ -16,7 +16,7 @@ CodexHybrid : CodexComposite {
 
 	initComposite {
 		server = Server.default;
-		if(this.class.todo.removeModules(this.name, moduleSet).notNil, {
+		if(todo.removeModules(this.name, moduleSet).notNil, {
 			this.processSynthDefs;
 		});
 		this.initHybrid;
@@ -34,13 +34,6 @@ CodexHybrid : CodexComposite {
 	processSynthDefs { processor.add(this.nameSynthDefs) }
 
 	removeSynthDefs { processor.remove(this.findSynthDefs) }
-/*	processSynthDefs  { this.processOn(this.nameSynthDefs) }
-
-	processOn { | synthDefs | processor.add(synthDefs) }
-
-	processOff { | synthDefs | processor.remove(synthDefs) }
-
-	removeSynthDefs { this.processOff(this.findSynthDefs) }*/
 
 	initHybrid {}
 
@@ -79,5 +72,4 @@ CodexHybrid : CodexComposite {
 		this.removeSynthDefs;
 		super.reloadScripts;
 	}
-
 }

@@ -18,7 +18,7 @@ list::
 
 However, if a situation arises in which a composite needs templates from different objects or combinations of objects, like a function that returns an array of events, CodexTemplater can be easily link::#Extending CodexTemplater#extended::.
 
-CodexTemplater was originally designed to work within the link::Classes/Composite:: framework. To see it in action, refer to this link::Guides/MusicCompositing##guide::.
+CodexTemplater was originally designed to work within the link::Classes/Composite:: framework. To see it in action, refer to this link::Guides/CodexIan##guide::.
 CLASSMETHODS::
 
 method::new
@@ -38,10 +38,8 @@ private::defaultPath
 
 INSTANCEMETHODS::
 private::makeTemplate
-method::setTemplateDir
-Sets the path where the class looks for templates to copy.
-method::resetTemplateDir
-Resets the path where the class looks for templates to copy to the default location.
+private::setTemplateDir
+private::resetTemplateDir
 
 method::path
 Gets and sets the path where new templates are to be stored.
@@ -133,7 +131,7 @@ PathName(path).files.do{|item|
 //5. Clean up.
 File.deleteAll("~/Desktop/_secondTemplateTest".standardizePath);
 ::
-section::Extending CodexTemplater 
+section::Extending CodexTemplater
 anchor::ExtendingCodexTemplater::
 Because sitautions may arise in which it is necessary to have templates for objects not defined by default, CodexTemplater can be easily extended to include new templates. The procedure for doing so requires two steps—writing a new template and writing an extension method for CodexTemplater that makes it.
 
