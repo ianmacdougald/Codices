@@ -112,7 +112,7 @@ CodexComposite {
 	moduleFolder { ^(this.class.classFolder+/+moduleSet); }
 
 	reloadScripts {
-		this.cache.removeModules(this.name, moduleSet);
+		cache.removeModules(this.name, moduleSet);
 		this.moduleSet = moduleSet;
 	}
 

@@ -16,10 +16,9 @@ method::new
 Creates a new instance.
 
 argument::moduleSet
-A symbol key representing the name of the set of modules to call. This key will correspond to a folder of modules within CodexComposite's directory.
-
+A string or symbol representing a relative path or a string representing an absolute path to a folder of modules.
 argument::from
-A symbol key representing the name of the folder to clone if the folder from moduleSet does not exist.
+A string or symbol representing a relative path or a string representing an absolute path to a folder to clone a new set of modules from.
 
 method::directory
 Gets and (persistently) sets the path to the directory of modules for all subclasses of CodexComposite. For further details, see link::Classes/CodexPaths::.
