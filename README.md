@@ -4,5 +4,5 @@ CodexIan is a library of classes designed to support an approach to music making
 ### Installation
 In SuperCollider, evaluate the following: 
 
-`Quarks.install("https://github.com/ianmacdougald/CodexIan")`
+`Quarks.install("https://github.com/ianmacdougald/CodexIan");`
 
