@@ -82,4 +82,22 @@ A symbol specifying the new set of modules to load. Setting moduleSet will in tu
 argument::from
 A symbol referring to an existing set of modules to copy if the new module name does not exist yet.
 
+method::openModules
+Opens the files associated with the currently loaded modules into the current ide. 
+
+method::openModulesSCqt
+Opens the files associated with the currently loaded modules in the ide emphasis::scqt::. 
+
+method::openModulesSCVim 
+Opens the files associated with the currently loaded modules in a vim-styled ide. 
+argument::shell
+Specifies the shell to be used when opening vim. 
+argument::neovim
+Boolean that declares whether neovim should be opened instead of vim. 
+argument::vertically
+Boolean that declares whether many modules should be stacked vertically or horizontally.
+
+
+
+
 private::name

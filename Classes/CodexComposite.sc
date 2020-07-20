@@ -159,10 +159,10 @@ CodexComposite {
 		});
 	}
 
-	openModulesSCVim { | shell("sh"), neoVim = false, vertically = false |
+	openModulesSCVim { | shell("sh"), neovim = false, vertically = false |
 		var cmd = "vim", paths = PathName(this.moduleFolder)
 		.files.collect(_.fullPath);
-		if(neoVim, { cmd = $n++cmd });
+		if(neovim, { cmd = $n++cmd });
 		if(vertically, { cmd = cmd+" -o "}, { cmd = cmd+" -O " });
 		paths.do{ | path | cmd=cmd++path++" " };
 		if(\GnomeTerminal.asClass.notNil, {
