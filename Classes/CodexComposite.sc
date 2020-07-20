@@ -150,7 +150,7 @@ CodexComposite {
 			shell = shell[..(shell.size - 2)];
 			this.openModulesSCVim(shell, false, true);
 		}
-		{ format("Warning: % not supported for opening modules yet.", ide).postln; }
+		{ this.openModulesSCqt }
 	}
 
 	openModulesSCqt {
