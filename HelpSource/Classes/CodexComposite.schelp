@@ -39,7 +39,7 @@ method::classFolder
 Gets the path to the folder where all of the collections of modules for a given composite-typed class are stored.
 
 method::moduleSets
-Gets the names of the moduleSets that currently exist for the given composite.
+Gets the names of the moduleSets that currently exist for the class.
 
 method::cache
 Gets the instance of link::Classes/CodexCache:: that stores the loaded scripts for all subclasses.
@@ -78,6 +78,9 @@ method::moduleSet
 Gets and sets the current moduleSet. 
 argument::newSet
 A symbol specifying the new set of modules to load. Setting moduleSet will in turn load the new resources. 
+
+method::moduleSets
+Gets the moduleSets that currently exist for the class.
 
 argument::from
 A symbol referring to an existing set of modules to copy if the new module name does not exist yet.

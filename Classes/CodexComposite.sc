@@ -126,8 +126,10 @@ CodexComposite {
 
 	*moduleSets {
 		^PathName(this.classFolder).folders
-		.collectAs({|m|m.folderName.asSymbol}, Set);
+		.collectAs({ | m | m.folderName.asSymbol }, Set);
 	}
+
+	moduleSets { ^this.class.moduleSets }
 
 	*directory_{| newPath |
 		directory = CodexPaths.setAt(newPath, id);
