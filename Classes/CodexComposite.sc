@@ -134,4 +134,40 @@ CodexComposite {
 	}
 
 	name { ^this.class.name; }
+
+	openModules {
+		var ide = Platform.ideName;
+		case { ide=="scqt"} { this.openModulesSCqt }
+		{ ide=="scnvim" }{
+			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
+			shell = shell[..(shell.size - 2)];
+			this.openModulesSCVim(shell, true, true);
+		}
+		{ ide=="scvim" }{
+			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
+			shell = shell[..(shell.size - 2)];
+			this.openModulesSCVim(shell, false, true);
+		}
+		{ format("Warning: % not supported for opening modules yet.", ide).postln; }
+	}
+
+	openModulesSCqt {
+		if(\Document.asClass.notNil, {
+			PathName(this.moduleFolder).files.do{ | file |
+				\Document.asClass.perform(\open, file.fullPath);
+			}
+		});
+	}
+
+	openModulesSCVim { | shell("sh"), neoVim = false, vertically = false |
+		var cmd = "vim", paths = PathName(this.moduleFolder)
+		.files.collect(_.fullPath);
+		if(neoVim, { cmd = $n++cmd });
+		if(vertically, { cmd = cmd+" -o "}, { cmd = cmd+" -O " });
+		paths.do{ | path | cmd=cmd++path++" " };
+		if(\GnomeTerminal.asClass.notNil, {
+			cmd.perform(\runInGnomeTerminal, shell);
+		}, { cmd.perform(\runInTerminal, shell) });
+	}
+
 }
