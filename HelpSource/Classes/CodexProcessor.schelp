@@ -14,19 +14,13 @@ INSTANCEMETHODS::
 private::init
 
 method::send
-Sends a SynthDef or collection of SynthDef objects to the server.
-
-method::sendTo 
-Sends a SynthDef or collection of SynthDef objects to an arbitrary server. 
+Sends a SynthDef or collection of SynthDef objects to an arbitrary server.
 
 method::add
-Adds a SynthDef or a collection of SynthDef objects to the default server.
+link::Classes/SynthDef#-add#Adds:: a SynthDef or a collection of SynthDef objects.
 
 method::remove
 Remove a SynthDef or a collection of SynthDef objects from the server.
-
-method::removeFrom
-Removes a SynthDef or collection of SynthDef objects from an arbitrary server.
 
 method::server
 Gets and sets the server.
