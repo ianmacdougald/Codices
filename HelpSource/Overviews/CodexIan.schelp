@@ -22,8 +22,6 @@ definitionlist::
 ||Manages the loading and unloading of SynthDefs from the server. 
 ##link::Classes/CodexTemplater::
 ||Creates templates of teletype::.scd:: files at a target location.  
-##link::Classes/CodexCache::
-||Manages a cache of modules on behalf of subclasses of CodexComposite.
 ##link::Classes/CodexPaths::
 ||Persistently stores paths that can be accessed via link::Classes/Symbol:: keys.
 ##link::Classes/CodexIncrementer::
