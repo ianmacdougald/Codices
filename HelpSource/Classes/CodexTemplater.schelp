@@ -18,14 +18,14 @@ list::
 
 However, if a situation arises in which a composite needs templates from different objects or combinations of objects, like a function that returns an array of events, CodexTemplater can be easily link::#Extending CodexTemplater#extended::.
 
-CodexTemplater was originally designed to work within the link::Classes/Composite:: framework. To see it in action, refer to this link::Guides/CodexIan##guide::.
+CodexTemplater was originally designed to work within the link::Classes/CodexComposite:: framework. To see it in action, refer to this link::Guides/CodexIan##guide::.
 CLASSMETHODS::
 
 method::new
 Creates a new instance of CodexTemplater.
 
 argument::moduleFolder
-A string that refers to the folder in which templates will be generated.
+A string that refers to the folder where generated templates will be stored.
 
 private::modulePathString
 private::moduleTemplateDir
