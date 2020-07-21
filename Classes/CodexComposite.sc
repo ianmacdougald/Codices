@@ -172,6 +172,9 @@ CodexComposite {
 		}, { cmd.perform(\runInTerminal, shell) });
 	}
 
+	//closeModules is not fully developed. It closes all Document instances
+	//whose titles match any of the modules' file names indiscriminately.
+	//It might be more trouble than its worth.
 	closeModules {
 		if(Platform.ideName=="scqt", {
 			var modules = PathName(this.moduleFolder).files.collect(_.fileName);

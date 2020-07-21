@@ -5,7 +5,7 @@ related::Classes/CodexHybrid, Guides/CodexIan
 keyword::composite, compositing, codexian, composition
 
 DESCRIPTION::
-CodexComposite establishes a workflow both for developing and interacting with objects that are comprised of interconnected scriptable modules. The class organizes collections of modules into folders within a directory that it maintains, and the class provides a simple interface for manipulating these collections—by loading them, unloading them, cloning them, and generating them from templates (see link::Classes/CodexTemplater::). In this way, each composite-typed class is free to focus on defining interesting behaviors for its respective modules rather than dealing with the pesky details of their storage and organization. 
+CodexComposite establishes a workflow both for developing and interacting with objects that are comprised of interconnected scriptable modules. The class organizes collections of modules into folders within a directory that it maintains, and the class provides a simple interface for manipulating these collections—by loading them, unloading them, cloning them, and generating them from templates (see link::Classes/CodexTemplater::). In this way, each composite-typed class is free to focus on defining interesting behaviors for its respective modules rather than dealing with the pesky details of their storage and organization.
 
 note::CodexComposite is a development tool that should not be instantiated. Rather, it is meant to encapsulate behaviors on behalf of its subclasses. So instance those instead.
 ::
@@ -22,10 +22,10 @@ A string or symbol representing a relative path or a string representing an abso
 
 method::directory
 Gets and (persistently) sets the path to the directory of modules for all subclasses of CodexComposite. For further details, see link::Classes/CodexPaths::.
-note::Before using a subclass of CodexComposite for the first time, be sure to configure the path to the modules directory. This can be done either through the interface of CodexComposite or through those of any of its subclasses. Any change will affect all subclasses of CodexComposite. 
+note::Before using a subclass of CodexComposite for the first time, be sure to configure the path to the modules directory. This can be done either through the interface of CodexComposite or through those of any of its subclasses. Any change will affect all subclasses of CodexComposite.
 code::
-//Check where the directory is. 
-CodexComposite.directory.postln; 
+//Check where the directory is.
+CodexComposite.directory.postln;
 
 //Replace this path with something you prefer.
 CodexComposite.directory = "~/Documents/sc-modules".standardizePath;
@@ -35,7 +35,7 @@ CodexComposite.directory = "~/Documents/sc-modules".standardizePath;
 private::defaultDirectory
 private::checkDefaults
 
-method::classFolder 
+method::classFolder
 Gets the path to the folder where all of the collections of modules for a given composite-typed class are stored.
 
 method::moduleSets
@@ -65,19 +65,19 @@ private::loadModules
 private::initComposite
 
 method::modules
-Gets an link::Classes/Event:: containing the loaded modules. 
+Gets an link::Classes/Event:: containing the loaded modules.
 
 method::reloadScripts
-Reloads modules into the cache from scripts, and makes copies them into link::#-modules::. 
+Reloads modules into the cache from scripts, and makes copies them into link::#-modules::.
 method::reloadModules
 Copies modules from the cache into link::#-modules::.
 
 private::getModuleName
 
 method::moduleSet
-Gets and sets the current moduleSet. 
+Gets and sets the current moduleSet.
 argument::newSet
-A symbol specifying the new set of modules to load. Setting moduleSet will in turn load the new resources. 
+A symbol specifying the new set of modules to load. Setting moduleSet will in turn load the new resources.
 argument::from
 A symbol referring to an existing set of modules to copy if the new module name does not exist yet.
 
@@ -86,22 +86,20 @@ method::moduleSets
 Gets the moduleSets that currently exist for the class.
 
 method::openModules
-Opens the files associated with the currently loaded modules into the current ide. 
+Opens the files associated with the currently loaded modules into the current ide.
 
 method::openModulesSCqt
-Opens the files associated with the currently loaded modules from within emphasis::scqt::. 
+Opens the files associated with the currently loaded modules from within emphasis::scqt::.
 
-method::openModulesSCVim 
-Opens the files associated with the currently loaded modules in a vim-styled ide. 
+method::openModulesSCVim
+Opens the files associated with the currently loaded modules in a vim-styled ide.
 argument::shell
-Specifies the shell to be used when opening vim. 
+Specifies the shell to be used when opening vim.
 argument::neovim
-Boolean that declares whether neovim should be opened instead of vim. 
+Boolean that declares whether neovim should be opened instead of vim.
 argument::vertically
 Boolean that declares whether many modules should be stacked vertically or horizontally.
 
-method::closeModules
-Closes all of the modules for the instance and class. 
-note::This is only implemented for emphasis::scqt::.::
+private::closeModules
 
 private::name
