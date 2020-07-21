@@ -172,4 +172,15 @@ CodexComposite {
 		}, { cmd.perform(\runInTerminal, shell) });
 	}
 
+	closeModules {
+		if(Platform.ideName=="scqt", {
+			var modules = PathName(this.moduleFolder).files.collect(_.fileName);
+			 Document.allDocuments.do { | doc |
+				if(modules.find([doc.title]).notNil, {
+					doc.close;
+				});
+			};
+		});
+	}
+
 }
