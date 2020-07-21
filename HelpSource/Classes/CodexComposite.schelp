@@ -100,7 +100,4 @@ Boolean that declares whether neovim should be opened instead of vim.
 argument::vertically
 Boolean that declares whether many modules should be stacked vertically or horizontally.
 
-
-
-
 private::name
