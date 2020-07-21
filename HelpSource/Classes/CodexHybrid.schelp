@@ -6,7 +6,7 @@ keyword::hybrid, compositing, codexian, codexian hybrid
 
 DESCRIPTION:: 
 
-CodexHybrid aims to streamline the development of hybrid composite classes, namely those that straddle SuperCollider's link::Guides/ClientVsServer##client-server architecture.:: Specifically, CodexHybrid manages the loading and unloading of link::Classes/SynthDef##SynthDefs:: so that other CodexHybrid-typed classes can easily call related link::Classes/Synth##Synths:: with minimal issues relating to link::Guides/Sync-Async##asynchronicity between the client and the server::. It does this by combining the procedures of link::Classes/CodexComposite:: with the services of link::Classes/SynthDefProcessor::.
+CodexHybrid aims to streamline the development of hybrid composite classes, namely those that straddle SuperCollider's link::Guides/ClientVsServer##client-server architecture.:: Specifically, CodexHybrid manages the loading and unloading of link::Classes/SynthDef##SynthDefs:: so that other CodexHybrid-typed classes can easily call related link::Classes/Synth##Synths:: with minimal issues relating to link::Guides/Sync-Async##asynchronicity between the client and the server::. It does this by combining the procedures of link::Classes/CodexComposite:: with the services of link::Classes/CodexProcessor::.
 
 note::Like CodexComposite, CodexHybrid itself should not be instanced. Doing so will probably throw an error. To see the class's features in action, refer to link::Classes/HybridExample::.
 ::
@@ -18,7 +18,10 @@ private::notAt
 private::processOff
 private::processOn
 private::todo
-
+copymethod:: CodexComposite *directory
+copymethod:: CodexComposite *classFolder
+copymethod:: CodexComposite *moduleSets
+copymethod:: CodexComposite *cache
 INSTANCEMETHODS::
 
 private::initHybrid
@@ -41,7 +44,12 @@ private::initComposite
 
 subsection::From CodexComposite
 copymethod:: CodexComposite -moduleFolder
+copyMethod:: CodexComposite -modules
 private::reloadScripts
 copymethod:: CodexComposite -reloadScripts
-copyMethod:: CodexComposite -modules
 copyMethod:: CodexComposite -moduleSet
+copyMethod:: CodexComposite -moduleSets 
+copyMethod:: CodexComposite -openModules
+copyMethod:: CodexComposite -openModulesSCqt
+copyMethod:: CodexComposite -openModulesSCVim 
+copyMethod:: CodexComposite -closeModules
