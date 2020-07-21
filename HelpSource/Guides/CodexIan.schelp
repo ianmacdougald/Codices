@@ -115,19 +115,14 @@ PathName(path).folders.do({|item|
 
 (
 //Inspecting that folder, see that an entry exists called default by default.
-var path = CodexComposite.directory+/+"CompositeExample";
+var path = CompositeExample.classFolder;
 PathName(path).folders.do({|item|
 	item.folderName.postln;
 });
 )
 
-(
-//Inspecting default, we see that there is a .scd file corresponding with the template defined in the class.
-var path = CodexComposite.directory+/+"CompositeExample"+/+"default";
-PathName(path).files.do({|item|
-	item.fileName.postln;
-});
-)
+//Open up the default script files to inspect them or make changes.
+x.openModules; 
 
 //If you want to make a new set of modules, that is easy.
 x.moduleSet = \experimental;
@@ -135,13 +130,11 @@ x.moduleSet = \experimental;
 //Inspect the modules.
 x.modules.postln;
 
-(
-//See that not only does the new folder experimental exist, but it is populated with correctly named module templates.
-var path = CodexComposite.directory+/+"CompositeExample"+/+"experimental";
-PathName(path).files.do({|item|
-	item.fileName.postln;
-});
-)
+//Open the \experimental set of modules.
+x.openModules; 
+
+//If you edit them, load the changes back into the instance. 
+x.reloadScripts; 
 
 //You can switch back and forth between existing modules too.
 x.moduleSet = \default;
@@ -158,13 +151,9 @@ PathName(path).folders.do({|item|
 //edit the file in the \experimental folder, and clone it as follows:
 x.moduleSet_(\exp2, \experimental);
 
-(
-//See that the new folder exists. Because experimental was created from templates, though, unless you edited it yourself in the meantime, the new folder will also be a copy of templates.
-var path = CodexComposite.directory+/+"CompositeExample";
-PathName(path).folders.do({|item|
-	item.folderName.postln;
-});
-)
+//Open the new modules. Although, unless you edited \experimental, the new modules will look like templates. 
+x.openModules;
+
 ::
 
 SECTION::CodexHybrid
