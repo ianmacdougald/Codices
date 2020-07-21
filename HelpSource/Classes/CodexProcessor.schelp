@@ -14,19 +14,19 @@ INSTANCEMETHODS::
 private::init
 
 method::send
-Sends a SynthDef or collections of SynthDef objects to the server.
-argument::synthDefs
-A SynthDef or collection of SynthDef objects.
+Sends a SynthDef or collection of SynthDef objects to the server.
+
+method::sendTo 
+Sends a SynthDef or collection of SynthDef objects to an arbitrary server. 
 
 method::add
 Adds a SynthDef or a collection of SynthDef objects to the default server.
-argument::synthDefs
-A SynthDef or collection of SynthDef objects.
 
 method::remove
 Remove a SynthDef or a collection of SynthDef objects from the server.
-argument::synthDefs
-A SynthDef or collection of SynthDef objects.
+
+method::removeFrom
+Removes a SynthDef or collection of SynthDef objects from an arbitrary server.
 
 method::server
 Gets and sets the server.
@@ -46,8 +46,8 @@ d = SynthDef(\someSynthDef, {
 });
 )
 
-//3. Send it.
-p.send(d);
+//3. Add it.
+p.add(d);
 
 //4. Test it.
 x = Synth(\someSynthDef);
@@ -81,32 +81,28 @@ d = Array.fill(16, { |i|
 		);
 		var sig = SinOsc.ar(\freq.kr(400));
 		sig = sig * env * \ampDB.kr(-12).dbamp;
-		Out.ar(\out.kr(0), sig);
+		Out.ar(\out.kr(0), sig ! 2);
 	});
 });
 )
 
-//3. Send them.
-p.send(d);
+//3. Add them.
+p.add(d);
 
 (
 //4. Test them.
-fork{
-	var dur = 0.2;
-	var degree = Pxrand([0, 2, 3, 4, 5, 7], inf).asStream;
-	16.do{|i|
-		//make one Synth from each SynthDef
-		var name = format("TestSynth%", i).asSymbol;
-		var freq = 440 * degree.next
-		.degreeToKey(Scale.major).midiratio;
-		format("SynthDef name is : %", name).postln;
-		Synth(name, [
-			\freq, freq,
-			\timescale, dur * 2
-		]);
-		dur.wait;
-	};
-}
+Pbind(
+	\instrument, p { 
+		16.do { | i |
+			var name = format("TestSynth%", i); 
+			format("% is playing", name).postln; 
+			name.yield;
+		}
+	}, 
+	\degree, Pxrand([0, 2, 3, 4, 5, 7], inf), 
+	\dur, 0.2, 
+	\timescale, Pkey(\dur) * 2
+).play
 )
 
 //5. Remove them.
