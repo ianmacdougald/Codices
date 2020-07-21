@@ -10,15 +10,14 @@ CompositeExample : CodexComposite {
 	}
 
 	play { 
-		player ?? {
+		if(player.isPlaying.not, { 
 			player = modules.sequence.play;
-		};
+		});
 	}
 
 	stop { 
-		player !? { 
-			player.stop; 
-			player = nil;
-		}
+		if(player.isPlaying, { 
+			player.stop;
+		});
 	}
 }

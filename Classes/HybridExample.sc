@@ -20,7 +20,7 @@ HybridExample : CodexHybrid {
 	}
 
 	play {
-		routine ?? {
+		if(routine.isPlaying.not, {  
 			routine = fork{
 				pattern = modules.sequence0.play;
 				2.wait;
@@ -31,22 +31,19 @@ HybridExample : CodexHybrid {
 				pattern = modules.sequence2.play;
 				2.wait;
 				pattern.stop;
-				pattern = nil;
 				0.1.wait;
-				routine = nil;
 				"Hybrid Example : All done".postln;
 			};
-		};
+		});
 	}
 
 	stop {
-		routine !? {
+		if(routine.isPlaying, {
 			routine.stop;
-			pattern !? {
-				pattern.stop;
-				pattern = nil;
-			};
-			routine = nil;
-		}
+		});
+
+		if(pattern.isPlaying, { 
+			pattern.stop;
+		});
 	}
 }
