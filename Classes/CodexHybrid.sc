@@ -54,7 +54,7 @@ CodexHybrid : CodexComposite {
 
 	stripTag { | string |
 		var found = string.findAll($_);
-		found !? { if(found.size>=2, { ^string[(found[1]+1)..] }) } ;
+		found !? { if(found.size>=2, { ^string[(found.last+1)..] }) } ;
 		^string;
 	}
 
