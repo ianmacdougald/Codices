@@ -1,9 +1,9 @@
 CodexCache {
 	var dictionary;
 
-	*new { ^super.new.init; }
+	*new { ^super.new.init }
 
-	init { dictionary = Dictionary.new; }
+	init { dictionary = Dictionary.new }
 
 	notAt { | key, subkey |
 		this.newDictionary(key);
@@ -34,11 +34,11 @@ CodexCache {
 		^dictionary.removeAt(key);
 	}
 
-	at { | key | ^dictionary[key]; }
+	at { | key | ^dictionary[key.asSymbol] }
 
 	clear { dictionary.clear; }
 
-	modulesAt { | key, subkey | ^dictionary[key][subkey]; }
+	modulesAt { | key, subkey | ^dictionary[key][subkey] }
 
 	copyEntry { | key, toCopy, newEntry |
 		if(this.notAt(key, newEntry), {
@@ -46,9 +46,9 @@ CodexCache {
 		});
 	}
 
-	keysAt { | key | ^dictionary[key].keys; }
+	keysAt { | key | ^dictionary[key].keys }
 
-	keys { ^dictionary.keys; }
+	keys { ^dictionary.keys }
 
 	printOn { | stream |
 		if (stream.atLimit) { ^this };
@@ -57,5 +57,5 @@ CodexCache {
 		stream << " ]" ;
 	}
 
-	do { | function | dictionary.do({ | item, index| function.value(item, index) }); }
+	do { | function | dictionary.do({ | item, index | function.value(item, index) }) }
 }

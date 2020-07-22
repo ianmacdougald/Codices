@@ -20,6 +20,8 @@ CodexComposite {
 		.loadModules(from).initComposite;
 	}
 
+	loadModules { | from | modules = this.class.getModules(moduleSet, from) }
+
 	*getModules { | set, from |
 		if(this.notAt(set) and: { this.shouldAdd(set, from) }, {
 			this.addModules(set);
@@ -27,7 +29,7 @@ CodexComposite {
 		^cache.modulesAt(this.name, set);
 	}
 
-	*notAt { | set | ^cache.notAt(this.name, set); }
+	*notAt { | set | ^cache.notAt(this.name, set) }
 
 	*shouldAdd { | set, from |
 		if(from.notNil, {
@@ -57,7 +59,7 @@ CodexComposite {
 		}, { ^input; });
 	}
 
-	*classFolder { ^(this.directory +/+ this.name); }
+	*classFolder { ^(this.directory +/+ this.name) }
 
 	*scriptKey { | input |
 		^PathName(input).fileNameWithoutExtension
@@ -76,7 +78,7 @@ CodexComposite {
 		from = this.asPath(from);
 		if(from.exists, {
 			from.copyScriptsTo(to);
-		}, { this.processTemplates(to) });
+		}, { this.template(to) });
 	}
 
 	*template { | where |
@@ -101,15 +103,11 @@ CodexComposite {
 		});
 	}
 
-	*defaultModulesPath { ^""; }
-
-	loadModules { | from |
-		modules = this.class.getModules(moduleSet, from);
-	}
+	*defaultModulesPath { ^"" }
 
 	initComposite {}
 
-	moduleFolder { ^(this.class.classFolder+/+moduleSet); }
+	moduleFolder { ^(this.class.classFolder+/+moduleSet) }
 
 	reloadScripts {
 		cache.removeModules(this.name, moduleSet);
@@ -135,7 +133,7 @@ CodexComposite {
 		directory = CodexPaths.setAt(newPath, id);
 	}
 
-	name { ^this.class.name; }
+	name { ^this.class.name }
 
 	openModules {
 		var ide = Platform.ideName;
