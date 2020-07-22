@@ -1,9 +1,9 @@
 CodexCache {
 	var dictionary;
 
-	*new { ^super.new.init }
+	*new { ^super.new.initCache }
 
-	init { dictionary = Dictionary.new }
+	initCache { dictionary = Dictionary.new }
 
 	notAt { | key, subkey |
 		this.newDictionary(key);
