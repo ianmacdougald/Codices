@@ -4,22 +4,28 @@ CodexHybrid : CodexComposite {
 
 	*initClass {
 		Class.initClassTree(CodexProcessor);
-		todo = CodexCache.new;
+		todo = LinkedList.new;
 		processor = CodexProcessor.new;
 	}
 
 	*notAt { | set |
 		var return = super.notAt(set);
-		if(return, { todo.add(this.name, set, set) });
+		if(return, { todo.add(this.name) });
 		^return;
 	}
 
 	initComposite {
 		server = Server.default;
-		if(todo.removeModules(this.name, moduleSet).notNil, {
-			this.processSynthDefs;
-		});
+		if(this.shouldProcess, { this.processSynthDefs });
 		this.initHybrid;
+	}
+
+	shouldProcess {
+		var popped = todo.pop ?? { ^false };
+		if(popped==this.class.name, { ^true }, {
+			todo.addFirst(popped);
+			^false
+		});
 	}
 
 	server_{ | newServer |
