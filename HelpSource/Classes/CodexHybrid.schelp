@@ -33,7 +33,9 @@ private::stripTag
 
 private::formatName
 method::synthDefs
-Gets a collection of the symbol names of the SynthDef managed by the class. 
+Gets an Array of the SynthDef modules.
+method::synthDefNames
+Gets an Array of the names of each SynthDef module.
 method:: server
 private::tag
 private::checkDictionary
@@ -41,6 +43,7 @@ private::checkModule
 private::initHybrid
 private::removeSynthDefs
 private::initComposite
+private::shouldProcess
 
 subsection::From CodexComposite
 copymethod:: CodexComposite -moduleFolder
