@@ -16,9 +16,7 @@ CodexIncrementer {
 		fileTemplate = PathName(pathname).noEndNumbers;
 	}
 
-	fileTemplate {
-		^(fileTemplate++"."++extension);
-	}
+	fileTemplate { ^(fileTemplate++"."++extension) }
 
 	increment {
 		if(previousFileName.isNil or: {previousFileName.exists}){
@@ -27,9 +25,7 @@ CodexIncrementer {
 		^previousFileName;
 	}
 
-	reset {
-		currentIncrement = -1;
-	}
+	reset { currentIncrement = -1 }
 
 	formatFileName {|template|
 		var return = folder+/+template;
