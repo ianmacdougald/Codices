@@ -1,10 +1,10 @@
 CodexPaths  {
 	classvar dictionary, <storagePath;
 
-	*parse { ^storagePath.parseYAMLFile; }
+	*parse { ^storagePath.parseYAMLFile }
 
 	*write { |item|
-		var fd = File.open(this.storagePath, "w+");
+		var fd = File.open(storagePath, "w+");
 		fd.write(item.asYAMLString);
 		fd.close;
 	}
@@ -14,7 +14,8 @@ CodexPaths  {
 		Class.initClassTree(Quarks);
 		Class.initClassTree(Dictionary);
 		Class.initClassTree(Collection);
-		storagePath = Main.packages.asDict.at('CodexIan')+/+format("%.yaml", this.name);
+		storagePath = Main.packages.asDict.at('CodexIan')
+		+/+format("%.yaml", this.name);
 		this.checkDictionary;
 	}
 
@@ -28,7 +29,7 @@ CodexPaths  {
 		};
 	}
 
-	*setAt { |newpath, key|
+	*setAt { | newpath, key |
 		if((dictionary[key]==newpath).not, {
 			dictionary.add(key->(newpath+/+""));
 			this.write(dictionary);
@@ -36,12 +37,12 @@ CodexPaths  {
 		^dictionary[key];
 	}
 
-	*at { |key| ^dictionary[key]; }
+	*at { | key | ^dictionary[key] }
 
-	*removeAt { |key|
+	*removeAt { | key |
 		dictionary.removeAt(key);
 		this.write(dictionary);
 	}
 
-	*keys { ^dictionary.keys; }
+	*keys { ^dictionary.keys }
 }
