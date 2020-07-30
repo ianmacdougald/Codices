@@ -1,6 +1,7 @@
 var asymb = {| name, n, def(0.5) |
 	format(name, n).asSymbol.kr(def); 
 }; 
+
 var op = { | freq(\freq.kr(400)), timescale(\timescale.kr(1)), n(1) |	
 	var freqRatio = asymb.("op%FreqRatio", n, 0.5); 
 	var atk = asymb.("op%Atk", n, 0);
