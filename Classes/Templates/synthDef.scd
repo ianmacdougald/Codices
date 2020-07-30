@@ -1,6 +1,6 @@
 //Define SynthDef here...
 
-SynthDef(\template, { 
+SynthDef('template', { 
 	
 	//write your code here...
 	
