@@ -35,6 +35,10 @@ CodexTemplater {
 		this.makeTemplate(templateName, Array);
 	}
 
+	list { | templateName("list") | 
+		this.makeTemplate(templateName, List);
+	}
+
 	makeExtTemplate { | templateName, object, path |
 		this.setTemplateDir(path ?? { this.class.defaultPath });
 		{this.makeTemplate(templateName, object)}
