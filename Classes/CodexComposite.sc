@@ -93,14 +93,14 @@ CodexComposite {
 	}
 
 	*checkDefaults {
-		var defaultModulesPath = this.defaultModulesPath;
+		var defaultsPath = this.defaultsPath;
 		var folder = this.classFolder+/+"default";
-		if(defaultModulesPath.exists && folder.exists.not, {
-			defaultModulesPath.copyScriptsTo(folder.mkdir);
+		if(defaultsPath.exists && folder.exists.not, {
+			defaultsPath.copyScriptsTo(folder.mkdir);
 		});
 	}
 
-	*defaultModulesPath { ^"" }
+	*defaultsPath { ^"" }
 
 	initComposite {}
 
