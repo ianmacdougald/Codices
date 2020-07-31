@@ -1,7 +1,4 @@
-//Define SynthDef here...
-
+//Define SynthDef here:
 SynthDef('template', { 
-	
 	//write your code here...
-	
 });

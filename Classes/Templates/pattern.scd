@@ -1,7 +1,4 @@
-//Define Pattern below
-
+//Define Pattern below:
 Pbind(
-
-	//define your code here...
-
+	//write your code here...
 );

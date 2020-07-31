@@ -1,7 +1,4 @@
-//Define Event below 
-
+//Define Event below:
 (
-
-//write your code here
-
+//write your code here...
 );

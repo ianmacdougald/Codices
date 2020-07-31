@@ -1,7 +1,4 @@
-//Define Array below
-
+//Define Array below:
 [ 
-
-	//write your code here
-
+	//write your code here...
 ];
