@@ -47,7 +47,7 @@ private::addModules
 private::asPath
 private::copyFiles
 private::copyModules
-method::defaultModulesPath
+method::defaultsPath
 Gets a string representing the path to a folder of default modules that ship with a class.
 private::getModules
 private::loadScripts
