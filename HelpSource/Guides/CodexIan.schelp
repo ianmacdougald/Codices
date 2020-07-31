@@ -61,7 +61,7 @@ As stated above, modules are teletype::.scd:: files containing scripts that retu
 
 If the source file of a module currently loaded into an instance of a CodexComposite-typed class is edited, simply calling link::Classes/CodexComposite#-reloadScripts:: will reload the objects from the scripts into the cache before copying them into the instance that called the method. Subsequently, all new instances that call for modules from that same collection will reflect these updates. To update currently existing instances, invoking link::Classes/CodexComposite#-reloadModules:: will refresh modules from the now modified cache. Furthermore, this process does not require recompiling sclang.
 
-The procedure for defining a set of default modules to ship with a class is simple and yet specific. All you need to do is make a folder, fill it with a correctly named script that corresponds with each respective module specified by the class, and then return a string representing a path to that folder in the method link::Classes/CodexComposite#*defaultModulesPath::. 
+The procedure for defining a set of default modules to ship with a class is simple and yet specific. All you need to do is make a folder, fill it with a correctly named script that corresponds with each respective module specified by the class, and then return a string representing a path to that folder in the method link::Classes/CodexComposite#*defaultsPath::. 
 
 section::CompositeExample
 Developing a class that inherits from CodexComposite is relatively simple. No constructor is needed. The only requirement is that the developer fill out the method link::Classes/CodexComposite#*makeTemplates::, which takes in an instance of link::Classes/CodexTemplater:: as an argument. In fact, it is this method that defines the modules of a class. For instance, if you are making a class requiring a pattern that will be accessed from the modules' event via the key \sequence, then the templater instance must be told to generate a pattern with the name "sequence". note::Templates themselves can be any arbitrary piece of code, and CodexTemplater can be told to reproduce that code so long as it is properly link::Classes/CodexTemplater#ExtendingCodexTemplater#extended::.::
@@ -171,7 +171,7 @@ code::
 HybridExample : CodexHybrid {
 	var routine, pattern;
 
-	*defaultModulesPath {
+	*defaultsPath {
 		^this.filenameString.dirname
 		+/+"ExampleModules";
 	}
