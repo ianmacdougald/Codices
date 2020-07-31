@@ -167,9 +167,9 @@ code::
 ::
 
 section::HybridExample
-The below example implementation builds on the previous one with some differences: instead of defining a single pattern module, three "patternFunction" modules are created from custom templates; there are also three SynthDef modules defined.
+The below implementation example builds upon the previous one in some key ways: instead of defining a single pattern module, three "patternFunction" modules are created from custom templates; there are also three SynthDef modules defined.
 
-Furthermore, note that the class specifies a set of default modules and that the method teletype::initComposite:: has been replaced with teletype::initHybrid::. The reason for this latter change is due to the fact that CodexHybrid engages its specialized procedures in the method teletype::initComposite:: making it unavailable. Nevertheless, given the fact that teletype::initHybrid:: is called upon after theh completion of these procedures, it plays an equivalent role for the subclasses of CodexHybrid as teletype::initComposite:: plays for all other subclasses of CodexComposite.
+Furthermore, of note is the fact that the class specifies a set of default modules and that the method teletype::initComposite:: has been replaced with teletype::initHybrid::. The reason for this latter change is due to the fact that CodexHybrid engages its specialized procedures in the method teletype::initComposite:: making it unavailable. Nevertheless, given the fact that teletype::initHybrid:: is called upon after the completion of these procedures, it plays an equivalent role for the subclasses of CodexHybrid as teletype::initComposite:: plays for all other subclasses of CodexComposite.
 code::
 HybridExample : CodexHybrid {
 	var routine, pattern;
