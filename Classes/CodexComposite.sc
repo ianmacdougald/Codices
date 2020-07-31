@@ -6,7 +6,8 @@ CodexComposite {
 		Class.initClassTree(Dictionary);
 		Class.initClassTree(CodexPaths);
 		directory = CodexPaths.at(id) ?? {
-			CodexPaths.setAt(this.defaultDirectory, id);
+			CodexPaths.setAt(this.filenameString
+				.dirname.dirname, id);
 		};
 		cache = CodexCache.new;
 		this.allSubclasses.do({ | class |
@@ -91,15 +92,11 @@ CodexComposite {
 		cache.add(this.name, moduleSymbol, this.loadScripts(moduleSymbol));
 	}
 
-	*defaultDirectory {
-		^(Platform.userExtensionDir.dirname+/+id);
-	}
-
 	*checkDefaults {
-		var defaults = this.defaultModulesPath;
+		var defaultModulesPath = this.defaultModulesPath;
 		var folder = this.classFolder+/+"default";
-		if(defaults.exists && folder.exists.not, {
-			defaults.copyScriptsTo(folder.mkdir);
+		if(defaultModulesPath.exists && folder.exists.not, {
+			defaultModulesPath.copyScriptsTo(folder.mkdir);
 		});
 	}
 
