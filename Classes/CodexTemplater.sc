@@ -1,13 +1,13 @@
 CodexTemplater {
 	classvar defaultPath;
-	var <>path;
+	var <>folder;
 
 	*initClass { defaultPath = this.filenameString
 		.dirname.dirname+/+"Templates" }
 
-	*new { | moduleFolder |
-		moduleFolder ?? { Error("No path set.").throw };
-		^super.newCopyArgs(moduleFolder.asString);
+	*new { | folder |
+		folder ?? { Error("No folder set.").throw };
+		^super.newCopyArgs(folder.asString);
 	}
 
 	synthDef { | templateName("synthDef") |
@@ -43,11 +43,11 @@ CodexTemplater {
 	}
 
 	makeTemplate { | templateName, sourcePath |
-		this.class.copyFile(templateName, sourcePath, path);
+		this.class.copyFile(templateName, sourcePath, folder);
 	}
 
-	*copyFile { | templateName, sourcePath, path |
-		var to = path+/+templateName.asString++".scd";
+	*copyFile { | templateName, sourcePath, folder |
+		var to = folder+/+templateName.asString++".scd";
 		try({ File.copy(sourcePath, to) }, { File.copy(sourcePath, to.increment) });
 	}
 }
