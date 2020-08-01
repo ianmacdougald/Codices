@@ -9,7 +9,7 @@
 		\octave, 5,
 		\atk, 0.005, 
 		\release, 1 - Pkey(\atk), 
-		\ampDB, -20, 
+		\ampDB, -24, 
 		\pan, Pwhite(-1.0, 1.0, inf), 
 		\timescale, Pkey(\dur) * Pexprand(0.5, 8.0, inf),
 	);
