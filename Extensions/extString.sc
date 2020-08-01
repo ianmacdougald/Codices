@@ -28,8 +28,6 @@
 		);
 	}
 
-	firstToLower_codexian { ^(this[0].toLower++this[1..]) }
-
 	exists { ^this.pathMatch.isEmpty.not }
 
 	increment {
@@ -76,6 +74,4 @@
 
 + Symbol {
 	isPath { ^this.asString.isPath }
-
-	firstToLower_codexIan { ^this.asString.firstToLower_codexIan.asSymbol }
 }
