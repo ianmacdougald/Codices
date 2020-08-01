@@ -14,7 +14,7 @@ CodexTemplater {
 	}
 
 	pattern { | templateName("pattern") |
-		this.makeTemplate(templateName, "pattern");
+		this.makeTemplate(templateName, this.defaultPath+/+"pattern");
 	}
 
 	function { | templateName("function") |
