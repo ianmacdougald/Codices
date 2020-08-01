@@ -2,7 +2,8 @@ CodexTemplater {
 	classvar defaultPath;
 	var <>path;
 
-	*initClass { defaultPath = this.filenameString.dirname.dirname+/+"Templates" }
+	*initClass { defaultPath = this.filenameString
+		.dirname.dirname+/+"Templates" }
 
 	*new { | moduleFolder |
 		moduleFolder ?? { Error("No path set.").throw };
