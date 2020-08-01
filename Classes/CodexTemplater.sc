@@ -59,7 +59,7 @@ CodexTemplater {
 	*defaultPath { ^(this.filenameString.dirname.dirname+/+"Templates") }
 
 	*copyFile { | templateName, fileName, path |
-		var from  = templateDir+/+templateName.asString++".scd";
+		var from  = templateDir+/+fileName.asString++".scd";
 		var to = path+/+templateName.asString++".scd";
 		try({ File.copy(from, to) }, { File.copy(from, to.increment) });
 	}
