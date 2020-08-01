@@ -1,8 +1,8 @@
 CodexTemplater {
-	classvar <>templateDir;
+	classvar defaultPath;
 	var <>path;
 
-	*initClass { templateDir = this.defaultPath }
+	*initClass { defaultPath = this.filenameString.dirname.dirname+/+"Templates" }
 
 	*new { | moduleFolder |
 		moduleFolder ?? { Error("No path set.").throw };
@@ -10,42 +10,40 @@ CodexTemplater {
 	}
 
 	synthDef { | templateName("synthDef") |
-		this.makeTemplate(templateName, this.defaultPath+/+"synthDef.scd");
+		this.makeTemplate(templateName, defaultPath+/+"synthDef.scd");
 	}
 
 	pattern { | templateName("pattern") |
-		this.makeTemplate(templateName, this.defaultPath+/+"pattern");
+		this.makeTemplate(templateName, defaultPath+/+"pattern");
 	}
 
 	function { | templateName("function") |
-		this.makeTemplate(templateName, this.defaultPath+/+"function.scd");
+		this.makeTemplate(templateName, defaultPath+/+"function.scd");
 	}
 
 	synth { | templateName("synth") |
-		this.makeTemplate(templateName, this.defaultPath+/+"node.scd");
+		this.makeTemplate(templateName, defaultPath+/+"node.scd");
 	}
 
 	event { | templateName("event") |
-		this.makeTemplate(templateName, this.defaultPath+/+"event.scd");
+		this.makeTemplate(templateName, defaultPath+/+"event.scd");
 	}
 
 	array { | templateName("array") |
-		this.makeTemplate(templateName, this.defaultPath+/+"array.scd");
+		this.makeTemplate(templateName, defaultPath+/+"array.scd");
 	}
 
 	list { | templateName("list") |
-		this.makeTemplate(templateName, this.defaultPath+/+"list.scd");
+		this.makeTemplate(templateName, defaultPath+/+"list.scd");
 	}
 
 	blank { | templateName("module") |
-		this.makeTemplate(templateName, this.defaultPath+/+"module.scd");
+		this.makeTemplate(templateName, defaultPath+/+"module.scd");
 	}
 
 	makeTemplate { | templateName, sourcePath |
 		this.class.copyFile(templateName, sourcePath, path);
 	}
-
-	*defaultPath { ^(this.filenameString.dirname.dirname+/+"Templates") }
 
 	*copyFile { | templateName, sourcePath, path |
 		var to = path+/+templateName.asString++".scd";
