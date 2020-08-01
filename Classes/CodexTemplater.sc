@@ -2,77 +2,65 @@ CodexTemplater {
 	classvar <>templateDir;
 	var <>path;
 
+	*initClass { templateDir = this.defaultPath }
+
 	*new { | moduleFolder |
-		moduleFolder ?? {Error("No path set.").throw};
+		moduleFolder ?? { Error("No path set.").throw };
 		^super.newCopyArgs(moduleFolder.asString);
 	}
 
 	synthDef { | templateName("synthDef") |
-		this.makeTemplate(templateName, SynthDef);
+		this.makeTemplate(templateName, "synthDef");
 	}
 
 	pattern { | templateName("pattern") |
-		this.makeTemplate(templateName, Pattern);
+		this.makeTemplate(templateName, "pattern");
 	}
 
 	function { | templateName("function") |
-		this.makeTemplate(templateName, Function);
+		this.makeTemplate(templateName, "function");
 	}
 
 	synth { | templateName("synth") |
-		this.makeTemplate(templateName, Node);
+		this.makeTemplate(templateName, "node");
 	}
 
 	event { | templateName("event") |
-		this.makeTemplate(templateName, Event);
+		this.makeTemplate(templateName, "event");
+	}
+
+	array { | templateName("array") |
+		this.makeTemplate(templateName, "array");
+	}
+
+	list { | templateName("list") |
+		this.makeTemplate(templateName, "list");
 	}
 
 	blank { | templateName("module") |
 		this.makeTemplate(templateName);
 	}
 
-	array { | templateName("array") |
-		this.makeTemplate(templateName, Array);
-	}
-
-	list { | templateName("list") | 
-		this.makeTemplate(templateName, List);
-	}
-
-	makeExtTemplate { | templateName, object, path |
+	makeExtTemplate { | templateName, fileName, path |
 		this.setTemplateDir(path ?? { this.class.defaultPath });
-		{this.makeTemplate(templateName, object)}
+		{this.makeTemplate(templateName, fileName)}
 		.protect({this.resetTemplateDir});
 		this.resetTemplateDir;
 	}
 
-	makeTemplate { | templateName, object |
-		this.class.targetCopy(templateName, path, object);
+	makeTemplate { | templateName, fileName |
+		this.class.copyFile(templateName, fileName, path);
 	}
 
-	resetTemplateDir {
-		this.class.templateDir = this.class.defaultPath;
-	}
+	resetTemplateDir { this.class.templateDir = this.class.defaultPath }
 
-	setTemplateDir { | newPath |
-		this.class.templateDir_(newPath);
-	}
+	setTemplateDir { | newPath | this.class.templateDir_(newPath) }
 
-	*targetCopy { | templateName, path, object|
-		var targetPath = path+/+templateName.asString++".scd";
-		try({this.copyFile(object, targetPath)}, {
-			this.copyFile(object, targetPath.increment);
-		});
-	}
+	*defaultPath { ^(this.filenameString.dirname+/+"Templates") }
 
-	*defaultPath {
-		^(PathName(this.filenameString).pathOnly+/+"Templates");
-	}
-
-	*copyFile { |type("blank"), filename|
-		var currentPath;
-		templateDir ?? {templateDir = this.defaultPath};
-		currentPath = templateDir+/+type.lowerFirstChar++".scd";
-		File.copy(currentPath, filename);
+	*copyFile { | templateName, fileName, path |
+		var from  = templateDir+/+templateName.asString++".scd";
+		var to = path+/+templateName.asString++".scd";
+		try({ File.copy(from, to) }, { File.copy(from, to.increment) });
 	}
 }

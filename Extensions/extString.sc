@@ -1,6 +1,6 @@
 + String {
 
-	normalizePathAudio{ | level(1.0), server(Server.default), 
+	normalizePathAudio{ | level(1.0), server(Server.default),
 		sampleFormat("int24") |
 		var buffer, pathname = PathName(this);
 		if(level <= 0.0, {level = level.dbamp});
@@ -16,27 +16,26 @@
 		});
 	}
 
-	asBuffer { | server(Server.default), startFrame(0), 
-		numFrames(-1), action, bufnum | 
-		^Buffer.read(server, this, startFrame, 
+	asBuffer { | server(Server.default), startFrame(0),
+		numFrames(-1), action, bufnum |
+		^Buffer.read(server, this, startFrame,
 			numFrames, action, bufnum);
 	}
 
-	getBuffers { | server, startFrame, numFrames, action | 
+	getBuffers { | server, startFrame, numFrames, action |
 		^this.getAudioPaths.collect(
 			_.asBuffer(server, startFrame, numFrames, action)
 		);
 	}
 
-	lowerFirstChar { ^this.replace(this.at(0), this.at(0).toLower) }
+	firstToLower_codexian { ^(this[0].toLower++this[1..]) }
 
-	// exists { ^File.exists(this); }
 	exists { ^this.pathMatch.isEmpty.not }
 
 	increment {
 		var path = PathName(this);
 		^CodexIncrementer(
-			path.fileName, 
+			path.fileName,
 			path.pathOnly
 		).increment;
 	}
@@ -77,4 +76,6 @@
 
 + Symbol {
 	isPath { ^this.asString.isPath }
+
+	firstToLower_codexIan { ^this.asString.firstToLower_codexIan.asSymbol }
 }
