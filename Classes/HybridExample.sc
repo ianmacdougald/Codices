@@ -23,13 +23,13 @@ HybridExample : CodexHybrid {
 		if(routine.isPlaying.not, {  
 			routine = fork{
 				pattern = modules.sequence0.play;
-				2.wait;
+				1.6.wait;
 				pattern.stop;
 				pattern = modules.sequence1.play;
-				4.wait;
+				1.6.wait;
 				pattern.stop;
 				pattern = modules.sequence2.play;
-				2.wait;
+				1.6.wait;
 				pattern.stop;
 				0.1.wait;
 				"Hybrid Example : All done".postln;
