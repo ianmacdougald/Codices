@@ -56,7 +56,7 @@ CodexTemplater {
 
 	setTemplateDir { | newPath | this.class.templateDir_(newPath) }
 
-	*defaultPath { ^(this.filenameString.dirname+/+"Templates") }
+	*defaultPath { ^(this.filenameString.dirname.dirname+/+"Templates") }
 
 	*copyFile { | templateName, fileName, path |
 		var from  = templateDir+/+templateName.asString++".scd";
