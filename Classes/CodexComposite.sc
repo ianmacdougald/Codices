@@ -63,8 +63,8 @@ CodexComposite {
 	*classFolder { ^(this.directory +/+ this.name) }
 
 	*scriptKey { | input |
-		^PathName(input).fileNameWithoutExtension
-		.lowerFirstChar.asSymbol;
+		var string = PathName(input).fileNameWithoutExtension;
+		^(string[0].toLower++string[1..]).asSymbol;
 	}
 
 	*processFolders { | set, from |
