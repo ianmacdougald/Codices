@@ -57,7 +57,7 @@ CodexComposite {
 		input = input.asString;
 		if(PathName(input).isRelativePath, {
 			^(this.classFolder+/+input);
-		}, { ^input; });
+		}, { ^input });
 	}
 
 	*classFolder { ^(this.directory +/+ this.name) }

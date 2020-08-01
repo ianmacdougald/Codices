@@ -1,14 +1,6 @@
 + CodexTemplater {
-
 	patternFunction { | templateName("patternFunction") |
-
-		this.makeExtTemplate(
-			templateName,
-			"patternFunction",
-			Main.packages.asDict.at('CodexIan')
-			+/+"Extensions/extCodexTemplater",
-		);
-
+		this.makeTemplate(templateName,
+			thisMethod.filenameString.dirname+/+"patternFunction.scd")
 	}
-
 }
