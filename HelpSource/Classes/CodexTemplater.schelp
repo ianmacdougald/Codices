@@ -70,7 +70,7 @@ method::makeExtTemplate
 Makes an arbitrary template from a folder anywhere on the machine.
 argument::templateName
 The name of the template to be generated.
-argument::object
+argument::fileName
 A string containing the name of the file (without the extension) containing the template.
 argument::
 A path to the folder containing the object.
