@@ -24,8 +24,8 @@ CLASSMETHODS::
 method::new
 Creates a new instance of CodexTemplater.
 
-argument::moduleFolder
-A string that refers to the folder where generated templates will be stored.
+argument::folder
+A string representing a path to the folder where templates will be stored.
 
 private::modulePathString
 private::moduleTemplateDir
@@ -37,43 +37,42 @@ private::templateDir
 private::defaultPath
 
 INSTANCEMETHODS::
-private::makeTemplate
+method::makeTemplate
+Copies a .scd file to the target folder with a defineable name from a source file. 
+argument::templateName
+A string representing the name of the template file to be made. 
+argument::sourcePath
+A string representing a path to a .scd file to be copied.
 private::setTemplateDir
 private::resetTemplateDir
 
-method::path
-Gets and sets the path where new templates are to be stored.
+method::folder
+Gets and sets the string representing the path to the folder where templates are to be stored.
 
 subsection::Templating methods
 method::synthDef
-Creates a template of a SynthDef object.
+Creates a template for a link::Classes/SynthDef:: object.
 
 method::pattern
-Creates a template of a Pattern object.
+Creates a template for a link::Classes/Pattern:: object.
 
 method::function
-Creates a template of a Function object.
+Creates a template for a link::Classes/Function:: object.
 
 method::synth
-Creates a template of a Synth object.
+Creates a template for a link::Classes/Synth:: object.
 
 method::event
-Creates a template of an Event object.
+Creates a template for an link::Classes/Event:: object.
 
 method::array
-Creates a template of an Array object.
+Creates a template for an link::Classes/Array:: object.
+
+method::list
+Creates a template for a link::Classes/List:: object.
 
 method::blank
 Creates an empty emphasis::.scd:: file
-
-method::makeExtTemplate
-Makes an arbitrary template from a folder anywhere on the machine.
-argument::templateName
-The name of the template to be generated.
-argument::fileName
-A string containing the name of the file (without the extension) containing the template.
-argument::
-A path to the folder containing the object.
 
 EXAMPLES::
 
@@ -131,23 +130,14 @@ PathName(path).files.do{|item|
 //5. Clean up.
 File.deleteAll("~/Desktop/_secondTemplateTest".standardizePath);
 ::
-section::Extending CodexTemplater
+
 anchor::ExtendingCodexTemplater::
-Because sitautions may arise in which it is necessary to have templates for objects not defined by default, CodexTemplater can be easily extended to include new templates. The procedure for doing so requires two steps—writing a new template and writing an extension method for CodexTemplater that makes it.
-
-By default, CodexTemplater looks for templates in the directory where the class is implemented. However, if new templates are written somewhere else, CodexTemplater must be directed to them. This is done by calling the method link::Classes/CodexTemplater#-makeExtTemplate:: as demonstrated below:
-
-code::
-+ CodexTemplater {
-
-	//This method will generate an arbitrary template from anywhere on the machine.
-	customTemplate { | templateName("custom") |
-		this.makeExtTemplate(
-			templateName,
-			"nameOfTemplateFile_NoExtension",
-			"Folder/With/New/Templates",
-		);
+section::Extending CodexTemplater 
+Because situations may arise in which it is necessary to have templates for objects not defined by default, CodexTemplater can be easily made to template any arbitrary code. The method link::Classes/CodexTemplater#-makeTemplate#-makeTemplate:: does this by taking two arguments—the name of the template to be created and a string representing the path to template's the source file. That said, if you think the script being templated is of general use, write an extension for CodexTemplater to simplify this process. The following is an example of how to implement this: 
+code:: 
++ CodexTemplater { 
+	customTemplate { | templateName("custom") | 
+		this.makeTemplate(templateName, "/Some/Folder/customTemplate.scd")
 	}
-
 }
 ::
