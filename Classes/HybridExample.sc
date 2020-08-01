@@ -2,7 +2,7 @@ HybridExample : CodexHybrid {
 	var routine, pattern;
 
 	*defaultsPath {
-		^this.filenameString.dirname
+		^this.filenameString.dirname.dirname
 		+/+"ExampleModules";
 	}
 
