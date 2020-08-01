@@ -5,7 +5,7 @@ related::Classes/FileIncrementer, Classes/Composite
 keyword:: template, codexian, compositing, utilities, codexian utilities
 
 DESCRIPTION::
-CodexTemplater creates emphasis::.scd:: files with code templates for the following classes:
+CodexTemplater creates teletype::.scd:: files with code templates for the following classes:
 
 list::
 ## link::Classes/SynthDef::
@@ -14,6 +14,7 @@ list::
 ## link::Classes/Synth::
 ## link::Classes/Event::
 ## link::Classes/Array::
+## link::Classes/List::
 ::
 
 However, if a situation arises in which a composite needs templates from different objects or combinations of objects, like a function that returns an array of events, CodexTemplater can be easily link::#Extending CodexTemplater#extended::.
@@ -51,28 +52,28 @@ Gets and sets the string representing the path to the folder where templates are
 
 subsection::Templating methods
 method::synthDef
-Creates a template for a link::Classes/SynthDef:: object.
+Creates a template for a SynthDef object.
 
 method::pattern
-Creates a template for a link::Classes/Pattern:: object.
+Creates a template for a Pattern object.
 
 method::function
-Creates a template for a link::Classes/Function:: object.
+Creates a template for a Function object.
 
 method::synth
-Creates a template for a link::Classes/Synth:: object.
+Creates a template for a Synth object.
 
 method::event
-Creates a template for an link::Classes/Event:: object.
+Creates a template for an Event object.
 
 method::array
-Creates a template for an link::Classes/Array:: object.
+Creates a template for an Array object.
 
 method::list
-Creates a template for a link::Classes/List:: object.
+Creates a template for a List object.
 
 method::blank
-Creates an empty emphasis::.scd:: file
+Creates an empty teletype::.scd:: file
 
 EXAMPLES::
 
