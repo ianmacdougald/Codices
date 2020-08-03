@@ -27,7 +27,7 @@ CodexIncrementer {
 
 	reset { currentIncrement = -1 }
 
-	formatFileName {|template|
+	formatFileName {| template |
 		var return = folder+/+template;
 		if(extension.isEmpty.not){
 			return = return++"."++extension;
