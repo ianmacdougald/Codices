@@ -53,8 +53,7 @@
 		var scripts = this.getScriptPaths;
 		if(scripts.notEmpty, {
 			scripts.do { | path |
-				var name = PathName(path).fileName;
-				File.copy(path, newDirectory+/+name);
+				File.copy(path, newDirectory+/+PathName(path).fileName);
 			}
 		});
 	}
@@ -62,7 +61,7 @@
 	copyFolder { | newFolder |
 		if(newFolder.exists.not, {
 			this.copyFilesTo(newFolder.mkdir);
-		}, { "Warning: String: copy failed; target exists.".postln; });
+		}, { "Warning: String: copy failed; target exists.".postln });
 	}
 }
 
