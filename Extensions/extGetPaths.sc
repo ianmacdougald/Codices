@@ -44,10 +44,10 @@
 	getAudioPaths { ^fullPath.getAudioPaths }
 }
 
-+ Array {
++ Collection {
 	getPaths {
 		var strings = [];
-		this.do{|item, index|
+		this.do{ | item, index |
 			strings = strings++item.getPaths;
 		};
 		^strings.as(this.class);
@@ -55,7 +55,7 @@
 
 	getAudioPaths {
 		var strings = [];
-		this.do{|item, index|
+		this.do{ | item, index |
 			strings = strings++item.getAudioPaths;
 		};
 		^strings.as(this.class);
