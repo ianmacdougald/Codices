@@ -44,18 +44,14 @@
 
 	copyFilesTo { | newDirectory |
 		this.getFilePaths.do { | path |
-			var name = PathName(path).fileName;
-			File.copy(path, newDirectory+/+name);
-		}
+			File.copy(path, newDirectory+/+PathName(path).fileName);
+		};
 	}
 
 	copyScriptsTo { | newDirectory |
-		var scripts = this.getScriptPaths;
-		if(scripts.notEmpty, {
-			scripts.do { | path |
-				File.copy(path, newDirectory+/+PathName(path).fileName);
-			}
-		});
+		this.getScriptPaths.do { | path |
+			File.copy(path, newDirectory+/+PathName(path).fileName);
+		};
 	}
 
 	copyFolder { | newFolder | this.copyFilesTo(newFolder.mkdir) }
