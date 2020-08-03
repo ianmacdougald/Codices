@@ -16,8 +16,8 @@
 	isValidScript { | input | ^(PathName(input).extension=="scd") }
 
 	isValidAudioPath { | input |
-		var ext = PathName(input).extension;
-		^this.class.validAudioPaths.find([ext]).notNil;
+		^this.class.validAudioPaths
+		.find([PathName(input).extension]).notNil;
 	}
 
 	*validAudioPaths {
