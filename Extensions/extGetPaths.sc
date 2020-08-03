@@ -32,10 +32,6 @@
 	getBuffers { ^this.getAudioPaths.collect(_.asBuffer) }
 }
 
-+ Buffer{
-	getPaths { ^PathName(this.path).getPaths }
-}
-
 + PathName{
 	getPaths {
 		var entries;
