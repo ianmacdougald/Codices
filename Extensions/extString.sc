@@ -58,11 +58,7 @@
 		});
 	}
 
-	copyFolder { | newFolder |
-		if(newFolder.exists.not, {
-			this.copyFilesTo(newFolder.mkdir);
-		}, { "Warning: String: copy failed; target exists.".postln });
-	}
+	copyFolder { | newFolder | this.copyFilesTo(newFolder.mkdir) }
 }
 
 + Symbol {
