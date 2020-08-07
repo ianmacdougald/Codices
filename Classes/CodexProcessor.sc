@@ -2,10 +2,10 @@ CodexRoutinizer {
 	var <>server, routine, <synthDefList;
 
 	*new { | server(Server.default) |
-		^super.newCopyArgs(server).init;
+		^super.newCopyArgs(server).initRoutinizer;
 	}
 
-	init {
+	initRoutinizer {
 		synthDefList = List.new;
 		ServerBoot.add({
 			if(synthDefList.notEmpty, {
@@ -105,7 +105,7 @@ CodexProcessor {
 	var <server, adder, remover, sender;
 
 	*new{ | server(Server.default) |
-		^super.newCopyArgs(server).init;
+		^super.newCopyArgs(server).initProcessor;
 	}
 
 	*initClass {
@@ -113,7 +113,7 @@ CodexProcessor {
 		Class.initClassTree(SynthDef);
 	}
 
-	init {
+	initProcessor {
 		adder = CodexAdder(server);
 		remover = CodexRemover(server);
 		sender = CodexSender(server);
@@ -122,8 +122,8 @@ CodexProcessor {
 	add { | synthDefs | adder.process(synthDefs) }
 
 	send { | synthDefs, targetServer(Server.default) |
-		forkIfNeeded({	
-			var tmp = sender.server; 
+		forkIfNeeded({
+			var tmp = sender.server;
 			sender.server = targetServer;
 			sender.process(synthDefs);
 			sender.server = tmp;

@@ -12,7 +12,7 @@ method::new
 Creates a new instance of CodexProcessor
 
 INSTANCEMETHODS::
-private::init
+private::initProcessor
 
 method::send
 Sends a SynthDef or collection of SynthDef objects to an arbitrary server.
@@ -87,15 +87,15 @@ p.add(d);
 (
 //4. Test them.
 Pbind(
-	\instrument, p { 
+	\instrument, p {
 		16.do { | i |
-			var name = format("TestSynth%", i); 
-			format("% is playing", name).postln; 
+			var name = format("TestSynth%", i);
+			format("% is playing", name).postln;
 			name.yield;
 		}
-	}, 
-	\degree, Pxrand([0, 2, 3, 4, 5, 7], inf), 
-	\dur, 0.2, 
+	},
+	\degree, Pxrand([0, 2, 3, 4, 5, 7], inf),
+	\dur, 0.2,
 	\timescale, Pkey(\dur) * 2
 ).play
 )
