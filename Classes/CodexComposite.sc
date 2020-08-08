@@ -1,5 +1,5 @@
 CodexComposite {
-	classvar <directory, id = 'sc-modules', <cache;
+	classvar <directory, id = 'sc-modules', cache;
 	var <moduleSet, <modules;
 
 	*initClass {
@@ -166,4 +166,10 @@ CodexComposite {
 			cmd.perform(\runInGnomeTerminal, shell);
 		}, { cmd.perform(\runInTerminal, shell) });
 	}
+
+	*clearCache { cache.removeAt(this.name).clear }
+
+	*cache { ^cache.at(this.name) }
+
+	*allCaches { ^cache }
 }
