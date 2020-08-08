@@ -1,8 +1,8 @@
-TITLE:: CodexPaths
-summary:: Configures default folder paths via persistent storage.
-categories:: Libraries>CodexIan
-related:: Classes/CodexIncrementer
-keyword:: persistent, codexian, codexian path, utilities, codexian utilities
+TITLE::CodexPaths
+summary::Configures default folder paths via persistent storage
+categories::Libraries>CodexIan
+related::Classes/CodexIncrementer
+keyword::persistent, codexian, codexian path, utilities, codexian utilities
 DESCRIPTION::
 
 CodexPaths is used for managing paths to files or folders using persistent storage. As a result, information stored through the class's interface will persist across sessions of the link::Classes/Interpreter::.

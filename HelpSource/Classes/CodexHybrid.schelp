@@ -1,5 +1,5 @@
 TITLE::CodexHybrid
-summary::Abstract superclass for composites with SynthDef modules.
+summary::Abstract superclass for composites with SynthDef modules
 categories::Libraries>CodexIan
 related::Classes/CodexComposite, Guides/CodexIan
 keyword::hybrid, compositing, codexian, codexian hybrid 

@@ -1,8 +1,8 @@
 TITLE::CodexTemplater
-summary::Create .scd files from templates of code.
+summary::Create .scd files from templates of code
 categories::Libraries>CodexIan
 related::Classes/FileIncrementer, Classes/Composite
-keyword:: template, codexian, compositing, utilities, codexian utilities
+keyword::template, codexian, compositing, utilities, codexian utilities
 
 DESCRIPTION::
 CodexTemplater creates teletype::.scd:: files with code templates for the following classes:
