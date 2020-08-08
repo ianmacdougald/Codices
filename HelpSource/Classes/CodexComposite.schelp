@@ -22,7 +22,7 @@ A string or symbol representing a relative path or a string representing an abso
 
 method::directory
 Gets and (persistently) sets the path to the directory of modules for all subclasses of CodexComposite. For further details, see link::Classes/CodexPaths::.
-note::Before using a subclass of CodexComposite for the first time, be sure to configure the path to the modules directory. This can be done either through the interface of CodexComposite or through those of any of its subclasses. Any change will affect all subclasses of CodexComposite.
+note::Before using a subclass of CodexComposite for the first time, be sure to configure the path to the directory of modules. This can be done either through the interface of CodexComposite or any of its subclasses. However, any change made will affect all subclasses of CodexComposite.
 code::
 //Check where the directory is.
 CodexComposite.directory.postln;
