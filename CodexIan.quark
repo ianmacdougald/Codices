@@ -1,9 +1,8 @@
 (
-    version:        "0.2.0",
-    copyright:      "ianmacdougald",
-    name:           "CodexIan",
-    path:           "CodexIan",
-    summary:        "Modularized music compositing",
-    helpdoc:        "Help/Libraries/CodexIan",
-    author:         "ianmacdougald",
+    name:           	"CodexIan",
+    summary:        	"Modular framework for music development",
+    version:        	"0.2.0",
+    dependencies:	[],		
+    author:		"ianmacdougald",
+    url:		"https://github.com/ianmacdougald/CodexIan"
 )
