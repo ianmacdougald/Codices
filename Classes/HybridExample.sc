@@ -1,49 +1,26 @@
 HybridExample : CodexHybrid {
-	var routine, pattern;
+	var player;
 
 	*defaultsPath {
-		^this.filenameString.dirname.dirname
-		+/+"ExampleModules";
+		^this.filenameString.dirname.dirname+/+"ExampleModules";
 	}
 
 	initHybrid {}
 
 	*makeTemplates { | templater |
-		//Three custom templates...
-		templater.patternFunction( "sequence0" );
-		templater.patternFunction( "sequence1" );
-		templater.patternFunction( "sequence2" );
-		//Three SynthDefs...
-		templater.synthDef( "synthDef0" );
-		templater.synthDef( "synthDef1" );
-		templater.synthDef( "synthDef2" );
+		templater.patternFunction( "sequence" );
+		templater.synthDef( "synthDef" );
 	}
 
 	play {
-		if(routine.isPlaying.not, {  
-			routine = fork{
-				pattern = modules.sequence0.play;
-				1.6.wait;
-				pattern.stop;
-				pattern = modules.sequence1.play;
-				1.6.wait;
-				pattern.stop;
-				pattern = modules.sequence2.play;
-				1.6.wait;
-				pattern.stop;
-				0.1.wait;
-				"Hybrid Example : All done".postln;
-			};
+		if(player.isPlaying.not, {
+			player = modules.sequence.play;
 		});
 	}
 
 	stop {
-		if(routine.isPlaying, {
-			routine.stop;
-		});
-
-		if(pattern.isPlaying, { 
-			pattern.stop;
+		if(player.isPlaying, {
+			player.stop;
 		});
 	}
 }
