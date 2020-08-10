@@ -5,9 +5,13 @@ related::Overviews/CodexIan
 keyword::hybrid, composite, composition
 
 section::Description
-CodexIan is a library designed to support an approach to music making in sclang that combines the specificity of a compiled class's interface with the open-ended potential of scripting. The basic idea for the library is that a class written using its features only has to describe high-level interactions between swappable components whose definitions are arbitrary. For instance, a class written to sequence patterns in a routine might implement only the routine, leaving the patterns to be loaded from external scripts called modules. As a result, the patterns of this example can be redefined at any point and put to use without the need for recompiling sclang.
+CodexIan is a collection of classes that establishes a framework for making and developing musical projects in sclang. Objects defined under this framework balance the specificity of a compiled class's interface with the open-ended, experimental potential of scripting. As such, a class written using its features only has to describe high-level interactions between scriptable components whose definitions are largely arbitrary. 
 
-link::Classes/CodexComposite:: coordinates these operations and maintains a directory of sets of modules, which it can load, unload, clone, and template on behalf of its subclasses. link::Classes/CodexHybrid::, which inherits from CodexComposite, handles sending and removing link::Classes/SynthDef:: modules from a given server. A description of how to work with both classes is described in the following guide.
+For instance, a class written to sequence patterns in a routine might implement only the routine and then leave the patterns to be loaded from external scripts called modules. As a result, the patterns of this example can be redefined at any point and redeployed without the need for recompiling sclang.  
+
+Moreover, the modules themselves can be edited, cloned, and templated at will. As such, every class developed under this framework can endlessly vary its core functions without additional developmental overhead.
+
+link::Classes/CodexComposite:: coordinates these operations and maintains a directory of sets of modules on behalf of its subclasses. link::Classes/CodexHybrid:: inherits from CodexComposite, handling the process of adding and removing link::Classes/SynthDef:: modules from a given server. A description of how to work with both classes is described in the following guide. 
 
 section::Module directories
 
@@ -51,17 +55,17 @@ tree::
 ::
 
 subsection::Class folders
-Class folders are generated automatically. However, the circumstances of when that happens vary depending on the implementation of the class whose modules a given class folder is storing. For instance, a class that specifies a set of default modules will create its class folder when sclang is recompiled as well as a subfolder called "default" populated with copies of these modules. Moreover, this process will repeat if either of these folders is deleted. If default modules are not specified, the first time a class is instanced, an entry will be made in the directory for the class and a modules folder filled with templates will be generated.
+Class folders are generated automatically. However, the circumstances regarding when that happens vary depending. For instance, a class that specifies a set of default modules will create its class folder when sclang is recompiled as well as a subfolder called "default" populated with copies of these modules. Moreover, this process will repeat if either of these folders is deleted. If default modules are not specified, the first time a class is instanced, an entry will be made in the directory for the class and a modules folder filled with templates will be generated.
 
 subsection::Module folders
-Modules are stored as teletype::.scd:: files within the subfolders of each class folder; each of these subfolders contains variations of the modules templated by the class. As a result, a class expects that modules representing specific sclang objects exist but does not need to now emphasis::how:: they exist. As such, a pattern contained within a file called teletype::sequence.scd:: in a folder called teletype::default:: can be implemented differently than pattern within a file of the same name but in a folder called teletype::experimental:: so long as both files return an object of the same type. Furthermore, there is no prescribed limit to the number of modular variations that can exist per class.
-An instance of a subclass of CodexComposite is told to load one of these collections either by supplying a relative name to the teletype::moduleSet:: argument of link::Classes/CodexComposite#*new:: in the form of a symbol or string or by setting the value of the field link::Classes/CodexComposite#-moduleSet::. In both cases, the user has an opportunity to point to a different set of modules using the argument teletype::from::. When the first set of modules does not already exist and the second set does, the first set will be cloned from the second. If no second set of modules is specified or does not exist, the first set of modules will be generated from link::Classes/CodexTemplater##templates::.  
+Modules are stored as teletype::.scd:: files within the subfolders of each class folder; each of these subfolders contains variations of the modules templated by the class. As a result, a class expects that modules representing specific sclang objects exist but does not need to now emphasis::how:: they exist. As such, the module loaded from the file teletype::default/sequence.scd:: can be different from the one from teletype::experimental/sequence.scd:: so long as both scripts return an object of the same type.
+
+Furthermore, there is no prescribed limit to the number of modular variations that can exist per class. An instance of a subclass of CodexComposite is told to load one of these collections either by supplying a relative name to the teletype::moduleSet:: argument of link::Classes/CodexComposite#*new:: in the form of a symbol or string or by setting the value of the field link::Classes/CodexComposite#-moduleSet::. In both cases, the user has an opportunity to point to a different set of modules using the argument teletype::from::. When the first set of modules does not already exist and the second set does, the first set will be cloned from the second. If no second set of modules is specified or does not exist, a new corresponding folder of modules will be generated from link::Classes/CodexTemplater##templates::.  
+
 subsection::Modules
 As stated above, modules are teletype::.scd:: files containing scripts that return an arbitrary object. When a set of modules is requested for the first time, these scripts are loaded into sclang, collected as an link::Classes/Event::, and stored in an instance of link::Classes/CodexCache::. Copies of the cached modules then can be accessed via link::Classes/CodexComposite#-modules::. The name of each respective module in the event is taken from the name of its source file. For instance, a pattern loaded from teletype::sequence.scd:: is accessible using the key \sequence. Moreover, if the name of the file were teletype::SillySequence.scd::, its associated module would be accessed using the key \sillySequence.
 
-If the source file of a module currently loaded into an instance of a CodexComposite-typed class is edited, simply calling link::Classes/CodexComposite#-reloadScripts:: will reload the objects from the scripts into the cache before copying them into the instance that called the method. Subsequently, all new instances that call for modules from that same collection will reflect these updates. To update currently existing instances, invoking link::Classes/CodexComposite#-reloadModules:: will refresh modules from the now modified cache. Furthermore, this process does not require recompiling sclang.
-
-The procedure for defining a set of default modules to ship with a class is simple and yet specific. All you need to do is make a folder, fill it with a correctly named script that corresponds with each respective module specified by the class, and then return a string representing a path to that folder in the method link::Classes/CodexComposite#*defaultsPath::. 
+If the source file of a module currently loaded into an instance of a CodexComposite-typed class is edited, simply calling link::Classes/CodexComposite#-reloadScripts:: will reload the objects from the scripts into the cache before copying them into the instance that called the method. Subsequently, all new instances that call for modules from that same collection will reflect these updates. To update currently existing instances, invoking link::Classes/CodexComposite#-reloadModules:: will refresh modules from the now modified cache. This process does not require recompiling sclang.
 
 section::CompositeExample
 Developing a class that inherits from CodexComposite is relatively simple. No constructor is needed. The only requirement is that the developer fill out the method link::Classes/CodexComposite#*makeTemplates::, which takes in an instance of link::Classes/CodexTemplater:: as an argument. In fact, it is this method that defines the modules of a class. For instance, if you are making a class requiring a pattern that will be accessed from the modules' event via the key \sequence, then the templater instance must be told to generate a pattern with the name "sequence". note::Templates themselves can be any arbitrary piece of code, and CodexTemplater can be told to reproduce that code so long as it is properly link::Classes/CodexTemplater#ExtendingCodexTemplater#extended::.::
@@ -126,6 +130,7 @@ x.openModules;
 x.modules.postln;
 
 //Open the \experimental set of modules.
+//This method is only supported for the editors scide, scvim, and scnvim.
 x.openModules; 
 
 //If you edit them, load the changes back into the instance. 
@@ -146,16 +151,16 @@ PathName(path).folders.do({|item|
 //edit the file in the \experimental folder, and clone it as follows:
 x.moduleSet_(\exp2, \experimental);
 
-//Open the new modules. Although, unless you edited \experimental, the new modules will look like templates. 
+//Open the new modules. Unless you edited \experimental, the new modules will look like templates. 
 x.openModules;
 
 ::
 
 SECTION::CodexHybrid
-CodexHybrid extends the procedures of CodexComposite to process SynthDef modules. It does this by reformatting their names to prevent clashes before sending each respective SynthDef to a given server. Moreover, SynthDef modules will only be loaded onto a server when unique collections of modules are added to the cache maintained by CodexComposite.
+CodexHybrid extends the procedures of CodexComposite to process SynthDef modules. It does this by reformatting their names to prevent clashes before sending each respective SynthDef to a given server. Moreover, SynthDef modules will only be added to the server when unique collections of modules are added to the cache maintained by CodexComposite.
 
 subsection::SynthDef naming
-If a subclass of CodexHybrid defines a SynthDef with the name \helloWorld, when the default modules are loaded that SynthDef's name will be reformatted and sent to the server with the symbol \ExampleClass_default_helloWorld. If modules from the set \experimental were cloned from the default set and loaded for the first time, its SynthDef's name would be reformatted and sent to the server with the symbol \ExampleClass_experimental_helloWorld. Further, once these sets of modules are loaded, the class will not reload them for the duration of the server session unless they are cleared by the user by using link::Classes/CodexHybrid#-removeSynthDefs::. Also, it is worth noting that the method link::Classes/CodexComposite#-reloadScripts:: is overwritten in CodexHybrid so that it updates SynthDefs on the server in the same way that modules are updated in the client.
+If a subclass of CodexHybrid defines a SynthDef with the name \helloWorld, then, when the default modules are loaded, that SynthDef's name will be reformatted and added to the server with the symbol \ExampleClass_default_helloWorld. If modules from the set \experimental were cloned from the default set and loaded for the first time, its SynthDef's name would be reformatted and added to the server with the symbol \ExampleClass_experimental_helloWorld. Once these sets of modules are loaded, the class will not re-add the associated SynthDefs for the duration of the server session unless they are removed using link::Classes/CodexHybrid#-removeSynthDefs::. In CodexHybrid, the method teletype::-reloadScripts:: is overwritten to include teletype::-removeSynthDefs:: so that SynthDefs are updated on the server as the modules themselves are updated. 
 
 note:: To ensure that SynthDef names are accessed consistently, it is best not to hardcode the names of SynthDefs either into any modules or class implementations. Rather, calling the method link::Classes/SynthDef#-name#-name:: on the associated SynthDef module will produce more consistent results.
 code::
