@@ -4,7 +4,7 @@ CodexIan is a collection of classes that establishes a framework for making and 
 
 For instance, a class written to sequence patterns in a routine might implement only the routine and then leave the patterns to be loaded from external scripts called modules. As a result, the patterns of this example can be redefined at any point and redeployed without the need for recompiling sclang.  
 
-Moreover, the modules themselves can be edited, cloned, and templated at will. As such, every class supports endless variations of its core functions without the need for additional development.
+Moreover, the modules themselves can be edited, cloned, and templated at will. As such, every class developed under this framework can endlessly vary its core functions without additional developmental overhead.
 
 ## Installation
 
