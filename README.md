@@ -10,4 +10,4 @@ Moreover, the modules themselves can be edited, cloned, and templated at will. A
 
 In SuperCollider, evaluate the following: 
 
-`Quarks.install("https://github.com/ianmacdougald/codexian");`
+`Quarks.install("https://github.com/ianmacdougald/CodexIan");`
