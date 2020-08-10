@@ -153,7 +153,6 @@ x.moduleSet_(\exp2, \experimental);
 
 //Open the new modules. Unless you edited \experimental, the new modules will look like templates. 
 x.openModules;
-
 ::
 
 SECTION::CodexHybrid
@@ -169,56 +168,33 @@ code::
 ::
 
 section::HybridExample
-The below implementation example builds upon the previous one in some key ways: instead of defining a single pattern module, three "patternFunction" modules are created from custom templates; there are also three SynthDef modules defined.
+The below implementation example builds upon the previous one by defining a SynthDef module and replacing the pattern module with a custom template called "patternFunction", which, as its name suggests, returns a function that itself returns a pattern.
 
-Furthermore, of note is the fact that the class specifies a set of default modules and that the method teletype::initComposite:: has been replaced with teletype::initHybrid::. The reason for this latter change is due to the fact that CodexHybrid engages its specialized procedures in the method teletype::initComposite:: making it unavailable. Nevertheless, given the fact that teletype::initHybrid:: is called upon after the completion of these procedures, it plays an equivalent role for the subclasses of CodexHybrid as teletype::initComposite:: plays for all other subclasses of CodexComposite.
+Furthermore, of note is the fact that the class specifies a set of default modules and that the method teletype::-initComposite:: has been replaced with teletype::-initHybrid::. The reason for this latter change is due to the fact that CodexHybrid engages its specialized procedures in the method teletype::-initComposite:: making it unavailable. Nevertheless, given the fact that teletype::-initHybrid:: is called upon after the completion of these procedures, it plays an equivalent role for the subclasses of CodexHybrid as teletype::-initComposite:: plays for all other subclasses of CodexComposite.
 code::
 HybridExample : CodexHybrid {
-	var routine, pattern;
+	var player;
 
 	*defaultsPath {
-		^this.filenameString.dirname
-		+/+"ExampleModules";
+		^this.filenameString.dirname.dirname+/+"ExampleModules";
 	}
 
 	initHybrid {}
 
 	*makeTemplates { | templater |
-		//Three custom templates...
-		templater.patternFunction( "sequence0" );
-		templater.patternFunction( "sequence1" );
-		templater.patternFunction( "sequence2" );
-		//Three SynthDefs...
-		templater.synthDef( "synthDef0" );
-		templater.synthDef( "synthDef1" );
-		templater.synthDef( "synthDef2" );
+		templater.patternFunction( "sequence" );
+		templater.synthDef( "synthDef" );
 	}
 
 	play {
-		if(routine.isPlaying.not, {  
-			routine = fork{
-				pattern = modules.sequence0.play;
-				2.wait;
-				pattern.stop;
-				pattern = modules.sequence1.play;
-				4.wait;
-				pattern.stop;
-				pattern = modules.sequence2.play;
-				2.wait;
-				pattern.stop;
-				0.1.wait;
-				"Hybrid Example : All done".postln;
-			};
+		if(player.isPlaying.not, {
+			player = modules.sequence.play;
 		});
 	}
 
 	stop {
-		if(routine.isPlaying, {
-			routine.stop;
-		});
-
-		if(pattern.isPlaying, { 
-			pattern.stop;
+		if(player.isPlaying, {
+			player.stop;
 		});
 	}
 }
@@ -232,12 +208,12 @@ x = HybridExample.new;
 //Inspect the modules.
 x.modules.postln;
 
-//Inspect the names of the SynthDefs
-x.synthDefs.postln;
+//Inspect the name of the SynthDef.
+x.synthDefs[0].name.postln;
 
-//Clone a new moduleSet to observe the new SynthDef names.
+//Clone a new moduleSet to observe the new SynthDef name.
 x.moduleSet_(\experimental, \default);
-x.synthDefs.postln; 
+x.synthDefs[0].name.postln; 
 
 //Play it to hear sounds.
 x.play;
