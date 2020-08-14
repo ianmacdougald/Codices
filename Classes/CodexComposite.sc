@@ -156,7 +156,7 @@ CodexComposite {
 		});
 	}
 
-	openModulesSCVim { | shell("sh"), neovim = false, vertically = true |
+	openModulesSCVim { | shell("sh"), neovim(false), vertically(true) |
 		var cmd = "vim", paths = PathName(this.moduleFolder)
 		.files.collect(_.fullPath);
 		if(neovim, { cmd = $n++cmd });
