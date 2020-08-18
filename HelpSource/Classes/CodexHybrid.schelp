@@ -21,6 +21,9 @@ private::todo
 copymethod:: CodexComposite *directory
 copymethod:: CodexComposite *classFolder
 copymethod:: CodexComposite *moduleSets
+copymethod:: CodexComposite *cache
+copymethod:: CodexComposite *clearCache
+copymethod:: CodexComposite *allCaches
 copymethod:: CodexComposite *defaultsPath
 INSTANCEMETHODS::
 

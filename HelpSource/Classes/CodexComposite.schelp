@@ -42,7 +42,11 @@ method::moduleSets
 Gets the names of the moduleSets that currently exist for the class.
 
 method::cache
-Gets the instance of link::Classes/CodexCache:: that stores the loaded scripts for all subclasses.
+Gets a link::Classes/Dictionary:: of link::Classes/Event##Events:: storing sets of modules.
+method::clearCache
+Clears the dictionary of module sets, forcing the class to reload the modules from scripts the next time a given set is requested.
+method::allCaches
+Get the instance of link::Classes/CodexCache:: that stores all of the scripts of each subclass of CodexComposite.
 private::addModules
 private::asPath
 private::copyFiles
