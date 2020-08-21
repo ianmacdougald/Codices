@@ -1,7 +1,7 @@
 TITLE::CodexTemplater
 summary::Create .scd files from templates of code
 categories::Libraries>CodexIan
-related::Classes/FileIncrementer, Classes/Composite
+related::Classes/CodexIncrementer, Classes/CodexComposite
 keyword::template, codexian, compositing, utilities, codexian utilities
 
 DESCRIPTION::
@@ -106,7 +106,7 @@ PathName(path).files.do{|item|
 File.deleteAll("~/Desktop/_templateTest".standardizePath);
 ::
 
-If one tries to make a template at a location where a template with the same name already exists, the class automatically link::Classes/FileIncrementer##increments:: the name starting with 1.
+If one tries to make a template at a location where a template with the same name already exists, the class automatically link::Classes/CodexIncrementer##increments:: the name starting with 1.
 code::
 (
 var path, templater;
