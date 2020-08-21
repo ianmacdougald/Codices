@@ -6,8 +6,11 @@ CodexComposite {
 		Class.initClassTree(Dictionary);
 		Class.initClassTree(CodexPaths);
 		directory = CodexPaths.at(id) ?? {
-			CodexPaths.setAt(this.filenameString
-				.dirname.dirname+/+"sc-modules", id);
+			CodexPaths.setAt(
+				Main.packages.asDict.at(\CodexIan)
+				+/+"sc-modules",
+				id
+			);
 		};
 		cache = CodexCache.new;
 		this.allSubclasses.do({ | class |
