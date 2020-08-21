@@ -7,7 +7,7 @@ CodexComposite {
 		Class.initClassTree(CodexPaths);
 		directory = CodexPaths.at(id) ?? {
 			CodexPaths.setAt(this.filenameString
-				.dirname.dirname, id);
+				.dirname.dirname+/+"sc-modules", id);
 		};
 		cache = CodexCache.new;
 		this.allSubclasses.do({ | class |
