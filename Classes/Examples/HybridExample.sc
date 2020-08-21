@@ -2,7 +2,7 @@ HybridExample : CodexHybrid {
 	var player;
 
 	*defaultsPath {
-		^this.filenameString.dirname.dirname+/+"ExampleModules";
+		^this.filenameString.dirname+/+"Modules";
 	}
 
 	initHybrid {}
