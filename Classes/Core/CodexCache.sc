@@ -38,7 +38,14 @@ CodexCache {
 
 	clear { dictionary.clear; }
 
-	modulesAt { | key, subkey | ^dictionary[key][subkey] }
+	modulesAt { | key, subkey | 
+		var copy = ();
+		dictionary[key][subkey].keysValuesDo({
+			| key, value | 
+			copy.add(key -> value.copy);
+		});
+		^copy;
+	}
 
 	copyEntry { | key, toCopy, newEntry |
 		if(this.notAt(key, newEntry), {
