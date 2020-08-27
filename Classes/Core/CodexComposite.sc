@@ -22,7 +22,7 @@ CodexComposite {
 
 	*new { | moduleSet, from |
 		^super.newCopyArgs(
-			moduleSet !? { Error("No module set specified").throw }
+			moduleSet ?? { Error("No module set specified").throw }
 		)
 		.loadModules(from).initComposite;
 	}
