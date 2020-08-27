@@ -19,8 +19,8 @@ CodexComposite {
 		});
 	}
 
-	*new { | moduleSet(\default), from |
-		^super.newCopyArgs(moduleSet)
+	*new { | moduleSet, from |
+		^super.newCopyArgs(moduleSet !? { Error("No module set specified").throw });
 		.loadModules(from).initComposite;
 	}
 
