@@ -1,10 +1,11 @@
 CodexComposite {
-	classvar <directory, id = 'sc-modules', cache;
+	classvar <directory, id = 'sc-modules', cache, versions;
 	var <moduleSet, <modules;
 
 	*initClass {
 		Class.initClassTree(Dictionary);
 		Class.initClassTree(CodexPaths);
+		Class.initClassTree(List);
 		directory = CodexPaths.at(id) ?? {
 			CodexPaths.setAt(
 				Main.packages.asDict.at(\CodexIan)
@@ -15,12 +16,14 @@ CodexComposite {
 		cache = CodexCache.new;
 		this.allSubclasses.do({ | class |
 			Class.initClassTree(class);
-			class.checkDefaults;
+			class.copyVersions;
 		});
 	}
 
 	*new { | moduleSet, from |
-		^super.newCopyArgs(moduleSet !? { Error("No module set specified").throw });
+		^super.newCopyArgs(
+			moduleSet !? { Error("No module set specified").throw }
+		)
 		.loadModules(from).initComposite;
 	}
 
@@ -96,14 +99,30 @@ CodexComposite {
 	}
 
 	*checkDefaults {
-		var defaultsPath = this.defaultsPath;
-		var folder = this.classFolder+/+"default";
-		if(defaultsPath.exists && folder.exists.not, {
-			defaultsPath.copyScriptsTo(folder.mkdir);
-		});
+		var versions = List.new;
+		this.addVersions(versions);
+		versions.do { | entry |
+			entry = this.formatEntry(entry);
+			entry !? {
+				var folder = this.classFolder++entry[1].asString;
+				entry[0].copyScriptsTo(folder.mkdir);
+			};
+		}
 	}
 
-	*defaultsPath { ^"" }
+	*formatEntry { | item |
+		^if(item.isCollection, {
+			if(item.isString, {
+				var name = CodexIncrementer(
+					this.classFolder,
+					"version"
+				).increment.currentIncrement;
+				[item, name];
+			}, { item.asArray });
+		}, { nil });
+	}
+
+	*addVersions { | list | }
 
 	initComposite {}
 
