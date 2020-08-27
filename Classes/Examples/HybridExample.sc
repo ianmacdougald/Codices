@@ -1,8 +1,10 @@
 HybridExample : CodexHybrid {
 	var player;
 
-	*defaultsPath {
-		^this.filenameString.dirname+/+"Modules";
+	*contribute { | versions |
+		versions.add(
+			[\example, this.filenameString.dirname+/+"Modules"]
+		);
 	}
 
 	initHybrid {}

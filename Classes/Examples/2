@@ -98,32 +98,33 @@ CodexComposite {
 		cache.add(this.name, moduleSymbol, this.loadScripts(moduleSymbol));
 	}
 
-	*copyVersions {
+	*checkDefaults {
 		var versions = List.new;
 		this.contribute(versions);
 		versions.do { | entry |
-			if(this.isVersion(entry), {
-				var folder = this.classFolder+/+entry[0].asString;
-				if(folder.exists.not, {
-					entry[1].copyScriptsTo(folder.mkdir.postln);
-				})
-			});
+			entry = this.formatEntry(entry);
+			entry !? {
+				var folder = this.classFolder+/+entry[1].asString;
+				if(folder.exists.not, {  
+					entry[0].copyScriptsTo(folder.mkdir.postln);
+				});
+			}
 		}
 	}
 
-	*isVersion { | entry |
-		^(
-			entry.isCollection
-			and: { entry.isString.not }
-			and: {
-				entry.select({ | item |
-					item.isString or: { item.isKindOf(Symbol)}
-				}).size >= 2
-			}
-		);
+	*formatEntry { | item |
+		^if(item.isCollection, {
+			if(item.isString, {
+				var name = CodexIncrementer(
+					this.classFolder,
+					"version"
+				).increment.currentIncrement;
+				[item, name];
+			}, { item.asArray });
+		}, { nil });
 	}
 
-	*contribute { | versions | }
+	*addVersions { | list | }
 
 	initComposite {}
 
