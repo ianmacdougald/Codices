@@ -105,7 +105,7 @@ CodexComposite {
 			if(this.isVersion(entry), {
 				var folder = this.classFolder+/+entry[0].asString;
 				if(folder.exists.not, {
-					entry[1].copyScriptsTo(folder.mkdir.postln);
+					entry[1].copyScriptsTo(folder.mkdir);
 				})
 			});
 		}
