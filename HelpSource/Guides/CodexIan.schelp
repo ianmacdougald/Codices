@@ -110,7 +110,7 @@ CompositeExample : CodexComposite {
 subsection::Usage
 Below represents code for interacting with the class whose implementation is displayed immediately above.
 code::
-x = CompositeExample.new;
+x = CompositeExample.new(\version1);
 
 //Insepct the modules.
 x.modules.postln;
@@ -135,11 +135,12 @@ PathName(path).folders.do({|item|
 x.openModules; 
 
 //If you want to make a new set of modules, that is easy.
+x.moduleSet = \version2;
 
 //Inspect the modules.
 x.modules.postln;
 
-//Open the \experimental set of modules.
+//Open the \version2 set of modules.
 //This method is only supported for the editors scide, scvim, and scnvim.
 x.openModules; 
 
@@ -147,7 +148,7 @@ x.openModules;
 x.reloadScripts; 
 
 //You can switch back and forth between existing modules too.
-x.moduleSet = \default;
+x.moduleSet = \version1;
 
 (
 //Note here that no new folder was made.
@@ -157,11 +158,11 @@ PathName(path).folders.do({|item|
 });
 )
 
-//If you want to make a new folder cloned from the experimental one...
-//edit the file in the \experimental folder, and clone it as follows:
-x.moduleSet_(\exp2, \experimental);
+//If you want to make a new folder cloned from the \version2 one...
+//edit the file in the \version2 folder, and clone it as follows:
+x.moduleSet_(\version3, \version2);
 
-//Open the new modules. Unless you edited \experimental, the new modules will look like templates. 
+//Open the new modules. Unless you edited \version2, the new modules will look like templates. 
 x.openModules;
 ::
 
@@ -169,7 +170,7 @@ SECTION::CodexHybrid
 CodexHybrid extends the procedures of CodexComposite to process SynthDef modules. It does this by reformatting their names to prevent clashes before sending each respective SynthDef to a given server. Moreover, SynthDef modules will only be added to the server when unique collections of modules are added to the cache maintained by CodexComposite.
 
 subsection::SynthDef naming
-If a subclass of CodexHybrid defines a SynthDef with the name \helloWorld, then, when the default modules are loaded, that SynthDef's name will be reformatted and added to the server with the symbol \ExampleClass_default_helloWorld. If modules from the set \experimental were cloned from the default set and loaded for the first time, its SynthDef's name would be reformatted and added to the server with the symbol \ExampleClass_experimental_helloWorld. Once these sets of modules are loaded, the class will not re-add the associated SynthDefs for the duration of the server session unless they are removed using link::Classes/CodexHybrid#-removeSynthDefs::. In CodexHybrid, the method teletype::-reloadScripts:: is overwritten to include teletype::-removeSynthDefs:: so that SynthDefs are updated on the server as the modules themselves are updated. 
+If a subclass of CodexHybrid defines a SynthDef with the name \helloWorld, then, when the default modules are loaded, that SynthDef's name will be reformatted and added to the server with the symbol \ExampleClass_default_helloWorld. If modules from the set \version2 were cloned from the default set and loaded for the first time, its SynthDef's name would be reformatted and added to the server with the symbol \ExampleClass__helloWorld. Once these sets of modules are loaded, the class will not re-add the associated SynthDefs for the duration of the server session unless they are removed using link::Classes/CodexHybrid#-removeSynthDefs::. In CodexHybrid, the method teletype::-reloadScripts:: is overwritten to include teletype::-removeSynthDefs:: so that SynthDefs are updated on the server as the modules themselves are updated. 
 
 note:: To ensure that SynthDef names are accessed consistently, it is best not to hardcode the names of SynthDefs either into any modules or class implementations. Rather, calling the method link::Classes/SynthDef#-name#-name:: on the associated SynthDef module will produce more consistent results.
 code::
@@ -217,7 +218,7 @@ subsection::Usage
 Here is an outline of how to interact with the HybridExample class. It should make sounds.
 
 code::
-x = HybridExample.new;
+x = HybridExample.new(\version1);
 
 //Inspect the modules.
 x.modules.postln;
@@ -226,7 +227,7 @@ x.modules.postln;
 x.synthDefs[0].name.postln;
 
 //Clone a new moduleSet to observe the new SynthDef name.
-x.moduleSet_(\experimental, \default);
+x.moduleSet_(\version2, \version1);
 x.synthDefs[0].name.postln; 
 
 //Play it to hear sounds.
