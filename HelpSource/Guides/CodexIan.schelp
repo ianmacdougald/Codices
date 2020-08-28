@@ -67,6 +67,16 @@ As stated above, modules are teletype::.scd:: files containing scripts that retu
 
 If the source file of a module currently loaded into an instance of a CodexComposite-typed class is edited, simply calling link::Classes/CodexComposite#-reloadScripts:: will reload the objects from the scripts into the cache before copying them into the instance that called the method. Subsequently, all new instances that call for modules from that same collection will reflect these updates. To update currently existing instances, invoking link::Classes/CodexComposite#-reloadModules:: will refresh modules from the now modified cache. This process does not require recompiling sclang.
 
+subsection::Contributing versions 
+CodexComposite supports the ability to ship any class with a set of pre-configured modules, representing a specific take on its functionality. This is done by overwriting the method link::Classes/CodexComposite#*contribute#*contribute::, which is passed a list for storing arrays of two items—a symbol or string representing the name of the set of modules to be cloned to the directory as well as the path where the modules are stored. Ideally, this path should be located within the folder of the project also implementing the class. 
+
+There are four short steps required to make a contribution: first, checkout a new branch of your clone of the project; second, add your version the modules to the project folder; third, point to your projects by adding its name and path (in that order) as an array to the list of versions in the class's implementation; and finally, commit your changes to the branch and submit a pull request for the project. 
+
+More or less, this project mirrors the way in which one contributes to SuperCollider itself. As such, for a more detailed explanation, visit the following link: 
+link::https://supercollider.github.io/contributing/::.
+
+In this way, the code of a piece of music developed in this framework could be considered as a sort of technical and abstract score such that any arbitrary and non-error-producing configuration of its modules developed by anyone is, in a musical sense, a valid interpretation, and is, in a software sense, a valid contribution to the project. As such, my hope is to promote a collaborative approach to music making that mirros the ethos of the open source/free software movements in which the SuperCollider project itself is developed.
+
 section::CompositeExample
 Developing a class that inherits from CodexComposite is relatively simple. No constructor is needed. The only requirement is that the developer fill out the method link::Classes/CodexComposite#*makeTemplates::, which takes in an instance of link::Classes/CodexTemplater:: as an argument. In fact, it is this method that defines the modules of a class. For instance, if you are making a class requiring a pattern that will be accessed from the modules' event via the key \sequence, then the templater instance must be told to generate a pattern with the name "sequence". note::Templates themselves can be any arbitrary piece of code, and CodexTemplater can be told to reproduce that code so long as it is properly link::Classes/CodexTemplater#ExtendingCodexTemplater#extended::.::
 
@@ -168,15 +178,19 @@ code::
 ::
 
 section::HybridExample
-The below implementation example builds upon the previous one by defining a SynthDef module and replacing the pattern module with a custom template called "patternFunction", which, as its name suggests, returns a function that itself returns a pattern.
+The below implementation example builds upon the previous one by defining a SynthDef module and replacing the pattern module with a custom template called "patternFunction", which, as its name suggests, returns a function that itself returns a pattern. 
 
-Furthermore, of note is the fact that the class specifies a set of default modules and that the method teletype::-initComposite:: has been replaced with teletype::-initHybrid::. The reason for this latter change is due to the fact that CodexHybrid engages its specialized procedures in the method teletype::-initComposite:: making it unavailable. Nevertheless, given the fact that teletype::-initHybrid:: is called upon after the completion of these procedures, it plays an equivalent role for the subclasses of CodexHybrid as teletype::-initComposite:: plays for all other subclasses of CodexComposite.
+Also, note that that the method teletype::initComposite:: has been replaced with teletype::initHybrid::. The reason for this change is due to the fact that CodexHybrid engages its specialized procedures in the method teletype::initComposite:: making it unavailable. Nevertheless, given the fact that teletype::-initHybrid:: is called upon after the completion of these procedures, it plays an equivalent role for the subclasses of CodexHybrid as teletype::initComposite:: plays for all other subclasses of CodexComposite. 
+
+Finally, HybridExample also makes use of the contribution interface, defining a set of pre-configured modules to be shipped with the class.
 code::
 HybridExample : CodexHybrid {
 	var player;
 
-	*defaultsPath { 
-		^this.filenameString.dirname+/+"Modules"; 
+	*contribute { | versions |
+		versions.add(
+			[\example, this.filenameString.dirname+/+"Modules"]
+		);
 	}
 
 	initHybrid {}

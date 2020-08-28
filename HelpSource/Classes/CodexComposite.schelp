@@ -51,8 +51,24 @@ private::addModules
 private::asPath
 private::copyFiles
 private::copyModules
-method::defaultsPath
-Gets a string representing the path to a folder of default modules that ship with a class.
+private::copyVersions
+method::contribute
+Manages versions of pre-configured modules that are shipped with a class inheriting from CodexComposite. 
+note::
+To make a contribution, overwrite this method by adding an array to the versions list with a symbol or string representing the name of the pre-configured set of modules and a path to their location like this:
+
+code::
+	*contribute { | versions | 
+		versions.add([\example, /Path/To/Example]);
+
+		versions.add([\anotherExample, /Path/To/AnothterExample]);
+	}
+	
+::
+::
+argument::versions
+A link::Classes/List:: to which a developer can add their contribution. 
+private::isVersion
 private::getModules
 private::loadScripts
 private::makeTemplates
