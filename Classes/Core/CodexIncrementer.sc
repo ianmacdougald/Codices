@@ -2,13 +2,13 @@ CodexIncrementer {
 	var fileTemplate, <>folder, <>extension;
 	var <currentIncrement, previousFileName;
 
-	*new {|fileTemplate = "some-file.wav", folder|
+	*new { | fileTemplate = "some-file.wav", folder |
 		^super.new
 		.fileTemplate_(fileTemplate)
 		.folder_(folder)
 	}
 
-	fileTemplate_{|newTemplate|
+	fileTemplate_{ | newTemplate |
 		var pathname = PathName(newTemplate);
 		extension = pathname.extension;
 		pathname = pathname.fileNameWithoutExtension;
