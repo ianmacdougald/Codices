@@ -72,7 +72,7 @@ CodexComposite supports the ability to ship any class with a set of pre-configur
 
 There are four short steps required to make a contribution: first, checkout a new branch of your clone of the project; second, add your version the modules to the project folder; third, point to your projects by adding its name and path (in that order) as an array to the list of versions in the class's implementation; and finally, commit your changes to the branch and submit a pull request for the project. 
 
-More or less, this project mirrors the way in which one contributes to SuperCollider itself. As such, for a more detailed explanation, visit the following link: 
+More or less, this project mirrors the way in which one contributes to SuperCollider. As such, for a more detailed explanation of these procedures, visit the following link: 
 link::https://supercollider.github.io/contributing/::.
 
 In this way, the code of a piece of music developed in this framework could be considered as a sort of technical and abstract score such that any arbitrary and non-error-producing configuration of its modules developed by anyone is, in a musical sense, a valid interpretation, and is, in a software sense, a valid contribution to the project. As such, my hope is to promote a collaborative approach to music making that mirros the ethos of the open source/free software movements in which the SuperCollider project itself is developed.
