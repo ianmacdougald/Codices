@@ -1,5 +1,5 @@
 CodexComposite {
-	classvar <directory, id = 'sc-modules', cache, versions;
+	classvar <directory, id = 'sc-modules', cache;
 	var <moduleSet, <modules;
 
 	*initClass {
