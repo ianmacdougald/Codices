@@ -1,5 +1,5 @@
 TITLE::CodexComposite
-summary::Abstract superclass of modularized composite classes
+summary::Abstract superclass of modular composite classes
 categories::Libraries>CodexIan
 related::Classes/CodexHybrid, Guides/CodexIan
 keyword::composite, compositing, codexian, composition
