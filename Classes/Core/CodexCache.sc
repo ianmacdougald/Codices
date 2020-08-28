@@ -38,18 +38,22 @@ CodexCache {
 
 	clear { dictionary.clear; }
 
-	modulesAt { | key, subkey | 
-		var copy = ();
-		dictionary[key][subkey].keysValuesDo({
-			| key, value | 
+	copyModules { | key, subkey |
+		var copy = (); 
+		dictionary[key][subkey].keysValuesDo({ 
+			| key, value |
 			copy.add(key -> value.copy);
-		});
+		}); 
 		^copy;
 	}
 
+	modulesAt { | key, subkey | ^this.copyModules(key, subkey) }
+
 	copyEntry { | key, toCopy, newEntry |
 		if(this.notAt(key, newEntry), {
-			dictionary[key].add(newEntry -> dictionary[key][toCopy]);
+			dictionary[key].add(
+				newEntry -> this.copyModules(key, toCopy)
+			);
 		});
 	}
 
