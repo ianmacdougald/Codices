@@ -9,11 +9,10 @@ CodexIncrementer {
 	}
 
 	fileTemplate_{ | newTemplate |
-		var pathname = PathName(newTemplate);
-		extension = pathname.extension;
-		pathname = pathname.fileNameWithoutExtension;
-		currentIncrement = PathName(pathname).endNumber;
-		fileTemplate = PathName(pathname).noEndNumbers;
+		var patharr = newTemplate.splitext;
+		extension = patharr[1];
+		currentIncrement = PathName(patharr[0]).endNumber;
+		fileTemplate = PathName(patharr[0]).noEndNumbers;
 	}
 
 	fileTemplate { ^(fileTemplate++"."++extension) }
