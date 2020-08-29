@@ -23,11 +23,12 @@ CodexComposite {
 	*new { | moduleSet, from |
 		^super.newCopyArgs(
 			moduleSet ?? { Error("No module set specified").throw }
-		)
-		.loadModules(from).initComposite;
+		).loadModules(from).initComposite;
 	}
 
-	loadModules { | from | modules = this.class.getModules(moduleSet, from) }
+	loadModules { | from | 
+		modules = this.class.getModules(moduleSet, from);
+	}
 
 	*getModules { | set, from |
 		if(this.notAt(set) and: { this.shouldAdd(set, from) }, {
@@ -77,7 +78,9 @@ CodexComposite {
 		var folder = this.asPath(set);
 		if(folder.exists.not, {
 			folder.mkdir;
-			from !? { this.copyFiles(from, folder) } ?? { this.template(folder) };
+			if(from.notNil, { 
+				this.copyFiles(from, folder);
+			}, { this.template(folder) });
 		});
 	}
 
@@ -94,8 +97,9 @@ CodexComposite {
 
 	*makeTemplates { | templater | }
 
-	*addModules { | moduleSymbol |
-		cache.add(this.name, moduleSymbol, this.loadScripts(moduleSymbol));
+	*addModules { | key |
+		this.cache.add(key -> this.loadScripts(key));
+//		cache.add(this.name, moduleSymbol, this.loadScripts(moduleSymbol));
 	}
 
 	*copyVersions {

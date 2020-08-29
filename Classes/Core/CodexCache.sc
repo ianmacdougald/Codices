@@ -38,23 +38,14 @@ CodexCache {
 
 	clear { dictionary.clear; }
 
-	copyModules { | key, subkey |
-		var copy = (); 
-		dictionary[key][subkey].keysValuesDo({ 
-			| key, value |
-			copy.add(key -> value.copy);
-		}); 
-		^copy;
+	modulesAt { | key, subkey | 
+		^dictionary[key][subkey].deepCopy;
 	}
 
-	modulesAt { | key, subkey | ^this.copyModules(key, subkey) }
-
-	copyEntry { | key, toCopy, newEntry |
-		if(this.notAt(key, newEntry), {
-			dictionary[key].add(
-				newEntry -> this.copyModules(key, toCopy)
-			);
-		});
+	copyEntry { | key, prevEntry, newEntry |
+		dictionary[key].add(
+			newEntry -> this.modulesAt(key, prevEntry)
+		);
 	}
 
 	keysAt { | key | ^dictionary[key].keys }
@@ -68,5 +59,9 @@ CodexCache {
 		stream << " ]" ;
 	}
 
-	do { | function | dictionary.do({ | item, index | function.value(item, index) }) }
+	do { | function | 
+		dictionary.do({ | item, index | 
+			function.value(item, index)
+		})
+	}
 }
