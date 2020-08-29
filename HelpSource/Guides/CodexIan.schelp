@@ -224,11 +224,11 @@ x = HybridExample.new(\version1);
 x.modules.postln;
 
 //Inspect the name of the SynthDef.
-x.synthDefs[0].name.postln;
+x.modules.synthDef.name.postln;
 
 //Clone a new moduleSet to observe the new SynthDef name.
 x.moduleSet_(\version2, \version1);
-x.synthDefs[0].name.postln; 
+x.modules.synthDef.name.postln;
 
 //Play it to hear sounds.
 x.play;
