@@ -43,19 +43,23 @@ CodexHybrid : CodexComposite {
 
 	initHybrid {}
 
-	findSynthDefs {
-		^modules.select({ | item | item.isKindOf(SynthDef) }).asArray;
-	}
-
-	nameSynthDefs {
-		^this.findSynthDefs.collect({ | def |
-			def.name = this.formatName(def.name.asString).asSymbol;
+	findSynthDefKeys {
+		^modules.keys.select({ | item | 
+			modules[item].isKindOf(SynthDef) 
 		});
 	}
 
-	formatName { | string |
-		string = this.stripTag(string);
-		^this.tag(this.name, this.tag(moduleSet, string));
+	nameSynthDefs {
+		^this.findSynthDefKeys.collect({ | key |
+			var synthDef = modules[key];
+			synthDef.name = this.formatName(synthDef.name);
+			this.class.cache[moduleSet][key].name = synthDef.name;
+		});
+	}
+
+	formatName { | symbol |
+		var string = this.stripTag(symbol.asString);
+		^this.tag(this.name, this.tag(moduleSet, string)).asSymbol;
 	}
 
 	stripTag { | string |
@@ -71,9 +75,6 @@ CodexHybrid : CodexComposite {
 		});
 		^name;
 	}
-
-	synthDefs { ^this.findSynthDefs }
-	synthDefNames { ^this.findSynthDefs.collect(_.name) }
 
 	reloadScripts {
 		this.removeSynthDefs;

@@ -16,18 +16,8 @@ CodexCache {
 		};
 	}
 
-	addToDictionary { | key, subkey, item |
-		dictionary[key].add(subkey -> item);
-	}
-
-	add { | key, subkey, item |
-		if(this.notAt(key, subkey), {
-			this.addToDictionary(key, subkey, item);
-		});
-	}
-
 	removeModules {  | key, subkey |
-		try { ^dictionary[key].removeAt(subkey) }{ ^nil; }
+		try { ^dictionary[key].removeAt(subkey) }{ ^nil };
 	}
 
 	removeAt { | key |
@@ -62,6 +52,6 @@ CodexCache {
 	do { | function | 
 		dictionary.do({ | item, index | 
 			function.value(item, index)
-		})
+		});
 	}
 }
