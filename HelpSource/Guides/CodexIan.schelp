@@ -218,7 +218,11 @@ subsection::Usage
 Here is an outline of how to interact with the HybridExample class. It should make sounds.
 
 code::
-x = HybridExample.new(\version1);
+//Inspect existing module sets
+HybridExample.moduleSets.postln;
+
+//Instance a new HybridExample.
+s.waitForBoot({ x = HybridExample.new(\example) });
 
 //Inspect the modules.
 x.modules.postln;
@@ -226,8 +230,11 @@ x.modules.postln;
 //Inspect the name of the SynthDef.
 x.modules.synthDef.name.postln;
 
+//Play it to hear sounds. 
+x.play;
+
 //Clone a new moduleSet to observe the new SynthDef name.
-x.moduleSet_(\version2, \version1);
+x.moduleSet_(\example2, \example);
 x.modules.synthDef.name.postln;
 
 //Play it to hear sounds.
