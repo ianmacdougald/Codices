@@ -26,7 +26,7 @@ CodexComposite {
 		).loadModules(from).initComposite;
 	}
 
-	loadModules { | from | 
+	loadModules { | from |
 		modules = this.class.getModules(moduleSet, from);
 	}
 
@@ -40,11 +40,14 @@ CodexComposite {
 	*notAt { | set | ^cache.notAt(this.name, set) }
 
 	*shouldAdd { | set, from |
-		if(from.notNil, {
+		^if(from.notNil, {
 			this.copyModules(set, from);
 			forkIfNeeded { this.processFolders(set, from) };
-			^false;
-		}, { this.processFolders(set); ^true });
+			false;
+		}, {
+			this.processFolders(set);
+			true
+		});
 	}
 
 	*copyModules { | to, from |
@@ -78,7 +81,7 @@ CodexComposite {
 		var folder = this.asPath(set);
 		if(folder.exists.not, {
 			folder.mkdir;
-			if(from.notNil, { 
+			if(from.notNil, {
 				this.copyFiles(from, folder);
 			}, { this.template(folder) });
 		});
@@ -99,7 +102,6 @@ CodexComposite {
 
 	*addModules { | key |
 		this.cache.add(key -> this.loadScripts(key));
-//		cache.add(this.name, moduleSymbol, this.loadScripts(moduleSymbol));
 	}
 
 	*copyVersions {
@@ -156,8 +158,6 @@ CodexComposite {
 	*directory_{| newPath |
 		directory = CodexPaths.setAt(newPath, id);
 	}
-
-	name { ^this.class.name }
 
 	openModules {
 		var ide = Platform.ideName;

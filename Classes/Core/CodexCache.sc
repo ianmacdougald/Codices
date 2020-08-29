@@ -12,7 +12,7 @@ CodexCache {
 
 	newDictionary { | key |
 		dictionary[key] ?? {
-			dictionary[key] = Dictionary.new;
+			dictionary.add(key -> Dictionary.new);
 		};
 	}
 
@@ -28,7 +28,7 @@ CodexCache {
 
 	clear { dictionary.clear; }
 
-	modulesAt { | key, subkey | 
+	modulesAt { | key, subkey |
 		^dictionary[key][subkey].deepCopy;
 	}
 
@@ -49,8 +49,8 @@ CodexCache {
 		stream << " ]" ;
 	}
 
-	do { | function | 
-		dictionary.do({ | item, index | 
+	do { | function |
+		dictionary.do({ | item, index |
 			function.value(item, index)
 		});
 	}
