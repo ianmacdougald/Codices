@@ -1,4 +1,4 @@
-SynthDef(\sineExample, { 
+SynthDef(\sine, { 
 	Out.ar(
 		\out.kr(0), 
 		Pan2.ar(
