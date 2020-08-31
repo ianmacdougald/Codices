@@ -1,5 +1,5 @@
 CodexHybrid : CodexComposite {
-	classvar todo, processor;
+	classvar todo, <processor;
 	var server;
 
 	*initClass {
@@ -18,16 +18,25 @@ CodexHybrid : CodexComposite {
 	}
 
 	*processSynthDefs { | key  |
-		processor.add(this.findSynthDefs(key));
+		processor.add(this.namedSynthDefs(key));
+	}
+
+	*removeSynthDefs { | key |
+		processor.remove(this.findSynthDefs(key));
 	}
 
 	*findSynthDefs { | key |
 		^this.cache[key].select({ | module |
-			if(module.isKindOf(SynthDef), {
-				module.name = this.formatName(module.name, key);
-				true;
-			}, { false });
-		});
+			module.isKindOf(SynthDef);
+		}).asArray;
+	}
+
+	*namedSynthDefs { | key |
+		var synthDefs = this.findSynthDefs(key);
+		synthDefs.do { | synthDef |
+			synthDef.name = this.formatName(synthDef.name, key);
+		};
+		^synthDefs;
 	}
 
 	*formatName { | symbol, key |
@@ -49,10 +58,6 @@ CodexHybrid : CodexComposite {
 		^name;
 	}
 
-	*removeSynthDefs { | key |
-		processor.remove(this.findSynthDefs(key));
-	}
-
 	initComposite {
 		server = Server.default;
 		this.initHybrid;
@@ -70,7 +75,7 @@ CodexHybrid : CodexComposite {
 	initHybrid {}
 
 	reloadScripts {
-		this.removeSynthDefs;
+		this.class.removeSynthDefs(moduleSet);
 		super.reloadScripts;
 	}
 }
