@@ -25,6 +25,8 @@ private::processSynthDefs
 private::removeSynthDefs
 private::stripTag
 private::tag
+private::findSynthDefs
+private::namedSynthDefs
 copymethod:: CodexComposite *directory
 copymethod:: CodexComposite *classFolder
 copymethod:: CodexComposite *moduleSets
