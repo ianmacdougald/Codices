@@ -1,5 +1,5 @@
 CodexHybrid : CodexComposite {
-	classvar todo, <processor;
+	classvar todo, processor;
 	var server;
 
 	*initClass {
