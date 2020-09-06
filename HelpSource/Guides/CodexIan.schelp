@@ -23,7 +23,7 @@ code::
 CodexComposite.directory.postln;
 
 //Replace this path with something you prefer.
-CodexComposite.directory = "~/Documents/sc-modules".standardizePath;
+CodexComposite.directory = "~/Documents/sc_modules".standardizePath;
 ::
 ::
 An outline of the directory looks like this:
