@@ -59,9 +59,9 @@ To make a contribution, overwrite this method by adding an array to the versions
 
 code::
 	*contribute { | versions | 
-		versions.add([\example, /Path/To/Example]);
+		versions.add([\example, "/Path/To/Example/Modules"]);
 
-		versions.add([\anotherExample, /Path/To/AnothterExample]);
+		versions.add([\anotherExample, "/Another/Example/Modules"]);
 	}
 	
 ::
