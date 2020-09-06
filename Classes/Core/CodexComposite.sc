@@ -1,5 +1,5 @@
 CodexComposite {
-	classvar <directory, id = 'sc-modules', cache;
+	classvar <directory, id = 'scmodules', cache;
 	var <moduleSet, <modules;
 
 	*initClass {
@@ -9,7 +9,7 @@ CodexComposite {
 		directory = CodexPaths.at(id) ?? {
 			CodexPaths.setAt(
 				Main.packages.asDict.at(\CodexIan)
-				+/+"sc-modules",
+				+/+"scmodules",
 				id
 			);
 		};
