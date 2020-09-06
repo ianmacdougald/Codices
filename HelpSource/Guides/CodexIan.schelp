@@ -185,8 +185,10 @@ HybridExample : CodexHybrid {
 	var player;
 
 	*contribute { | versions |
+		var modulesPath = Main.packages.asDict.at(\CodexIan)
+		+/+"Classes/Examples/Modules";
 		versions.add(
-			[\example, this.filenameString.dirname+/+"Modules"]
+			[\example, modulesPath]
 		);
 	}
 
