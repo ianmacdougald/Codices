@@ -201,14 +201,6 @@ CodexComposite {
 		});
 	}
 
-	openModulesSCqt {
-		if(\Document.asClass.notNil, {
-			PathName(this.moduleFolder).files.do{ | file |
-				\Document.asClass.perform(\open, file.fullPath);
-			}
-		});
-	}
-
 	openModule_scvim { | key, shell("sh"), neovim(false) |
 		var cmd = "vim";
 		var path = this.moduleFolder+/+key.asString++".scd";
