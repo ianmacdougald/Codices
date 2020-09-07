@@ -177,22 +177,6 @@ CodexComposite {
 		};
 	}
 
-	openAll {
-		var ide = Platform.ideName;
-		case { ide=="scqt"} { this.openAll_scvim }
-		{ ide=="scnvim" }{
-			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
-			shell = shell[..(shell.size - 2)];
-			this.openAll_scvim(shell, true, true);
-		}
-		{ ide=="scvim" }{
-			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
-			shell = shell[..(shell.size - 2)];
-			this.openAll_scvim(shell, false, true);
-		}
-		{ format("Warning: cannot open modules from %", ide).postln };
-	}
-
 	openModule_scqt { | key |
 		if(\Document.asClass.notNil, {
 			var path = this.moduleFolder+/+key.asString++".scd";
@@ -226,6 +210,22 @@ CodexComposite {
 			cmd.perform(\runInGnomeTerminal, shell);
 		}, { cmd.perform(\runInTerminal, shell) });
 	}
+
+	openAll {
+		var ide = Platform.ideName;
+		case { ide=="scqt"} { this.openAll_scvim }
+		{ ide=="scnvim" }{
+			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
+			shell = shell[..(shell.size - 2)];
+			this.openAll_scvim(shell, true, true);
+		}
+		{ ide=="scvim" }{
+			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
+			shell = shell[..(shell.size - 2)];
+			this.openAll_scvim(shell, false, true);
+		}
+		{ format("Warning: cannot open modules from %", ide).postln };
+	}	
 
 	*clearCache { cache.removeAt(this.name).clear }
 
