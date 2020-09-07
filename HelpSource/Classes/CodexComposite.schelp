@@ -106,8 +106,21 @@ A symbol referring to an existing set of modules to copy if the new module name 
 method::moduleSets
 Gets the moduleSets that currently exist for the class.
 
-method::openModules
-Opens the files associated with the currently loaded modules into the current ide.
+method::openModule
+argument::key 
+A symbol or array of symbols representing the keys of modules to open.
+
+method::openAll
+Opens all modules.
+
+method::openAll_scvim
+Open all modules using either scvim or scnvim.
+
+method::openModule_scqt
+Open a single module using scqt.
+
+method::openModule_scvim 
+Open a single module or group of modules using scvim.
 
 method::openModulesSCqt
 Opens the files associated with the currently loaded modules from within emphasis::scqt::.
