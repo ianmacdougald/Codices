@@ -26,9 +26,9 @@ CodexIncrementer {
 
 	reset { currentIncrement = -1 }
 
-	formatFileName {| template |
+	formatFileName { | template |
 		var return = folder+/+template;
-		if(extension.isEmpty.not){
+		if(extension.notNil){
 			return = return++"."++extension;
 		};
 		^return;
@@ -43,6 +43,10 @@ CodexIncrementer {
 		});
 		currentIncrement = tmpInc;
 		^filename;
+	}
+
+	decrement {
+		^this.formatFileName(fileTemplate++(currentIncrement -1));
 	}
 
 }

@@ -159,20 +159,46 @@ CodexComposite {
 		directory = CodexPaths.setAt(newPath, id);
 	}
 
-	openModules {
+	openModule { | key |
 		var ide = Platform.ideName;
-		case { ide=="scqt"} { this.openModulesSCqt }
+		if(key.isCollection and: { key.isString.not }, {
+			key.do{ | k | this.openModule(k) };
+		});
+		case { ide=="scqt" }{ this.openModule_scqt(key) }
 		{ ide=="scnvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.openModulesSCVim(shell, true, true);
+			this.openModule_scvim(key, shell, true);
 		}
 		{ ide=="scvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.openModulesSCVim(shell, false, true);
+			this.openModule_scvim(key, shell, false);
+		};
+	}
+
+	openAll {
+		var ide = Platform.ideName;
+		var keys = modules.keys;
+		case { ide=="scqt"} { keys.do{ | key | this.openModule_scqt(key) } }
+		{ ide=="scnvim" }{
+			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
+			shell = shell[..(shell.size - 2)];
+			this.openAll_scvim(shell, true, true);
+		}
+		{ ide=="scvim" }{
+			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
+			shell = shell[..(shell.size - 2)];
+			this.openAll_scvim(shell, false, true);
 		}
 		{ format("Warning: cannot open modules from %", ide).postln };
+	}
+
+	openModule_scqt { | key |
+		if(\Document.asClass.notNil, {
+			var path = this.moduleFolder+/+key.asString++".scd";
+			\Document.asClass.perform(\open, path);
+		});
 	}
 
 	openModulesSCqt {
@@ -183,7 +209,17 @@ CodexComposite {
 		});
 	}
 
-	openModulesSCVim { | shell("sh"), neovim(false), vertically(true) |
+	openModule_scvim { | key, shell("sh"), neovim(false) |
+		var cmd = "vim";
+		var path = this.moduleFolder+/+key.asString++".scd";
+		if(neovim, { cmd = $n++cmd });
+		cmd = cmd++" "++path;
+		if(\GnomeTerminal.asClass.notNil, {
+			cmd.perform(\runInGnomeTerminal, shell);
+		}, { cmd.perform(\runInTerminal, shell) });
+	}
+
+	openAll_scvim { | shell("sh"), neovim(false), vertically(true) |
 		var cmd = "vim", paths = PathName(this.moduleFolder)
 		.files.collect(_.fullPath);
 		if(neovim, { cmd = $n++cmd });
