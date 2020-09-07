@@ -179,8 +179,7 @@ CodexComposite {
 
 	openAll {
 		var ide = Platform.ideName;
-		var keys = modules.keys;
-		case { ide=="scqt"} { keys.do{ | key | this.openModule_scqt(key) } }
+		case { ide=="scqt"} { this.openAll_scvim }
 		{ ide=="scnvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
@@ -209,6 +208,12 @@ CodexComposite {
 		if(\GnomeTerminal.asClass.notNil, {
 			cmd.perform(\runInGnomeTerminal, shell);
 		}, { cmd.perform(\runInTerminal, shell) });
+	}
+
+	openAll_scqt { 
+		modules.keys.do{ | key | 
+			this.openModule_scqt(key);
+		};
 	}
 
 	openAll_scvim { | shell("sh"), neovim(false), vertically(true) |
