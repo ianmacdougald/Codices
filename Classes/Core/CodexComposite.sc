@@ -159,40 +159,74 @@ CodexComposite {
 		directory = CodexPaths.setAt(newPath, id);
 	}
 
-	openModules {
+	openModule { | key |
 		var ide = Platform.ideName;
-		case { ide=="scqt"} { this.openModulesSCqt }
-		{ ide=="scnvim" }{
+		if(key.isCollection and: { key.isString.not }, {
+			key.do{ | k | this.openModule(k) };
+		});
+		case { ide=="scqt" }{ this.openModule_scqt(key) }
+		{ ide=="scnvim" }{ 
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.openModulesSCVim(shell, true, true);
+			this.openModule_scvim(key, shell, true, true);
 		}
 		{ ide=="scvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.openModulesSCVim(shell, false, true);
-		}
-		{ format("Warning: cannot open modules from %", ide).postln };
+			this.openModule_scvim(key, shell, false, true);
+		};
 	}
 
-	openModulesSCqt {
+	openModule_scqt { | key |
 		if(\Document.asClass.notNil, {
-			PathName(this.moduleFolder).files.do{ | file |
-				\Document.asClass.perform(\open, file.fullPath);
-			}
+			if(key.isCollection.not, { key = [key] });
+			key.do{ | item | 
+				\Document.asClass.perform(
+					\open, 
+					this.moduleFolder+/+item.asString++".scd"
+				);
+			};
 		});
 	}
 
-	openModulesSCVim { | shell("sh"), neovim(false), vertically(true) |
-		var cmd = "vim", paths = PathName(this.moduleFolder)
-		.files.collect(_.fullPath);
+	openModule_scvim { | key, shell("sh"), neovim(false), vertically(false) |
+		var cmd = "vim", paths = "";
+		if(key.isCollection.not, { key = [key] });
+		key.do({ | item |
+			paths = paths++this.moduleFolder
+			+/+item.asString++".scd ";
+		});
 		if(neovim, { cmd = $n++cmd });
-		if(vertically, { cmd = cmd+" -o "}, { cmd = cmd+" -O " });
-		paths.do{ | path | cmd=cmd++path++" " };
+		if(vertically, { cmd = cmd++" -o "}, { cmd = cmd++" -O " });
+		paths.do{ | path | cmd=cmd++path};
 		if(\GnomeTerminal.asClass.notNil, {
 			cmd.perform(\runInGnomeTerminal, shell);
 		}, { cmd.perform(\runInTerminal, shell) });
 	}
+
+	openAll_scqt { 
+		this.openModule_scqt(modules.keys);
+	}
+
+	openAll_scvim { | shell("sh"), neovim(false), vertically(false) |
+		this.openModule_scvim(modules.keys, shell, neovim, vertically);
+	}
+
+	openAll {
+		var ide = Platform.ideName;
+		case { ide=="scqt"} { this.openAll_scqt }
+		{ ide=="scnvim" }{
+			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
+			shell = shell[..(shell.size - 2)];
+			this.openAll_scvim(shell, true, true);
+		}
+		{ ide=="scvim" }{
+			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
+			shell = shell[..(shell.size - 2)];
+			this.openAll_scvim(shell, false, true);
+		}
+		{ format("Warning: cannot open modules from %", ide).postln };
+	}	
 
 	*clearCache { cache.removeAt(this.name).clear }
 

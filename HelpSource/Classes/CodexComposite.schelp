@@ -106,19 +106,36 @@ A symbol referring to an existing set of modules to copy if the new module name 
 method::moduleSets
 Gets the moduleSets that currently exist for the class.
 
-method::openModules
-Opens the files associated with the currently loaded modules into the current ide.
+method::openModule
+argument::key 
+table::
+## Symbol || The name of the module to open. 
+## Array of symbols || Multiple names of modules to open.
+::
 
-method::openModulesSCqt
-Opens the files associated with the currently loaded modules from within emphasis::scqt::.
+method::openModule_scqt
+Open a single module using scqt.
 
-method::openModulesSCVim
-Opens the files associated with the currently loaded modules in a vim-styled ide.
+method::openModule_scvim 
+Open a single module or group of modules using scvim.
+
+argument::key 
+table::
+## Symbol || The name of the module to open. 
+## Array of symbols || Multiple names of modules to open.
+::
 argument::shell
-Specifies the shell to be used when opening vim.
+A String representing the name of the shell to use to open vim/nvim.
 argument::neovim
-Boolean that declares whether neovim should be opened instead of vim.
+A link::Classes/Boolean:: determining whether to use scvim or scnvim. 
 argument::vertically
-Boolean that declares whether many modules should be stacked vertically or horizontally.
+A Boolean determining if modules files will be opened vertically or horizontally.
 
-private::name
+method::openAll
+Opens all modules.
+
+method::openAll_scvim
+Open all modules using either scvim or scnvim.
+
+method::openAll_scqt 
+Open all modules using scqt.
