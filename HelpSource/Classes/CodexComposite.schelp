@@ -108,14 +108,28 @@ Gets the moduleSets that currently exist for the class.
 
 method::openModule
 argument::key 
-A symbol or array of symbols representing the keys of modules to open.
-
+table::
+## Symbol || The name of the module to open. 
+## Array of symbols || Multiple names of modules to open.
+::
 
 method::openModule_scqt
 Open a single module using scqt.
 
 method::openModule_scvim 
 Open a single module or group of modules using scvim.
+
+argument::key 
+table::
+## Symbol || The name of the module to open. 
+## Array of symbols || Multiple names of modules to open.
+::
+argument::shell
+A String representing the name of the shell to use to open vim/nvim.
+argument::neovim
+A link::Classes/Boolean:: determining whether to use scvim or scnvim. 
+argument::vertically
+A Boolean determining if modules files will be opened vertically or horizontally.
 
 method::openAll
 Opens all modules.
