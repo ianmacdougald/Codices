@@ -1,0 +1,18 @@
+TTILE::CodexSonata
+summary::Compose music with sequences of NodeProxy modules.
+categories::Libraries>CodexIan>Frameworks
+related::Classes/CodexSymphony, Classes/CodexMovement, Classes/CodexComposite
+keyword::sonata, composition, codexian
+
+DESCRIPTION::
+CodexSonata defines a framework for making music that extends the procedures established by link::Classes/CodexComposite::. Specifically, an instance of CodexSonata is responsible for sequencing those of its modules that contain functions whose code, in turn, manipulates link::Classes/NodeProxy##NodeProxies:: within a link::Classes/ProxySpace::. For more on this, review the comments in a copy of the teletype::codexSonata_section.scd:: template.
+
+The management of the durations of sections is managed by a link::Classes/Task:: that updates the field link::Classes/CodexSonata#-timeRemaining#timeRemaining:: and also evaluates a function registered using link::Classes/CodexSonata#-onLoop#onLoop. Moreover, at the completion of a section, the function registered with link::Classes/CodexSonata#-onLoopEnd#onLoopEnd:: is also evaluated. In this way, the procedures of CodexSonata can be coordinated to control or be synchronized with other external objects, such as a GUI interface. 
+
+
+
+CLASSMETHODS::
+
+INSTANCEMETHODS::
+
+EXAMPLES::
