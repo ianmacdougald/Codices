@@ -1,18 +1,25 @@
 CodexSymphony {
 	var <movements, player, <pattern, <proxySpace;
 
-	*new { |...movements | ^super.new.movements_(movements.flat).initSchmooper }
+	*new { |...movements | 
+		^super.new
+		.movements_(movements.flat)
+		.proxySpace_(ProxySpace(Server.default))
+		.initSymphony
+	}
 
 	movements_{ | newSections |
-		movements = newSections.select(_.isKindOf(SchmooperSection)).as(List);
+		movements = newSections
+		.select(_.isKindOf(SchmooperSection))
+		.as(List);
 		pattern = this.makePattern(movements);
 	}
 
-	initSchmooper {
-		this.proxySpace = ProxySpace.new(Server.default);
-	}
+	initSymphony {  }
 
-	makePattern { | array(movements) | ^Pseq(array.collect(_.getPattern), 1) }
+	makePattern { | array(movements) | 
+	 	^Pseq(array.collect(_.getPattern), 1);
+ 	}
 
 	reset {
 		movements.do(_.cleanup);
@@ -40,7 +47,9 @@ CodexSymphony {
 	proxySpace_{ | newProxySpace |
 		if(newProxySpace.isKindOf(ProxySpace), {
 			proxySpace = newProxySpace;
-			movements.do({ | movement | movement.proxySpace = proxySpace });
+			movements.do({ | movement | 
+				movement.proxySpace = proxySpace;
+			});
 		});
 	}
 
@@ -59,7 +68,9 @@ CodexSymphony {
 	}
 
 	playSections { | indicies(movements) |
-		pattern = this.makePattern(indicies.collect({ | i | movements[i] }));
+		pattern = this.makePattern(
+			indicies.collect({ | i | movements[i] })
+		);
 		this.play;
 	}
 
