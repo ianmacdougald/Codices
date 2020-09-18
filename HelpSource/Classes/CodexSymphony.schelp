@@ -1,0 +1,19 @@
+TITLE::CodexSymphony
+summary::Compose music with collections of movements
+categories::Libraries>CodexIan>Frameworks
+keyword::symphony, CodexIan
+
+DESCRIPTION::
+CodexSymphony and its associated class, link::Classes/CodexMovement::, together establish a framework for making music that relies on the procedures of link::Classes/CodexComposite::. While CodexSymphony itself does not inherit from CodexComposite, it was designed to sequence collections of CodexMovements, which do. As a result, a piece of music defined in this framework can be modularly developed on a movement-by-movement basis. 
+
+CLASSMETHODS::
+
+method::new 
+Creates a new instance of CodexSymphony
+argument::... movements
+A collection of CodexMovement objects.
+
+INSTANCEMETHODS::
+private::initSymphony
+private::makePattern
+
