@@ -2,7 +2,7 @@ CodexInstrument : CodexHybrid {
 	var <>group, <synth, <ios, views, <window;
 	
 	*makeTemplates { | templater |
-		templater.codex_instrument_synthDef;
+		templater.codexInstrument_synthDef;
 	}
 
 	initHybrid { 
