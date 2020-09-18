@@ -1,7 +1,7 @@
 CodexSonata : CodexComposite {
 	var <proxySpace, <sectionIndex = -1;
 	var <task, <timeRemaining;
-	var onLoop, onLoopEnd;
+	var <onLoop, <onLoopEnd;
 	var <>loopDelta = 0.1;
 
 	*nSections { ^nil }
@@ -106,10 +106,13 @@ CodexSonata : CodexComposite {
 		});
 	}
 
+	isPlaying { ^task.isPlaying }
+
 	clear { proxySpace.clear }
 
 	reset {
 		this.stop;
+		this.clear;
 		sectionIndex = -1;
 	}
 
