@@ -4,11 +4,11 @@ CodexSonata : CodexComposite {
 	var onLoop, onLoopEnd;
 	var <>taskDelta = 0.1;
 
-	*n_sections { ^nil }
+	*nSections { ^nil }
 
 	*makeTemplates { | templater |
 		templater.list("cleanup");
-		this.n_sections.do{ this.sectionTemplate(templater) };
+		this.nSections.do{ this.sectionTemplate(templater) };
 		this.otherTemplates(templater);
 	}
 
@@ -31,7 +31,7 @@ CodexSonata : CodexComposite {
 		if(function.isFunction, { onLoopEnd = function });
 	}
 
-	initCodexSonata {  }
+	initSonata {  }
 
 	server { ^proxySpace.server }
 
@@ -53,7 +53,7 @@ CodexSonata : CodexComposite {
 	sectionIndex_{ | newIndex |
 		this.stop;
 		sectionIndex = newIndex;
-		if(sectionIndex < this.class.n_sections && sectionIndex >= 0, {
+		if(sectionIndex < this.class.nSections && sectionIndex >= 0, {
 			this.engageTask(
 				modules[("section"++sectionIndex).asSymbol]
 				.value(modules, proxySpace)
