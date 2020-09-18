@@ -4,10 +4,10 @@ CodexComposite {
 
 	*initClass {
 		Class.initClassTree(Dictionary);
-		Class.initClassTree(CodexPaths);
+		Class.initClassTree(CodexStorage);
 		Class.initClassTree(List);
-		directory = CodexPaths.at(id) ?? {
-			CodexPaths.setAt(
+		directory = CodexStorage.at(id) ?? {
+			CodexStorage.setAt(
 				Main.packages.asDict.at(\CodexIan)
 				+/+"scmodules",
 				id
@@ -155,8 +155,8 @@ CodexComposite {
 
 	moduleSets { ^this.class.moduleSets }
 
-	*directory_{| newPath |
-		directory = CodexPaths.setAt(newPath, id);
+	*directory_{ | newPath |
+		directory = CodexStorage.setAt(newPath, id);
 	}
 
 	openModule { | key |

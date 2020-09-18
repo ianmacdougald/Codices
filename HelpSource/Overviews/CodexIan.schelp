@@ -17,7 +17,7 @@ definitionlist::
 ||Manages the loading and unloading of SynthDefs from the server. 
 ##link::Classes/CodexTemplater::
 ||Creates templates of teletype::.scd:: files at a target location.  
-##link::Classes/CodexPaths::
+##link::Classes/CodexStorage::
 ||Persistently stores paths that can be accessed via link::Classes/Symbol:: keys.
 ##link::Classes/CodexIncrementer::
 ||Generates incrementally advanced file names within a given directory.

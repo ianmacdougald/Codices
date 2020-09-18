@@ -1,4 +1,4 @@
-CodexPaths  {
+CodexStorage  {
 	classvar dictionary, <storagePath;
 
 	*parse { ^storagePath.parseYAMLFile }
