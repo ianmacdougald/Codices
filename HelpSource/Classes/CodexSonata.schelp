@@ -84,6 +84,7 @@ subsection::From CodexComposite
 copymethod::CodexComposite -moduleSet
 copymethod::CodexComposite -reloadScripts
 copymethod::CodexComposite -reloadModules
+copymethod::CodexComposite -openModule
 copymethod::CodexComposite -openAll
 
 EXAMPLES::
