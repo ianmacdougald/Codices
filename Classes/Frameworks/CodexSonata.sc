@@ -2,7 +2,7 @@ CodexSonata : CodexComposite {
 	var <proxySpace, <sectionIndex = -1;
 	var <task, <timeRemaining;
 	var onLoop, onLoopEnd;
-	var <>taskDelta = 0.1;
+	var <>loopDelta = 0.1;
 
 	*nSections { ^nil }
 
@@ -70,9 +70,9 @@ CodexSonata : CodexComposite {
 				timeRemaining = duration;
 				while({ timeRemaining > 0 }, {
 					onLoop.value(timeRemaining);
-					timeRemaining = (timeRemaining - taskDelta)
+					timeRemaining = (timeRemaining - loopDelta)
 					.clip(0, duration);
-					taskDelta.wait;
+					loopDelta.wait;
 				});
 				timeRemaining = nil;
 				onLoopEnd.value;
