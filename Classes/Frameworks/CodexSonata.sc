@@ -1,4 +1,4 @@
-Schmooper : CodexComposite {
+CodexSonata : CodexComposite {
 	var <proxySpace, <sectionIndex = -1;
 	var <task, <timeRemaining;
 	var onLoop, onLoopEnd;
@@ -13,14 +13,14 @@ Schmooper : CodexComposite {
 	}
 
 	*sectionTemplate { | templater |
-		templater.schmooper_section("section0");
+		templater.codexSonata_section("section0");
 	}
 
 	*otherTemplates { | templater | }
 
 	initComposite {
 		proxySpace = ProxySpace.new(Server.default);
-		this.initSchmooper;
+		this.initSonata;
 	}
 
 	onLoop_{ | function |
@@ -31,7 +31,7 @@ Schmooper : CodexComposite {
 		if(function.isFunction, { onLoopEnd = function });
 	}
 
-	initSchmooper {  }
+	initCodexSonata {  }
 
 	server { ^proxySpace.server }
 
