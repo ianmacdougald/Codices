@@ -11,22 +11,6 @@
 		);
 	}
 
-	codexSonata_section{ | templateName("section") |
-		this.makeTemplate(
-			templateName,
-			this.codexFrameworks_path
-			+/+"codexSonata_section.scd"
-		);
-	}
-
-	codexMovement_section { | templateName("movement") |
-		this.makeTemplate(
-			templateName, 
-			this.codexFrameworks_path
-			+/+"codexMovement_section.scd"
-		);
-	}
-
 	codexInstrument_synthDef { | templateName("synthDef") |
 		this.makeTemplate(
 			templateName, 
