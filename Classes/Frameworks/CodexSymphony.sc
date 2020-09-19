@@ -97,7 +97,7 @@ CodexMovement : CodexProxier {
 		+/+this.name.asString;
 	}
 
-	getMovements {
+	getSections {
 		^Pseq(this.class.nSections.collect({ | i |
 			modules[("section"++i).asSymbol];
 		}));
