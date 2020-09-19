@@ -1,26 +1,11 @@
-CodexSonata : CodexComposite {
-	var <proxySpace, <sectionIndex = -1;
+CodexSonata : CodexProxier {
+	var <sectionIndex = -1;
 	var <task, <timeRemaining;
 	var <onLoop, <onLoopEnd;
 	var <>loopDelta = 0.1;
 
-	*nSections { ^nil }
-
-	*makeTemplates { | templater |
-		templater.list("cleanup");
-		this.nSections.do{ this.sectionTemplate(templater) };
-		this.otherTemplates(templater);
-	}
-
 	*sectionTemplate { | templater |
 		templater.codexSonata_section("section0");
-	}
-
-	*otherTemplates { | templater | }
-
-	initComposite {
-		proxySpace = ProxySpace.new(Server.default);
-		this.initSonata;
 	}
 
 	onLoop_{ | function |
@@ -29,21 +14,6 @@ CodexSonata : CodexComposite {
 
 	onLoopEnd_{ | function |
 		if(function.isFunction, { onLoopEnd = function });
-	}
-
-	initSonata {  }
-
-	server { ^proxySpace.server }
-
-	server_{ | newServer |
-		proxySpace.clear;
-		this.proxySpace = ProxySpace(newServer);
-	}
-
-	proxySpace_{ | newProxySpace |
-		if(newProxySpace.isKindOf(ProxySpace), {
-			proxySpace = newProxySpace;
-		});
 	}
 
 	next { this.sectionIndex = sectionIndex + 1 }
@@ -107,8 +77,6 @@ CodexSonata : CodexComposite {
 	}
 
 	isPlaying { ^task.isPlaying }
-
-	clear { proxySpace.clear }
 
 	reset {
 		this.stop;
