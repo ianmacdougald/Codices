@@ -1,5 +1,5 @@
 CodexProxier : CodexComposite {
-	var <proxySpace, <server;
+	var <proxySpace;
 
 	*nSection { ^nil }
 
