@@ -1,3 +1,4 @@
+//This is still a bit experimental
 CodexInstrument : CodexHybrid { 
 	var <>group, <synth, <ios, views, <window;
 	
