@@ -13,8 +13,6 @@ CLASSMETHODS::
 private::classFolder
 private::makeTemplates
 private::symphony 
-method::nSections
-Returns an integer that specifies the number of sections within a sonata. A requirement for developing classes within this framework is that an integer is specified. Because CodexMovement itself returns teletype::nil:: here, it should not be instanced.
 
 
 INSTANCEMETHODS::
