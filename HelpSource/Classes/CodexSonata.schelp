@@ -66,7 +66,7 @@ A function that will be evaluated once the loop of the Task has been completed a
 method::loopDelta
 The duration of time to spend in each loop.
 
-subsection::ProxySpace-related methods
+subsection::From CodexProxier
 method::proxySpace
 Gets and sets the instance of ProxySpace that manages the NodeProxies organized in the modular sections.
 

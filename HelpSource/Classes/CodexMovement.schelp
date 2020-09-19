@@ -22,3 +22,21 @@ method::getPattern
 Get the stream that sequences the section modules.
 private::initProxier
 private::initComposite
+subsection::From CodexProxier
+method::proxySpace
+Gets and sets the instance of ProxySpace that manages the NodeProxies organized in the modular sections.
+
+method::clear
+Clears the ProxySpace
+
+method::server
+Gets the server help by the ProxySpace object.
+
+private::cleanup
+
+subsection::From CodexComposite
+copymethod::CodexComposite -moduleSet
+copymethod::CodexComposite -reloadScripts
+copymethod::CodexComposite -reloadModules
+copymethod::CodexComposite -openModule
+copymethod::CodexComposite -openAll
