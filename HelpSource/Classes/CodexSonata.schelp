@@ -29,7 +29,7 @@ private::initSonata
 private::moduleSet
 private::engageTask
 
-subsection::Section methods
+subsection::Section interface
 method::start
 Starts the piece of music, evaluating the first section. 
 method::next
@@ -43,7 +43,7 @@ Gets the index of the section currently running in the class.
 method::reset
 Resets the sections of the object so that it can be started again.
 
-subsection::Task-related methods
+subsection::Task management
 The following methods are used to control the Task object held by the instance.
 
 method::pause
@@ -56,7 +56,7 @@ method::isPlaying
 
 private::task
 
-subsection::Loop-related methods
+subsection::Loop functionality
 method::onLoop
 argument::function 
 A function that will be evaluated within the loop of the instance's Task. This function will be passed the current timeRemaining in the section.
