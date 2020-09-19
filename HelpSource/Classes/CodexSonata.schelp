@@ -19,8 +19,6 @@ private::makeTemplates
 private::otherTemplates
 private::sectionTemplate
 
-method::nSections
-Returns an integer that specifies the number of sections within a sonata. A requirement for developing classes within this framework is that an integer is specified. Because CodexSonata itself returns teletype::nil:: here, it should not be instanced.
 
 INSTANCEMETHODS::
 
