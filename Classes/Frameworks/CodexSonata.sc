@@ -4,10 +4,6 @@ CodexSonata : CodexProxier {
 	var <onLoop, <onLoopEnd;
 	var <>loopDelta = 0.1;
 
-	*sectionTemplate { | templater |
-		templater.codexSonata_section("section0");
-	}
-
 	onLoop_{ | function |
 		if(function.isFunction, { onLoop = function });
 	}

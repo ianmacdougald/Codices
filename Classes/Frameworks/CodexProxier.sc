@@ -40,7 +40,7 @@ CodexProxier : CodexComposite {
 	*getModules { | set, from |
 		var nSections = this.nSections;
 		if(nSections.notNil and: { nSections!=this }, {
-			super.getModules(set, from);
+			^super.getModules(set, from);
 		}, {
 			Error("No sections specified. Modules can't be loaded").throw;
 		});
