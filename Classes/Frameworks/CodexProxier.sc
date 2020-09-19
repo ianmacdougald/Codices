@@ -1,7 +1,7 @@
 CodexProxier : CodexComposite {
 	var <proxySpace;
 
-	*nSection { ^nil }
+	*nSections { ^nil }
 
 	*makeTemplates { | templater |
 		templater.list("cleanup");
