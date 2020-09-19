@@ -1,5 +1,5 @@
 TITLE::CodexMovement
-summary::Modular object to be contained by CodexSymphony
+summary::Modular object to be collected by CodexSymphony
 categories::Libraries>CodexIan>Frameworks
 keyword::CodexIan, CodexSymphony, symphony, movement
 
@@ -16,3 +16,9 @@ private::symphony
 
 
 INSTANCEMETHODS::
+private::cleanup
+private::getSections
+method::getPattern
+Get the stream that sequences the section modules.
+private::initProxier
+private::initComposite
