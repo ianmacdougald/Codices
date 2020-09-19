@@ -8,8 +8,8 @@ CodexSymphony {
 		.initSymphony
 	}
 
-	movements_{ | newSections |
-		movements = newSections
+	movements_{ | newMovements |
+		movements = newMovements
 		.select(_.isKindOf(SchmooperMovement))
 		.as(List);
 		pattern = this.makePattern(movements);
@@ -73,7 +73,7 @@ CodexSymphony {
 		player = pattern.play(proxySpace.clock ? TempoClock.default, ());
 	}
 
-	playSections { | indicies(movements) |
+	playMovements { | indicies(movements) |
 		pattern = this.makePattern(
 			indicies.collect({ | i | movements[i] })
 		);
@@ -91,11 +91,14 @@ CodexMovement : CodexComposite {
 
 	*symphony { ^nil }
 
-	*classFolder { ^(
-		this.directory
-		+/+this.symphony.asString
-		+/+this.name.asString
-	) }
+	*classFolder {
+		var subfolder = if(this.symphony.isNil, { "" }, {
+			this.symphony.asString});
+		^(
+			this.directory+/+subfolder
+			+/+this.name.asString
+		)
+	}
 
 	*nSections { ^nil }
 
@@ -106,8 +109,8 @@ CodexMovement : CodexComposite {
 		};
 	}
 
-	getSections {
-		^Pseq(this.class.n_movements.collect({ | i |
+	getMovements {
+		^Pseq(this.class.nSections.collect({ | i |
 			modules[("section"++i).asSymbol];
 		}));
 	}
@@ -120,7 +123,7 @@ CodexMovement : CodexComposite {
 				//the movement stream should be a pseq that returns functions
 				//that take in the proxy space as an argument and returns
 				//the duration of the subevent.
-				this.getSections.asStream.do { | function |
+				this.getMovements.asStream.do { | function |
 					function.value(modules, proxySpace).yield;
 				};
 				this.cleanup;
