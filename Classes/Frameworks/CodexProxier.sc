@@ -6,14 +6,14 @@ CodexProxier : CodexComposite {
 	*makeTemplates { | templater |
 		templater.list("cleanup");
 		this.nSections.do{ this.sectionTemplate(templater) };
-		this.moreTemplates(templater);
+		this.otherTemplates(templater);
 	}
 
 	*sectionTemplate { | templater |
 		templater.codexSonata_section("section0");
 	}
 
-	*moreTemplates { | templater | }
+	*otherTemplates { | templater | }
 
 	initComposite {
 		proxySpace = ProxySpace.new(Server.default);
