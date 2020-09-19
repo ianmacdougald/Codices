@@ -7,15 +7,15 @@
 		this.makeTemplate(
 			templateName,
 			this.codexFrameworks_path
-			+/+"codex_sonata_section.scd"
+			+/+"codexSonata_section.scd"
 		);
 	}
 
-	codexSymphony_movement { | templateName("movement") |
+	codexMovement_section { | templateName("movement") |
 		this.makeTemplate(
 			templateName, 
 			this.codexFrameworks_path
-			+/+"codexSymphony_movement.scd"
+			+/+"codexMovement_section.scd"
 		);
 	}
 
