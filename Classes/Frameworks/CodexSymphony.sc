@@ -86,8 +86,7 @@ CodexSymphony {
 	}
 }
 
-CodexMovement : CodexComposite {
-	var <>proxySpace;
+CodexMovement : CodexProxier {
 
 	*symphony { ^nil }
 
@@ -98,22 +97,15 @@ CodexMovement : CodexComposite {
 		+/+this.name.asString;
 	}
 
-	*nSections { ^nil }
-
-	*makeTemplates { | templater |
-		templater.list("cleanup");
-		this.nSections.do { | i |
-			templater.codexMovement_section("section"++i);
-		};
-	}
-
 	getMovements {
 		^Pseq(this.class.nSections.collect({ | i |
 			modules[("section"++i).asSymbol];
 		}));
 	}
 
-	initComposite { }
+	initComposite { this.initProxier }
+
+	initProxier { }
 
 	getPattern {
 		^Pbind(
