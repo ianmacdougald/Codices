@@ -94,10 +94,8 @@ CodexMovement : CodexComposite {
 	*classFolder {
 		var subfolder = if(this.symphony.isNil, { "" }, {
 			this.symphony.asString});
-		^(
-			this.directory+/+subfolder
-			+/+this.name.asString
-		)
+		^this.directory+/+subfolder
+		+/+this.name.asString;
 	}
 
 	*nSections { ^nil }
