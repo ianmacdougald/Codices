@@ -3,6 +3,14 @@
 		^Main.packages.asDict.at(\CodexIan)+/+"Classes/Frameworks";
 	}
 
+	codexProxier_section { | templateName("section") |
+		this.makeTemplate(
+			templateName, 
+			this.codexFrameworks_path
+			+/+"codexProxier_section.scd"
+		);
+	}
+
 	codexSonata_section{ | templateName("section") |
 		this.makeTemplate(
 			templateName,
