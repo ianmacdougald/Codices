@@ -15,6 +15,7 @@ list::
 ## link::Classes/Event::
 ## link::Classes/Array::
 ## link::Classes/List::
+## link::Classes/Buffer::
 ::
 
 However, if a situation arises in which a composite needs templates from different objects or combinations of objects, like a function that returns an array of events, CodexTemplater can be easily link::#Extending CodexTemplater#extended::.
@@ -71,6 +72,9 @@ Creates a template for an Array object.
 
 method::list
 Creates a template for a List object.
+
+method::buffer
+Creates a template for a Buffer object.
 
 method::blank
 Creates an empty teletype::.scd:: file
