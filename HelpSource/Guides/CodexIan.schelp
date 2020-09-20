@@ -185,17 +185,18 @@ HybridExample : CodexHybrid {
 	var player;
 
 	*contribute { | versions |
-		var modulesPath = Main.packages.asDict.at(\CodexIan)
-		+/+"Classes/Examples/Modules";
+		var toQuark = Main.packages.asDict.at(\CodexIan);
+		var toExample = toQuark+/+"Classes/Examples/example_modules";
+
 		versions.add(
-			[\example, modulesPath]
+			[\example, toExample]
 		);
 	}
 
 	initHybrid {}
 
 	*makeTemplates { | templater |
-		templater.patternFunction( "sequence" );
+		templater.hybridExample_function( "sequence" );
 		templater.synthDef( "synthDef" );
 	}
 
