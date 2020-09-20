@@ -3,7 +3,7 @@ HybridExample : CodexHybrid {
 
 	*contribute { | versions |
 		var modulesPath = Main.packages.asDict.at(\CodexIan)
-		+/+"Classes/Examples/Modules";
+		+/+"Classes/Examples/example_modules";
 		versions.add(
 			[\example, modulesPath]
 		);
@@ -12,7 +12,7 @@ HybridExample : CodexHybrid {
 	initHybrid {}
 
 	*makeTemplates { | templater |
-		templater.patternFunction( "sequence" );
+		templater.hybridExample_function( "sequence" );
 		templater.synthDef( "synthDef" );
 	}
 
