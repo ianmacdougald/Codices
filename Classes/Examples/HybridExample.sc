@@ -2,10 +2,11 @@ HybridExample : CodexHybrid {
 	var player;
 
 	*contribute { | versions |
-		var modulesPath = Main.packages.asDict.at(\CodexIan)
-		+/+"Classes/Examples/example_modules";
+		var toQuark = Main.packages.asDict.at(\CodexIan);
+		var toExample = toQuark+/+"Classes/Examples/example_modules";
+
 		versions.add(
-			[\example, modulesPath]
+			[\example, toExample]
 		);
 	}
 
