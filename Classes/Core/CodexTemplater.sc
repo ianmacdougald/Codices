@@ -40,6 +40,10 @@ CodexTemplater {
 		this.makeTemplate(templateName, defaultPath+/+"list.scd");
 	}
 
+	buffer { | templateName("buffer") |
+		this.makeTemplate(templateName, defaultPath+/+"buffer.scd");	
+	}
+
 	blank { | templateName("module") |
 		this.makeTemplate(templateName, defaultPath+/+"module.scd");
 	}
