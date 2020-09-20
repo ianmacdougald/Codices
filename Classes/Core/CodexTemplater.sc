@@ -2,8 +2,10 @@ CodexTemplater {
 	classvar defaultPath;
 	var <>folder;
 
-	*initClass { defaultPath = this.filenameString
-		.dirname.dirname+/+"Templates" }
+	*initClass { 
+		defaultPath = Main.packages.asDict
+		.at(\CodexIan)+/+"Classes/Templates";
+	}
 
 	*new { | folder |
 		folder ?? { Error("No folder set.").throw };
