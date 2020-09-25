@@ -17,7 +17,7 @@ CodexHybrid : CodexComposite {
 		this.processSynthDefs(to);
 	}
 
-	*processSynthDefs { | key  |
+	*processSynthDefs { | key |
 		processor.add(this.namedSynthDefs(key));
 	}
 
