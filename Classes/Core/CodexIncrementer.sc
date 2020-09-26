@@ -1,5 +1,5 @@
 CodexIncrementer {
-	var fileTemplate, <>folder, <>extension;
+	var fileTemplate, <folder, <>extension;
 	var <currentIncrement, previousFileName;
 
 	*new { | fileTemplate = "some-file.wav", folder |
@@ -13,6 +13,7 @@ CodexIncrementer {
 		extension = patharr[1];
 		currentIncrement = PathName(patharr[0]).endNumber;
 		fileTemplate = PathName(patharr[0]).noEndNumbers;
+		this.reset;
 	}
 
 	fileTemplate { ^(fileTemplate++"."++extension) }
@@ -24,7 +25,10 @@ CodexIncrementer {
 		^previousFileName;
 	}
 
-	reset { currentIncrement = -1 }
+	reset {
+		currentIncrement = -1;
+		previousFileName = nil;
+	}
 
 	formatFileName { | template |
 		var return = folder+/+template;
@@ -47,6 +51,11 @@ CodexIncrementer {
 
 	decrement {
 		^this.formatFileName(fileTemplate++(currentIncrement -1));
+	}
+
+	folder_{ | newFolder |
+		folder = newFolder;
+		this.reset;
 	}
 
 }
