@@ -20,10 +20,18 @@ CodexComposite {
 		});
 	}
 
-	*new { | moduleSet, from |
+	*basicNew { | moduleSet, from |
 		^super.newCopyArgs(
 			moduleSet ?? { Error("No module set specified").throw }
-		).loadModules(from).initComposite;
+		);
+	}
+
+	*new { | moduleSet, from |
+		^this.basicNew(moduleSet).setup(from);
+	}
+
+	setup { | from |
+		this.loadModules(from).initComposite;
 	}
 
 	loadModules { | from |
@@ -142,6 +150,12 @@ CodexComposite {
 
 	reloadModules { this.moduleSet = moduleSet }
 
+	changeSet { | newSet, from |
+		moduleSet = newSet;
+		this.loadModules(from);
+		this.initComposite;
+	}
+
 	moduleSet_{ | newSet, from |
 		moduleSet = newSet;
 		this.loadModules(from);
@@ -165,7 +179,7 @@ CodexComposite {
 			key.do{ | k | this.openModule(k) };
 		});
 		case { ide=="scqt" }{ this.openModule_scqt(key) }
-		{ ide=="scnvim" }{ 
+		{ ide=="scnvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
 			this.openModule_scvim(key, shell, true, true);
@@ -180,9 +194,9 @@ CodexComposite {
 	openModule_scqt { | key |
 		if(\Document.asClass.notNil, {
 			if(key.isCollection.not, { key = [key] });
-			key.do{ | item | 
+			key.do{ | item |
 				\Document.asClass.perform(
-					\open, 
+					\open,
 					this.moduleFolder+/+item.asString++".scd"
 				);
 			};
@@ -204,7 +218,7 @@ CodexComposite {
 		}, { cmd.perform(\runInTerminal, shell) });
 	}
 
-	openAll_scqt { 
+	openAll_scqt {
 		this.openModule_scqt(modules.keys);
 	}
 
@@ -226,7 +240,7 @@ CodexComposite {
 			this.openAll_scvim(shell, false, true);
 		}
 		{ format("Warning: cannot open modules from %", ide).postln };
-	}	
+	}
 
 	*clearCache { cache.removeAt(this.name).clear }
 
