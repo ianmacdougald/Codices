@@ -1,74 +1,85 @@
 //This is still a bit experimental
-CodexInstrument : CodexHybrid { 
-	var <>group, <synth, <ios, views, <window;
-	
+CodexInstrument : CodexHybrid {
+	var <input, <output;
+	var inputArray, outputArray, desc;
+	var <>group, <synth, views, <window;
+
 	*makeTemplates { | templater |
 		templater.codexInstrument_synthDef;
 	}
 
-	initHybrid { 
-		Routine({ 
-			server.sync; 
-			this.fillIOs;
+	initHybrid {
+		server.bind({
+			desc = this.class.cache.at(moduleSet).synthDef.desc;
+			this.output = 0;
 			this.initInstrument;
-		}).play(AppClock);
+		});
 	}
 
-	initInstrument {  }
+	initInstrument { }
 
 	getArguments { | specs | }
 
-	makeSynth { 
+	makeSynth {
 		synth = Synth(
-			modules.synthDef.name, 
-			this.getArguments(modules.synthDef.specs)++ios.asPairs, 
+			modules.synthDef.name,
+			this.getArguments(modules.synthDef.specs)
+			++inputArray++outputArray,
 			group ?? { server.defaultGroup }
-		).register; 
-		synth.onFree({synth = nil});
+		).register;
 		^synth;
 	}
 
-	freeSynth { 
+	freeSynth {
 		if(synth.isPlaying)
 		{
-			synth.free; 
+			synth.free;
 		}
 	}
 
-	fillIOs { 
-		var desc = this.class.cache[moduleSet]
-		.synthDef.desc;
-		var count = 0; 
-		var fillIO = { | coll | 
-			if(coll.isEmpty.not, { 
-				coll.do { | io |
-					ios.add(
-						io.startingChannel.asSymbol 
-						-> count
-					);	
-					count = count + 1 
-					+ (io.numberOfChannels - 1);
-				};
-			})
-		};
-		ios = ();
-		fillIO.value(desc.outputs);
-		fillIO.value(desc.inputs);
+	setIO { | ios, val, arr |
+		if(ios.notEmpty, {
+			var offset = 0;
+			arr !? { arr.do(_.free) };
+			arr = [];
+			if(val.isKindOf(Bus).not, {
+				arr = arr.add(ios.startingChannel.asSymbol);
+				arr = arr.add(Bus.new(\audio, val, ios[0].numberOfChannels, server));
+				offset = 1;
+			});
+			ios[offset..(ios.size - 1)].do { | io, index |
+				arr = arr.add(io.startingChannel.asSymbol);
+				arr = arr.add(Bus.audio(server, io.numberOfChannels));
+			};
+			^arr
+		});
+		^[];
 	}
 
-	setBus { | key, value | 
-		if(value.isNumber)
-		{
-			value = value.asInteger;
-		}
-		//else
-		{ 
-			if(value.isKindOf(Bus).not)
-			{
-				Error("Can only set bus with a bus or bus index").throw;
-			}
-		}; 
-		ios[key] = value;
+	setOutputs {
+		outputArray = this.setIO(
+			desc.outputs,
+			output,
+			outputArray ? []
+		);
+	}
+
+	output_{ | newBus |
+		output = newBus;
+		this.setOutputs;
+	}
+
+	setInputs {
+		inputArray = this.setIO(
+			desc.inputs,
+			input,
+			inputArray ? []
+		);
+	}
+
+	input_{ | newBus |
+		input = newBus;
+		this.setInputs;
 	}
 
 	window_{ | newWindow |
@@ -78,7 +89,7 @@ CodexInstrument : CodexHybrid {
 		}
 	}
 
-	close { 
+	close {
 		if(window.notNil and: { window.isClosed.not })
 		{
 			window.close;
@@ -86,8 +97,7 @@ CodexInstrument : CodexHybrid {
 	}
 
 	moduleSet_{ | to, from |
-		this.close; 
+		this.close;
 		super.moduleSet_(to, from);
-	}	
-
+	}
 }
