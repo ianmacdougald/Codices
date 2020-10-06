@@ -173,21 +173,23 @@ CodexComposite {
 		directory = CodexStorage.setAt(newPath, id);
 	}
 
-	openModule { | key |
+	open { | ...keys |
 		var ide = Platform.ideName;
-		if(key.isCollection and: { key.isString.not }, {
-			key.do{ | k | this.openModule(k) };
-		});
-		case { ide=="scqt" }{ this.openModule_scqt(key) }
+		keys = keys.flat;
+		case { ide=="scqt" }{
+			keys.do { | key |
+				this.openModule_scqt(key);
+			};
+		}
 		{ ide=="scnvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.openModule_scvim(key, shell, true, true);
+			this.openModule_scvim(keys, shell, true, true);
 		}
 		{ ide=="scvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.openModule_scvim(key, shell, false, true);
+			this.openModule_scvim(keys, shell, false, true);
 		};
 	}
 
@@ -195,10 +197,12 @@ CodexComposite {
 		if(\Document.asClass.notNil, {
 			if(key.isCollection.not, { key = [key] });
 			key.do{ | item |
-				\Document.asClass.perform(
-					\open,
-					this.moduleFolder+/+item.asString++".scd"
-				);
+				var file = this.moduleFolder+/+item.asString++".scd";
+				if(File.exists(file), {
+					\Document.asClass.perform(
+						\open, file
+					);
+				});
 			};
 		});
 	}
@@ -218,28 +222,19 @@ CodexComposite {
 		}, { cmd.perform(\runInTerminal, shell) });
 	}
 
-	openAll_scqt {
-		this.openModule_scqt(modules.keys);
-	}
+	openModules { this.open(modules.keys) }
 
-	openAll_scvim { | shell("sh"), neovim(false), vertically(false) |
-		this.openModule_scvim(modules.keys, shell, neovim, vertically);
-	}
-
-	openAll {
-		var ide = Platform.ideName;
-		case { ide=="scqt"} { this.openAll_scqt }
-		{ ide=="scnvim" }{
-			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
-			shell = shell[..(shell.size - 2)];
-			this.openAll_scvim(shell, true, true);
-		}
-		{ ide=="scvim" }{
-			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
-			shell = shell[..(shell.size - 2)];
-			this.openAll_scvim(shell, false, true);
-		}
-		{ format("Warning: cannot open modules from %", ide).postln };
+	closeModules {
+		if(Platform.ideName=="scqt", {
+			if(\Document.asClass.notNil, {
+				\Document.asClass.perform(\allDocuments).do {
+					| doc, index |
+					if(doc.dir==this.moduleFolder, {
+						doc.close;
+					});
+				}
+			});
+		})
 	}
 
 	*clearCache { cache.removeAt(this.name).clear }
