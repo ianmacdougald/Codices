@@ -1,8 +1,7 @@
-//This is still a bit experimental
 CodexInstrument : CodexHybrid {
 	var <input, <output;
-	var <>group, <synth, views, <window;
-	var <inputArray, <outputArray, desc;
+	var <>group, <synth, <window;
+	var inputArray, outputArray, desc;
 
 	*makeTemplates { | templater |
 		templater.codexInstrument_synthDef;
