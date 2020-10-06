@@ -27,11 +27,11 @@
 		);
 	}
 
-	codexPanel_template { | templateName("panel") |
+	codexPanel { | templateName("panel") |
 		this.makeTemplate(
 			templateName, 
 			this.codexFrameworks_path
-			+/+"codexPanel_template.scd"
+			+/+"codexPanel.scd"
 		);
 	}
 }
