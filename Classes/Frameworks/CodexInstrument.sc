@@ -38,12 +38,17 @@ CodexInstrument : CodexHybrid {
 			var offset = 0;
 			arr !? { arr.do(_.free) };
 			arr = [];
-			if(val.isKindOf(Bus).not, {
-				arr = arr.add(ios[0].startingChannel.asSymbol);
-				arr = arr.add(Bus.new(\audio, val, ios[0].numberOfChannels, server));
-				offset = 1;
-			});
-			if(ios.size > offset, { 
+			val !? {
+				if(val.isCollection.not, { val = [val] });
+				val.do{ | item |
+					arr = arr.add(ios[0].startingChannel.asSymbol);
+					if(item.isKindOf(Bus).not, {
+						arr = arr.add(Bus.new(\audio, item, ios[0].numberOfChannels, server));
+					}, { arr = arr.add(item) });
+				};
+				offset = val.size;
+			};
+			if(ios.size > offset, {
 				ios[offset..(ios.size - 1)].do { | io, index |
 					arr = arr.add(io.startingChannel.asSymbol);
 					arr = arr.add(Bus.audio(server, io.numberOfChannels));
@@ -83,11 +88,11 @@ CodexInstrument : CodexHybrid {
 		this.setInputs;
 	}
 
-	checkDesc { 
-		desc ?? { 
+	checkDesc {
+		desc ?? {
 			desc = this.class.cache.at(moduleSet).synthDef.desc;
 		}
-	}	
+	}
 
 	window_{ | newWindow |
 		if((window.isNil || try{ window.isClosed }) && newWindow.isKindOf(Window))
