@@ -26,4 +26,12 @@
 			+/+"codexPanel_function.scd"
 		);
 	}
+
+	codexPanel_template { | templateName("panel") |
+		this.makeTemplate(
+			templateName, 
+			this.codexFrameworks_path
+			+/+"codexPanel_template.scd"
+		);
+	}
 }
