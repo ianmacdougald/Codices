@@ -18,4 +18,12 @@
 			+/+"codexInstrument_synthDef.scd"
 		);
 	}
+
+	codexPanel_function { | templateName("function") |
+		this.makeTemplate(
+			templateName, 
+			this.codexFrameworks_path
+			+/+"codexPanel_function.scd"
+		);
+	}
 }
