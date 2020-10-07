@@ -22,3 +22,13 @@ definitionlist::
 ##link::Classes/CodexIncrementer::
 ||Generates incrementally advanced file names within a given directory.
 ::
+
+section::Framework extensions
+definitionlist::
+##link::Classes/CodexSonata::
+||Sequences scripts that manipulate link::Classes/NodeProxy##NodeProxies::.
+##link::Classes/CodexSymphony::
+||Makes music by organizing sonata-like sections with patterns.
+##link::Classes/CodexInstrument::
+||Provides a basic foundation for creating modularized instruments.
+::
