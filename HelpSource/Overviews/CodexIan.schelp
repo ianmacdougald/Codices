@@ -31,4 +31,6 @@ definitionlist::
 ||Makes music by organizing sonata-like sections with patterns.
 ##link::Classes/CodexInstrument::
 ||Provides a basic foundation for creating modularized instruments.
+##link::Classes/CodexPanel::
+||Provides a basic foundation for creating modularizes guis.
 ::
