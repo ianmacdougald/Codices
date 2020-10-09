@@ -1,7 +1,7 @@
 (
 name:           "CodexIan",
 summary:        "Modular framework for music development",
-version:        "0.2.0",
+version:        "0.3.0",
 dependencies:	[],		
 author:		"ianmacdougald",
 url:		"https://github.com/ianmacdougald/CodexIan"
