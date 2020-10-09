@@ -27,10 +27,10 @@ CodexComposite {
 	}
 
 	*new { | moduleSet, from |
-		^this.basicNew(moduleSet).setup(from);
+		^this.basicNew(moduleSet).initCodex(from);
 	}
 
-	setup { | from |
+	initCodex { | from |
 		this.loadModules(from).initComposite;
 	}
 
@@ -149,12 +149,6 @@ CodexComposite {
 	}
 
 	reloadModules { this.moduleSet = moduleSet }
-
-	changeSet { | newSet, from |
-		moduleSet = newSet;
-		this.loadModules(from);
-		this.initComposite;
-	}
 
 	moduleSet_{ | newSet, from |
 		moduleSet = newSet;

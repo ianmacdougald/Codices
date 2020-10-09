@@ -20,8 +20,12 @@ A string or symbol representing a relative path or a string representing an abso
 argument::from
 A string or symbol representing a relative path or a string representing an absolute path to a folder to clone a new set of modules from.
 
+method::basicNew 
+Creates a new instance without loading modules. 
+
+After creation, use the instance method link::Classes/CodexComposite#-initCodex#initCodex:: to initialize the modules.
 method::directory
-Gets and (persistently) sets the path to the directory of modules for all subclasses of CodexComposite. For further details, see link::Classes/CodexPaths::.
+Gets and (persistently) sets the path to the directory of modules for all subclasses of CodexComposite. For further details, see link::Classes/CodexStorage::.
 note::Before using a subclass of CodexComposite for the first time, be sure to configure the path to the directory of modules. This can be done either through the interface of CodexComposite or any of its subclasses. However, any change made will affect all subclasses of CodexComposite.
 code::
 //Check where the directory is.
@@ -42,11 +46,11 @@ method::moduleSets
 Gets the names of the moduleSets that currently exist for the class.
 
 method::cache
-Gets a link::Classes/Dictionary:: of link::Classes/Event##Events:: storing sets of modules.
+Gets a link::Classes/Dictionary:: storing sets of modules.
 method::clearCache
-Clears the dictionary of module sets, forcing the class to reload the modules from scripts the next time a given set is requested.
+Clears the cache, forcing the class to reload the modules from scripts the next time a given set is requested.
 method::allCaches
-Get the instance of link::Classes/CodexCache:: that stores all of the scripts of each subclass of CodexComposite.
+Gets the instance link::Classes/CodexCache:: that stores each cache on behalf of the subclasses of CodexComposite.
 private::addModules
 private::asPath
 private::copyFiles
@@ -102,20 +106,15 @@ A symbol specifying the new set of modules to load. Setting moduleSet will in tu
 argument::from
 A symbol referring to an existing set of modules to copy if the new module name does not exist yet.
 
-
 method::moduleSets
 Gets the moduleSets that currently exist for the class.
 
-method::openModule
-argument::key 
-table::
-## Symbol || The name of the module to open. 
-## Array of symbols || Multiple names of modules to open.
-::
+method::open
+argument::... keys
+Open the files associated with specified modules.
 
 method::openModule_scqt
 Open a single module using scqt.
-
 method::openModule_scvim 
 Open a single module or group of modules using scvim.
 
@@ -131,11 +130,14 @@ A link::Classes/Boolean:: determining whether to use scvim or scnvim.
 argument::vertically
 A Boolean determining if modules files will be opened vertically or horizontally.
 
-method::openAll
-Opens all modules.
+method::openModules
+Open all of the modules' associated scripts.
 
-method::openAll_scvim
-Open all modules using either scvim or scnvim.
+method::initCodex
+Loads the modules into the instance.
+argument::from
+A string or symbol representing a relative path or a string representing an absolute path to a folder to clone a new set of modules from.
 
-method::openAll_scqt 
-Open all modules using scqt.
+private::doesNotUnderstand
+method::know 
+If set to true, the instance interprets method calls as look-ups in the collection of modules. This behavior is similar to link::Classes/IdentityDictionary#-know::
