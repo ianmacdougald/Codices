@@ -1,6 +1,6 @@
 CodexComposite {
 	classvar <directory, id = 'scmodules', cache;
-	var <moduleSet, <modules;
+	var <moduleSet, <modules, <>know = false;
 
 	*initClass {
 		Class.initClassTree(Dictionary);
@@ -242,4 +242,29 @@ CodexComposite {
 	*cache { ^cache.at(this.name) }
 
 	*allCaches { ^cache }
+
+	//Experimental:
+	//On the one hand, allows modules to be re-written on the fly without modifying files
+	//On the other hand, creates a lot of opportunities for confusing scripting errors
+
+	doesNotUnderstand { arg selector ... args;
+		if(know, {
+			var module = modules[selector];
+			module !? {
+				^module.functionPerformList(\value, this, args);
+			};
+			if(selector.isSetter, {
+				if(args[0].isKindOf(modules[selector.asGetter].class), {
+					^modules[selector.asGetter] = args[0];
+				}, {
+					warn(
+						"Can only overwrite pseudo-variable"
+						++"with object of same type."
+					);
+					^this;
+				});
+			});
+		});
+		^this.superPerformList(\doesNotUnderstand, selector, args);
+	}
 }
