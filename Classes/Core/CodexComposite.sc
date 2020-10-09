@@ -170,27 +170,23 @@ CodexComposite {
 	open { | ...keys |
 		var ide = Platform.ideName;
 		keys = keys.flat;
-		case { ide=="scqt" }{
-			keys.do { | key |
-				this.openModule_scqt(key);
-			};
-		}
+		case { ide=="scqt" }{ this.open_scqt(keys) }
 		{ ide=="scnvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.openModule_scvim(keys, shell, true, true);
+			this.open_scvim(keys, shell, true, true);
 		}
 		{ ide=="scvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.openModule_scvim(keys, shell, false, true);
+			this.open_scvim(keys, shell, false, true);
 		};
 	}
 
-	openModule_scqt { | key |
+	open_scqt { | keys |
 		if(\Document.asClass.notNil, {
-			if(key.isCollection.not, { key = [key] });
-			key.do{ | item |
+			if(keys.isCollection.not, { keys = [keys] });
+			keys.do{ | item |
 				var file = this.moduleFolder+/+item.asString++".scd";
 				if(File.exists(file), {
 					\Document.asClass.perform(
@@ -201,10 +197,10 @@ CodexComposite {
 		});
 	}
 
-	openModule_scvim { | key, shell("sh"), neovim(false), vertically(false) |
+	open_scvim { | keys, shell("sh"), neovim(false), vertically(false) |
 		var cmd = "vim", paths = "";
-		if(key.isCollection.not, { key = [key] });
-		key.do({ | item |
+		if(keys.isCollection.not, { keys = [keys] });
+		keys.do({ | item |
 			paths = paths++this.moduleFolder
 			+/+item.asString++".scd ";
 		});
