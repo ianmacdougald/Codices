@@ -167,25 +167,24 @@ CodexComposite {
 		directory = CodexStorage.setAt(newPath, id);
 	}
 
-	open { | ...keys |
+	open { | ... keys |
 		var ide = Platform.ideName;
 		keys = keys.flat;
 		case { ide=="scqt" }{ this.open_scqt(keys) }
 		{ ide=="scnvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.open_scvim(keys, shell, true, true);
+			this.open_scvim(shell, true, true, keys);
 		}
 		{ ide=="scvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.open_scvim(keys, shell, false, true);
+			this.open_scvim(shell, false, true, keys);
 		};
 	}
 
-	open_scqt { | keys |
+	open_scqt { | ... keys |
 		if(\Document.asClass.notNil, {
-			if(keys.isCollection.not, { keys = [keys] });
 			keys.do{ | item |
 				var file = this.moduleFolder+/+item.asString++".scd";
 				if(File.exists(file), {
@@ -197,9 +196,10 @@ CodexComposite {
 		});
 	}
 
-	open_scvim { | keys, shell("sh"), neovim(false), vertically(false) |
+	open_scvim {
+		| shell("sh"), neovim(false), vertically(false) ...keys |
 		var cmd = "vim", paths = "";
-		if(keys.isCollection.not, { keys = [keys] });
+		keys.postln;
 		keys.do({ | item |
 			paths = paths++this.moduleFolder
 			+/+item.asString++".scd ";
@@ -237,7 +237,7 @@ CodexComposite {
 	//On the one hand, allows modules to be re-written on the fly without modifying files
 	//On the other hand, creates a lot of opportunities for confusing scripting errors
 
-	doesNotUnderstand { arg selector ... args;
+	doesNotUnderstand { | selector ... args |
 		if(know, {
 			var module = modules[selector];
 			module !? {
