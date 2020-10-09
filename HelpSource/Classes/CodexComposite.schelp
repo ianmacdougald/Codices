@@ -135,11 +135,13 @@ method::closeModules
 Close all of the open module files. 
 note::This is only implemented for scqt.::
 
+private::doesNotUnderstand
+method::know 
+If set to true, the instance interprets method calls as look-ups in the collection of modules. This behavior is similar to link::Classes/IdentityDictionary#-know::
+
 method::initCodex
 Loads the modules into the instance.
 argument::from
 A string or symbol representing a relative path or a string representing an absolute path to a folder to clone a new set of modules from.
 
-private::doesNotUnderstand
-method::know 
-If set to true, the instance interprets method calls as look-ups in the collection of modules. This behavior is similar to link::Classes/IdentityDictionary#-know::
+
