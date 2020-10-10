@@ -184,15 +184,16 @@ CodexComposite {
 	}
 
 	open_scqt { | ... keys |
-		if(\Document.asClass.notNil, {
+		var document = \Document.asClass;
+		if(document.notNil, {
+			var current = Document.current;
 			keys.do{ | item |
 				var file = this.moduleFolder+/+item.asString++".scd";
 				if(File.exists(file), {
-					\Document.asClass.perform(
-						\open, file
-					);
+					document.perform(\open, file);
 				});
 			};
+			current.front;
 		});
 	}
 
@@ -211,7 +212,7 @@ CodexComposite {
 		}, { cmd.perform(\runInTerminal, shell) });
 	}
 
-	openModules { this.open(keys: modules.keys.asArray) }
+	openModules { this.open(keys: modules.keys.asArray.sort) }
 
 	closeModules {
 		if(Platform.ideName=="scqt", {
