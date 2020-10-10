@@ -170,16 +170,16 @@ CodexComposite {
 	open { | ... keys |
 		var ide = Platform.ideName;
 		keys = keys.flat;
-		case { ide=="scqt" }{ this.open_scqt(keys) }
+		case { ide=="scqt" }{ this.open_scqt(keys: keys) }
 		{ ide=="scnvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.open_scvim(shell, true, true, keys);
+			this.open_scvim(shell, true, true, keys: keys);
 		}
 		{ ide=="scvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.open_scvim(shell, false, true, keys);
+			this.open_scvim(shell, false, true, keys: keys);
 		};
 	}
 
