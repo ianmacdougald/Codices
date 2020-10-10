@@ -21,7 +21,6 @@
 		var i = object.sectionIndex;
 		if(i < 0, {
 			i = "\%";
-			this.announce(initialPrompt);
 			clockText.stringColor = Color.black;
 			clockText.string = clockPrompt;
 		});

@@ -170,36 +170,36 @@ CodexComposite {
 	open { | ... keys |
 		var ide = Platform.ideName;
 		keys = keys.flat;
-		case { ide=="scqt" }{ this.open_scqt(keys) }
+		case { ide=="scqt" }{ this.open_scqt(keys: keys) }
 		{ ide=="scnvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.open_scvim(shell, true, true, keys);
+			this.open_scvim(shell, true, true, keys: keys);
 		}
 		{ ide=="scvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.open_scvim(shell, false, true, keys);
+			this.open_scvim(shell, false, true, keys: keys);
 		};
 	}
 
 	open_scqt { | ... keys |
-		if(\Document.asClass.notNil, {
+		var document = \Document.asClass;
+		if(document.notNil, {
+			var current = Document.current;
 			keys.do{ | item |
 				var file = this.moduleFolder+/+item.asString++".scd";
 				if(File.exists(file), {
-					\Document.asClass.perform(
-						\open, file
-					);
+					document.perform(\open, file);
 				});
 			};
+			current.front;
 		});
 	}
 
 	open_scvim {
 		| shell("sh"), neovim(false), vertically(false) ...keys |
 		var cmd = "vim", paths = "";
-		keys.postln;
 		keys.do({ | item |
 			paths = paths++this.moduleFolder
 			+/+item.asString++".scd ";
@@ -212,7 +212,7 @@ CodexComposite {
 		}, { cmd.perform(\runInTerminal, shell) });
 	}
 
-	openModules { this.open(modules.keys) }
+	openModules { this.open(keys: modules.keys.asArray.sort) }
 
 	closeModules {
 		if(Platform.ideName=="scqt", {
@@ -232,10 +232,6 @@ CodexComposite {
 	*cache { ^cache.at(this.name) }
 
 	*allCaches { ^cache }
-
-	//Experimental:
-	//On the one hand, allows modules to be re-written on the fly without modifying files
-	//On the other hand, creates a lot of opportunities for confusing scripting errors
 
 	doesNotUnderstand { | selector ... args |
 		if(know, {
