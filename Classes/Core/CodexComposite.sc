@@ -170,16 +170,16 @@ CodexComposite {
 	open { | ... keys |
 		var ide = Platform.ideName;
 		keys = keys.flat;
-		case { ide=="scqt" }{ this.open_scqt(keys) }
+		case { ide=="scqt" }{ this.open_scqt(keys: keys) }
 		{ ide=="scnvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.open_scvim(shell, true, true, keys);
+			this.open_scvim(shell, true, true, keys: keys);
 		}
 		{ ide=="scvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.open_scvim(shell, false, true, keys);
+			this.open_scvim(shell, false, true, keys: keys);
 		};
 	}
 
@@ -199,7 +199,6 @@ CodexComposite {
 	open_scvim {
 		| shell("sh"), neovim(false), vertically(false) ...keys |
 		var cmd = "vim", paths = "";
-		keys.postln;
 		keys.do({ | item |
 			paths = paths++this.moduleFolder
 			+/+item.asString++".scd ";
@@ -212,7 +211,7 @@ CodexComposite {
 		}, { cmd.perform(\runInTerminal, shell) });
 	}
 
-	openModules { this.open(modules.keys) }
+	openModules { this.open(keys: modules.keys.asArray) }
 
 	closeModules {
 		if(Platform.ideName=="scqt", {
