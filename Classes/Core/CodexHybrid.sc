@@ -3,6 +3,8 @@ CodexHybrid : CodexComposite {
 	var server;
 
 	*initClass {
+		Class.initClassTree(Server);
+		Class.initClassTree(SynthDef);
 		Class.initClassTree(CodexProcessor);
 		processor = CodexProcessor.new;
 	}

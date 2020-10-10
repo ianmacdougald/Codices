@@ -108,11 +108,6 @@ CodexProcessor {
 		^super.newCopyArgs(server).initProcessor;
 	}
 
-	*initClass {
-		Class.initClassTree(Server);
-		Class.initClassTree(SynthDef);
-	}
-
 	initProcessor {
 		adder = CodexAdder(server);
 		remover = CodexRemover(server);

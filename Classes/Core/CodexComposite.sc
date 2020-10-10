@@ -1,6 +1,6 @@
 CodexComposite {
 	classvar <directory, id = 'scmodules', cache;
-	var <moduleSet, <modules;
+	var <moduleSet, <modules, <>know = false;
 
 	*initClass {
 		Class.initClassTree(Dictionary);
@@ -27,10 +27,10 @@ CodexComposite {
 	}
 
 	*new { | moduleSet, from |
-		^this.basicNew(moduleSet).setup(from);
+		^this.basicNew(moduleSet).initCodex(from);
 	}
 
-	setup { | from |
+	initCodex { | from |
 		this.loadModules(from).initComposite;
 	}
 
@@ -150,12 +150,6 @@ CodexComposite {
 
 	reloadModules { this.moduleSet = moduleSet }
 
-	changeSet { | newSet, from |
-		moduleSet = newSet;
-		this.loadModules(from);
-		this.initComposite;
-	}
-
 	moduleSet_{ | newSet, from |
 		moduleSet = newSet;
 		this.loadModules(from);
@@ -173,30 +167,25 @@ CodexComposite {
 		directory = CodexStorage.setAt(newPath, id);
 	}
 
-	open { | ...keys |
+	open { | ... keys |
 		var ide = Platform.ideName;
 		keys = keys.flat;
-		case { ide=="scqt" }{
-			keys.do { | key |
-				this.openModule_scqt(key);
-			};
-		}
+		case { ide=="scqt" }{ this.open_scqt(keys) }
 		{ ide=="scnvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.openModule_scvim(keys, shell, true, true);
+			this.open_scvim(shell, true, true, keys);
 		}
 		{ ide=="scvim" }{
 			var shell = "echo $SHELL".unixCmdGetStdOut.split($/).last;
 			shell = shell[..(shell.size - 2)];
-			this.openModule_scvim(keys, shell, false, true);
+			this.open_scvim(shell, false, true, keys);
 		};
 	}
 
-	openModule_scqt { | key |
+	open_scqt { | ... keys |
 		if(\Document.asClass.notNil, {
-			if(key.isCollection.not, { key = [key] });
-			key.do{ | item |
+			keys.do{ | item |
 				var file = this.moduleFolder+/+item.asString++".scd";
 				if(File.exists(file), {
 					\Document.asClass.perform(
@@ -207,10 +196,11 @@ CodexComposite {
 		});
 	}
 
-	openModule_scvim { | key, shell("sh"), neovim(false), vertically(false) |
+	open_scvim {
+		| shell("sh"), neovim(false), vertically(false) ...keys |
 		var cmd = "vim", paths = "";
-		if(key.isCollection.not, { key = [key] });
-		key.do({ | item |
+		keys.postln;
+		keys.do({ | item |
 			paths = paths++this.moduleFolder
 			+/+item.asString++".scd ";
 		});
@@ -242,4 +232,29 @@ CodexComposite {
 	*cache { ^cache.at(this.name) }
 
 	*allCaches { ^cache }
+
+	//Experimental:
+	//On the one hand, allows modules to be re-written on the fly without modifying files
+	//On the other hand, creates a lot of opportunities for confusing scripting errors
+
+	doesNotUnderstand { | selector ... args |
+		if(know, {
+			var module = modules[selector];
+			module !? {
+				^module.functionPerformList(\value, this, args);
+			};
+			if(selector.isSetter, {
+				if(args[0].isKindOf(modules[selector.asGetter].class), {
+					^modules[selector.asGetter] = args[0];
+				}, {
+					warn(
+						"Can only overwrite pseudo-variable"
+						++"with object of same type."
+					);
+					^this;
+				});
+			});
+		});
+		^this.superPerformList(\doesNotUnderstand, selector, args);
+	}
 }

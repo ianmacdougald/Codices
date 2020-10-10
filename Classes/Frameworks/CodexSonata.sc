@@ -81,7 +81,9 @@ CodexSonata : CodexProxier {
 	}
 
 	cleanup {
-		modules.cleanup.do(_.value)
+		this.server.bind({
+			modules.cleanup.do(_.value)
+		});
 	}
 
 	moduleSet_{ | newSet, from |
