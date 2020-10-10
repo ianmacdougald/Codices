@@ -232,10 +232,6 @@ CodexComposite {
 
 	*allCaches { ^cache }
 
-	//Experimental:
-	//On the one hand, allows modules to be re-written on the fly without modifying files
-	//On the other hand, creates a lot of opportunities for confusing scripting errors
-
 	doesNotUnderstand { | selector ... args |
 		if(know, {
 			var module = modules[selector];
