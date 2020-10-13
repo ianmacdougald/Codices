@@ -18,8 +18,8 @@ CodexSonata : CodexVarProxier {
 
 	sectionIndex_{ | newIndex |
 		this.stop;
-		sectionIndex = newIndex;
-		if(sectionIndex < this.nSections && sectionIndex >= 0, {
+		if(newIndex < sections.size && newIndex >= 0, {
+			sectionIndex = newIndex;
 			this.engageTask(
 				modules[sections[sectionIndex]].value(modules, proxySpace);
 			);
