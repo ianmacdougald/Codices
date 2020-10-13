@@ -1,4 +1,4 @@
-CodexSonata : CodexProxier {
+CodexSonata : CodexVarProxier {
 	var <sectionIndex = -1;
 	var <task, <timeRemaining;
 	var <onLoop, <onLoopEnd;
@@ -21,8 +21,7 @@ CodexSonata : CodexProxier {
 		sectionIndex = newIndex;
 		if(sectionIndex < this.nSections && sectionIndex >= 0, {
 			this.engageTask(
-				modules[("section"++sectionIndex).asSymbol]
-				.value(modules, proxySpace)
+				modules[sections[sectionIndex]].value(modules, proxySpace);
 			);
 		}, {
 			this.reset;

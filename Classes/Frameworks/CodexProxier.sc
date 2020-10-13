@@ -37,7 +37,7 @@ CodexProxier : CodexComposite {
 }
 
 CodexVarProxier : CodexProxier { 
-	var sections;
+	var <sections;
 
 	initComposite { 
 		proxySpace = ProxySpace.new(Server.default);
@@ -52,7 +52,9 @@ CodexVarProxier : CodexProxier {
 	}
 
 	collectSections { 
-		^modules.select(_.isFunction); 
+		^modules.keys.select({ | key |
+			modules[key].isFunction;
+		}).asArray;
 	}
 }
 
