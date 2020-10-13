@@ -36,49 +36,49 @@ CodexProxier : CodexComposite {
 	clear { proxySpace.clear }
 }
 
-CodexVarProxier : CodexProxier { 
+CodexVarProxier : CodexProxier {
 	var <sections;
 
-	initComposite { 
+	initComposite {
 		proxySpace = ProxySpace.new(Server.default);
 		sections = this.collectSections;
 		this.initProxier;
 	}
-	
-	makeSection { 
+
+	makeSection {
 		this.class.sectionTemplate(
 			CodexTemplater(this.moduleFolder);
 		);
 	}
 
-	collectSections { 
+	collectSections {
 		^modules.keys.select({ | key |
 			modules[key].isFunction;
-		}).asArray;
+		}).asArray.reverse;
 	}
 }
 
-CodexFixedProxier : CodexProxier { 
+CodexFixedProxier : CodexProxier {
 	*nSections { ^nil }
 
 	*makeTemplates { | templater |
 		super.makeTemplates(templater);
-		if(this.nSections.notNil, { 
-			(this.nSections - 1).do { 
+		if(this.nSections.notNil, {
+			(this.nSections - 1).do {
 				this.sectionTemplate(templater);
 			};
 		});
 	}
 }
 
-Codex2Proxier : CodexFixedProxier { 
+Codex2Proxier : CodexFixedProxier {
 	*nSections { ^2 }
 }
 
-Codex4Proxier : CodexFixedProxier { 
+Codex4Proxier : CodexFixedProxier {
 	*nSections { ^4 }
 }
 
-Codex8Proxier : CodexFixedProxier { 
+Codex8Proxier : CodexFixedProxier {
 	*nSections { ^8 }
 }
