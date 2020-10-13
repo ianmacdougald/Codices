@@ -37,19 +37,12 @@ CodexProxier : CodexComposite {
 }
 
 CodexVarProxier : CodexProxier { 
-	var nSections, twoFails = false;
+	var sections;
 
 	initComposite { 
 		proxySpace = ProxySpace.new(Server.default);
-		nSections = this.countSections;
-		if(nSections==0, { 
-			if(twoFails.not, {  
-				this.makeSection; 
-				this.reloadScripts;
-				twoFails = true;
-			}, { warn("Something went really wrong. Make sure there aren't a silly number of modules made"); });
-		
-		}); 
+		sections = this.collectSections;
+		this.initProxier;
 	}
 	
 	makeSection { 
@@ -58,17 +51,32 @@ CodexVarProxier : CodexProxier {
 		);
 	}
 
-	countSections { 
-		^modules.keys.select({ | key |
-			key.asString.find("section").notNil
-		}).size;
+	collectSections { 
+		^modules.select(_.isFunction); 
 	}
 }
 
-CodexVarTester : CodexVarProxier {  }
-
-/*CodexFixedProxier : CodexProxier { 
+CodexFixedProxier : CodexProxier { 
 	*nSections { ^nil }
 
+	*makeTemplates { | templater |
+		super.makeTemplates(templater);
+		if(this.nSections.notNil, { 
+			(this.nSections - 1).do { 
+				this.sectionTemplate(templater);
+			};
+		});
+	}
+}
 
-}*/
+Codex2Proxier : CodexFixedProxier { 
+	*nSections { ^2 }
+}
+
+Codex4Proxier : CodexFixedProxier { 
+	*nSections { ^4 }
+}
+
+Codex8Proxier : CodexFixedProxier { 
+	*nSections { ^8 }
+}
