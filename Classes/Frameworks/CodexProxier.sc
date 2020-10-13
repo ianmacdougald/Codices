@@ -1,5 +1,5 @@
 CodexProxier : CodexComposite {
-	var <proxySpace;
+	var <proxySpace, <sections;
 
 	*makeTemplates { | templater |
 		templater.list("cleanup");
@@ -14,8 +14,22 @@ CodexProxier : CodexComposite {
 	*otherTemplates { | templater | }
 
 	initComposite {
+		this.cleanup;
 		proxySpace = ProxySpace.new(Server.default);
+		sections = this.collectSections;
 		this.initProxier;
+	}
+
+	makeSection {
+		this.class.sectionTemplate(
+			CodexTemplater(this.moduleFolder);
+		);
+	}
+
+	collectSections {
+		^modules.keys.selectAs({ | key |
+			modules[key].isFunction;
+		}, Array).reverse;
 	}
 
 	initProxier { }
@@ -33,52 +47,20 @@ CodexProxier : CodexComposite {
 		});
 	}
 
-	clear { proxySpace.clear }
-}
-
-CodexVarProxier : CodexProxier {
-	var <sections;
-
-	initComposite {
-		proxySpace = ProxySpace.new(Server.default);
-		sections = this.collectSections;
-		this.initProxier;
+	clear {
+		proxySpace.clear;
+		this.cleanup;
 	}
 
-	makeSection {
-		this.class.sectionTemplate(
-			CodexTemplater(this.moduleFolder);
-		);
-	}
-
-	collectSections {
-		^modules.keys.select({ | key |
-			modules[key].isFunction;
-		}).asArray.reverse;
-	}
-}
-
-CodexFixedProxier : CodexProxier {
-	*nSections { ^nil }
-
-	*makeTemplates { | templater |
-		super.makeTemplates(templater);
-		if(this.nSections.notNil, {
-			(this.nSections - 1).do {
-				this.sectionTemplate(templater);
-			};
+	cleanup {
+		if(modules.cleanup.isEmpty.not, {
+			modules.cleanup.do(_.value);
+			modules.cleanup.clear;
 		});
 	}
-}
 
-Codex2Proxier : CodexFixedProxier {
-	*nSections { ^2 }
-}
-
-Codex4Proxier : CodexFixedProxier {
-	*nSections { ^4 }
-}
-
-Codex8Proxier : CodexFixedProxier {
-	*nSections { ^8 }
+	moduleSet_{ | newSet, from |
+		this.clear;
+		super.moduleSet_(newSet, from);
+	}
 }

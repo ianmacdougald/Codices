@@ -1,4 +1,4 @@
-CodexSonata : CodexVarProxier {
+CodexSonata : CodexProxier {
 	var <sectionIndex = -1;
 	var <task, <timeRemaining;
 	var <onLoop, <onLoopEnd;
@@ -21,7 +21,11 @@ CodexSonata : CodexVarProxier {
 		if(newIndex < sections.size && newIndex >= 0, {
 			sectionIndex = newIndex;
 			this.engageTask(
-				modules[sections[sectionIndex]].value(modules, proxySpace);
+				modules[sections[sectionIndex]]
+				.value(
+					modules,
+					proxySpace
+				);
 			);
 		}, {
 			this.reset;
@@ -43,6 +47,9 @@ CodexSonata : CodexVarProxier {
 				onLoopEnd.value;
 				fork { this.next };
 			}).play;
+		}, {
+			timeRemaining = nil;
+			onLoop.value(timeRemaining);
 		});
 	}
 
@@ -75,18 +82,11 @@ CodexSonata : CodexVarProxier {
 
 	reset {
 		this.stop;
-		this.clear;
 		sectionIndex = -1;
 	}
 
-	cleanup {
-		this.server.bind({
-			modules.cleanup.do(_.value)
-		});
-	}
-
-	moduleSet_{ | newSet, from |
+	clear {
 		this.reset;
-		super.moduleSet_(newSet, from);
+		super.clear;
 	}
 }

@@ -235,7 +235,11 @@ CodexComposite {
 		if(know, {
 			var module = modules[selector];
 			module !? {
-				^module.functionPerformList(\value, this, args);
+				^module.functionPerformList(
+					\value,
+					modules,
+					args
+				);
 			};
 			if(selector.isSetter, {
 				if(args[0].isKindOf(modules[selector.asGetter].class), {
@@ -243,7 +247,7 @@ CodexComposite {
 				}, {
 					warn(
 						"Can only overwrite pseudo-variable"
-						++"with object of same type."
+						++"with object of the same type."
 					);
 					^this;
 				});
