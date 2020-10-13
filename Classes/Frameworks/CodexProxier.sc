@@ -1,13 +1,9 @@
 CodexProxier : CodexComposite {
 	var <proxySpace;
 
-	*nSections { ^nil }
-
 	*makeTemplates { | templater |
 		templater.list("cleanup");
-		this.nSections.do{
-			this.sectionTemplate(templater);
-		};
+		this.sectionTemplate(templater);
 		this.otherTemplates(templater);
 	}
 
@@ -47,5 +43,18 @@ CodexProxier : CodexComposite {
 			Error("No sections specified. Modules can't be loaded").throw;
 		});
 	}
-
 }
+
+CodexVarProxier : CodexProxier { 
+	makeSection { 
+		this.class.sectionTemplate(
+			CodexTemplater(this.moduleFolder);
+		);
+	}
+}
+
+/*CodexFixedProxier : CodexProxier { 
+	*nSections { ^nil }
+
+
+}*/
