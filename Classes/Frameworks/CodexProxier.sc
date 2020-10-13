@@ -34,24 +34,38 @@ CodexProxier : CodexComposite {
 	}
 
 	clear { proxySpace.clear }
-
-	*getModules { | set, from |
-		var nSections = this.nSections;
-		if(nSections.notNil and: { nSections!=this }, {
-			^super.getModules(set, from);
-		}, {
-			Error("No sections specified. Modules can't be loaded").throw;
-		});
-	}
 }
 
 CodexVarProxier : CodexProxier { 
+	var nSections, twoFails = false;
+
+	initComposite { 
+		proxySpace = ProxySpace.new(Server.default);
+		nSections = this.countSections;
+		if(nSections==0, { 
+			if(twoFails.not, {  
+				this.makeSection; 
+				this.reloadScripts;
+				twoFails = true;
+			}, { warn("Something went really wrong. Make sure there aren't a silly number of modules made"); });
+		
+		}); 
+	}
+	
 	makeSection { 
 		this.class.sectionTemplate(
 			CodexTemplater(this.moduleFolder);
 		);
 	}
+
+	countSections { 
+		^modules.keys.select({ | key |
+			key.asString.find("section").notNil
+		}).size;
+	}
 }
+
+CodexVarTester : CodexVarProxier {  }
 
 /*CodexFixedProxier : CodexProxier { 
 	*nSections { ^nil }

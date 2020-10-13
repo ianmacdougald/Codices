@@ -19,7 +19,7 @@ CodexSonata : CodexProxier {
 	sectionIndex_{ | newIndex |
 		this.stop;
 		sectionIndex = newIndex;
-		if(sectionIndex < this.class.nSections && sectionIndex >= 0, {
+		if(sectionIndex < this.nSections && sectionIndex >= 0, {
 			this.engageTask(
 				modules[("section"++sectionIndex).asSymbol]
 				.value(modules, proxySpace)
