@@ -186,14 +186,12 @@ CodexComposite {
 	open_scqt { | ... keys |
 		var document = \Document.asClass;
 		if(document.notNil, {
-			var current = Document.current;
 			keys.do{ | item |
 				var file = this.moduleFolder+/+item.asString++".scd";
 				if(File.exists(file), {
 					document.perform(\open, file);
 				});
 			};
-			current.front;
 		});
 	}
 
