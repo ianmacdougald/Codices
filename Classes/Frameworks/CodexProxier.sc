@@ -1,13 +1,9 @@
 CodexProxier : CodexComposite {
 	var <proxySpace;
 
-	*nSections { ^nil }
-
 	*makeTemplates { | templater |
 		templater.list("cleanup");
-		this.nSections.do{
-			this.sectionTemplate(templater);
-		};
+		this.sectionTemplate(templater);
 		this.otherTemplates(templater);
 	}
 
@@ -38,14 +34,51 @@ CodexProxier : CodexComposite {
 	}
 
 	clear { proxySpace.clear }
+}
 
-	*getModules { | set, from |
-		var nSections = this.nSections;
-		if(nSections.notNil and: { nSections!=this }, {
-			^super.getModules(set, from);
-		}, {
-			Error("No sections specified. Modules can't be loaded").throw;
-		});
+CodexVarProxier : CodexProxier { 
+	var <sections;
+
+	initComposite { 
+		proxySpace = ProxySpace.new(Server.default);
+		sections = this.collectSections;
+		this.initProxier;
+	}
+	
+	makeSection { 
+		this.class.sectionTemplate(
+			CodexTemplater(this.moduleFolder);
+		);
 	}
 
+	collectSections { 
+		^modules.keys.select({ | key |
+			modules[key].isFunction;
+		}).asArray;
+	}
+}
+
+CodexFixedProxier : CodexProxier { 
+	*nSections { ^nil }
+
+	*makeTemplates { | templater |
+		super.makeTemplates(templater);
+		if(this.nSections.notNil, { 
+			(this.nSections - 1).do { 
+				this.sectionTemplate(templater);
+			};
+		});
+	}
+}
+
+Codex2Proxier : CodexFixedProxier { 
+	*nSections { ^2 }
+}
+
+Codex4Proxier : CodexFixedProxier { 
+	*nSections { ^4 }
+}
+
+Codex8Proxier : CodexFixedProxier { 
+	*nSections { ^8 }
 }
