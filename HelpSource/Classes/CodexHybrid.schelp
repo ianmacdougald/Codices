@@ -48,6 +48,6 @@ private::reloadScripts
 copymethod:: CodexComposite -reloadScripts
 copyMethod:: CodexComposite -moduleSet
 copyMethod:: CodexComposite -moduleSets 
+copyMethod:: CodexComposite -open
 copyMethod:: CodexComposite -openModules
-copyMethod:: CodexComposite -openModulesSCqt
-copyMethod:: CodexComposite -openModulesSCVim 
+copyMethod:: CodexComposite -closeModules
