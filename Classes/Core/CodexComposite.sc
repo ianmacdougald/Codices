@@ -255,4 +255,13 @@ CodexComposite {
 		});
 		^this.superPerformList(\doesNotUnderstand, selector, args);
 	}
+
+	addModule { | moduleName, templateType(\blank) |
+		moduleName ?? { Error("No name specified").throw };
+		if(modules[moduleName].isNil, {
+			CodexTemplater(this.moduleFolder)
+			.perform(templateType, moduleName);
+			this.reloadScripts;
+		}, { warn("Module already exists.") });
+	}
 }

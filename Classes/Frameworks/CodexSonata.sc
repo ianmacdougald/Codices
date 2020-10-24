@@ -24,7 +24,8 @@ CodexSonata : CodexProxier {
 				modules[sections[sectionIndex]]
 				.value(
 					modules,
-					proxySpace
+					proxySpace,
+					cleanup_list
 				);
 			);
 		}, {

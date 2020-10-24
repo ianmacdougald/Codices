@@ -1,8 +1,7 @@
 CodexProxier : CodexComposite {
-	var <proxySpace, <sections;
+	var <proxySpace, <sections, <cleanup_list;
 
 	*makeTemplates { | templater |
-		templater.list("cleanup");
 		this.sectionTemplate(templater);
 		this.otherTemplates(templater);
 	}
@@ -14,9 +13,9 @@ CodexProxier : CodexComposite {
 	*otherTemplates { | templater | }
 
 	initComposite {
-		this.cleanup;
 		proxySpace = ProxySpace.new(Server.default);
 		sections = this.collectSections;
+		cleanup_list !? { this.cleanup } ?? { cleanup_list = List.new };
 		this.initProxier;
 	}
 
@@ -53,14 +52,27 @@ CodexProxier : CodexComposite {
 	}
 
 	cleanup {
-		if(modules.cleanup.isEmpty.not, {
-			modules.cleanup.do(_.value);
-			modules.cleanup.clear;
+		if(cleanup_list.isEmpty.not, {
+			cleanup_list.do(_.value);
+			cleanup_list.clear;
 		});
 	}
 
 	moduleSet_{ | newSet, from |
 		this.clear;
 		super.moduleSet_(newSet, from);
+	}
+
+	engage { | ... sections |
+		sections.do{ | item |
+			var module = modules[item];
+			if(module.notNil, {
+				module.value(
+					modules,
+					proxySpace,
+					cleanup_list
+				);
+			});
+		};
 	}
 }
