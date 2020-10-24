@@ -1,5 +1,5 @@
 TITLE::CodexProxier
-summary::Manipulates NodeProxies in modularized sections
+summary::Modular manipulator of data in ProxySpace
 categories::Libraries>CodexIan
 related::Classes/CodexSonata, Classes/CodexMovement
 keyword::codexian, proxier
