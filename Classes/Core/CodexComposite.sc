@@ -54,7 +54,7 @@ CodexComposite {
 			false;
 		}, {
 			this.processFolders(set);
-			true
+			true;
 		});
 	}
 
