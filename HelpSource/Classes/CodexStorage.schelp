@@ -1,5 +1,5 @@
 TITLE::CodexStorage
-summary::Configures default folder paths via persistent storage
+summary::Interface for persistent storage of data
 categories::Libraries>CodexIan
 related::Classes/CodexIncrementer
 keyword::persistent, codexian, codexian path, utilities, codexian utilities

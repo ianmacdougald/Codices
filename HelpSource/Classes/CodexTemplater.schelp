@@ -1,5 +1,5 @@
 TITLE::CodexTemplater
-summary::Create .scd files from templates of code
+summary::Generator of .scd files from templates of code
 categories::Libraries>CodexIan
 related::Classes/CodexIncrementer, Classes/CodexComposite
 keyword::template, codexian, compositing, utilities, codexian utilities

@@ -1,5 +1,5 @@
 TITLE::CodexSonata
-summary::Compose music with sequences of NodeProxy modules.
+summary::Modular sequencer of data in ProxySpace
 categories::Libraries>CodexIan>Frameworks
 related::Classes/CodexSymphony, Classes/CodexMovement, Classes/CodexComposite
 keyword::sonata, composition, codexian
