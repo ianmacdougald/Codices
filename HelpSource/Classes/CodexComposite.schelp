@@ -109,6 +109,13 @@ A symbol referring to an existing set of modules to copy if the new module name 
 method::moduleSets
 Gets the moduleSets that currently exist for the class.
 
+method::addModule
+Adds a module to link::Classes/CodexComposite#-modules#-modules:: by creating a new teletype::.scd:: file in the modules' folder and then calls link::Classes/CodexComposite#-reloadScripts#-reloadScripts::.
+argument::moduleName
+A symbol
+argument::templateType
+A symbol corresponding to one of the available templating methods of link::Classes/CodexTemplater::.
+
 method::open
 argument::... keys
 The symbols or string specifying which modules' files should be opened.
