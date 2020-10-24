@@ -65,7 +65,7 @@ code::
 	*contribute { | versions | 
 		versions.add([\example, "/Path/To/Example/Modules"]);
 
-		versions.add([\anotherExample, "/Another/Example/Modules"]);
+		versions.add([\anotherExample, "/Another/Example/Path"]);
 	}
 	
 ::
