@@ -1,5 +1,5 @@
 TITLE::Developing with CodexProxier
-summary::Describes the implementation of CodexProxier and its subclasses.
+summary::Guide to understanding the implementation of CodexProxier-type classes
 related::Classes/CodexProxier, Classes/CodexMovement, Guides/CodexIan
 categories::Libraries>CodexIan
 
