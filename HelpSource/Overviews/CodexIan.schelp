@@ -26,13 +26,15 @@ definitionlist::
 section::Framework extensions
 definitionlist::
 ##link::Classes/CodexProxier::
-||Manipulates sections link::Classes/NodeProxy##NodeProxies:: inside a link::Classes/ProxySpace::.
+||Manipulates data in a link::Classes/ProxySpace::.
 ##link::Classes/CodexSonata::
 ||Sequences proxier-like sections.
+##link::Classes/CodexMovement::
+||Sequences proxier-like sections via patterns.
 ##link::Classes/CodexSymphony::
-||Makes music by organizing proxier-like sections with patterns.
+||Sequences collections of CodexMovement.
 ##link::Classes/CodexInstrument::
-||Provides a basic foundation for creating modularized instruments.
+||Establishes a foundation for developing instruments.
 ##link::Classes/CodexPanel::
-||Provides a basic foundation for creating modularizes GUIs.
+||Establishes a foundation for creating GUIs.
 ::
