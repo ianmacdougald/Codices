@@ -1,7 +1,7 @@
 TITLE::CodexIan Overview
 summary::List of documented classes that define CodexIan framework
 categories::Libraries>CodexIan
-related::Guides/CodexIan
+related::Guides/CodexIan, Guides/CodexProxier
 keyword::hybrid, composite, composition
 
 Description:: 
