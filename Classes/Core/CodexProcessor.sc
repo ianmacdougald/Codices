@@ -22,26 +22,20 @@ CodexRoutinizer {
 	}
 
 	stop {
-		if(this.isRunning){
+		if(routine.isPlaying, { 
 			routine.stop;
-		};
+		});
 	}
 
-	load { | synthDef |
-		this.loadSynthDefCollection(
-			this.testCollection(synthDef)
-		);
+	load { | ... synthDefs |
+		synthDefs.flat.do{ | item |
+			this.addSynthDef(item);
+		};
 	}
 
 	process { | synthDef |
 		this.load(synthDef);
 		this.run;
-	}
-
-	isRunning { ^routine.isPlaying }
-
-	loadSynthDefCollection { |collection|
-		collection.do{ | item | this.addSynthDef(item) }
 	}
 
 	addSynthDef { | synthDef |
@@ -50,16 +44,14 @@ CodexRoutinizer {
 		});
 	}
 
-	testCollection { | input |
-		if(input.isCollection.not, { input = [input] });
-		^input;
+	pop { 
+		try { ^synthDefList.removeAt(0) }
+		{ ^nil };
 	}
-
-	pop { ^try({synthDefList.removeAt(0)}, {^nil}) }
 
 	popAction {
 		var def = this.pop;
-		def !? {this.action(def)};
+		def !? { this.action(def) };
 		^def;
 	}
 
@@ -75,9 +67,8 @@ CodexRoutinizer {
 
 	makeRoutine {
 		^forkIfNeeded({
-			var previousDef = this.popAction;
-			while({synthDefList.isEmpty.not}, {
-				previousDef = this.popAction;
+			while({ synthDefList.isEmpty.not }, {
+				this.popAction;
 			});
 		});
 	}
