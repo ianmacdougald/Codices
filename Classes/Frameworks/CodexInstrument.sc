@@ -35,7 +35,7 @@ CodexInstrument : CodexHybrid {
 	setIO { | ios, val, arr |
 		if(ios.notEmpty, {
 			var offset = 0;
-			arr !? { arr.do(_.free) };
+			// arr !? { arr.do(_.free) };
 			arr = [];
 			val !? {
 				if(val.isCollection.not, { val = [val] });
