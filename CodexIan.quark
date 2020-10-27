@@ -4,5 +4,5 @@ summary: "Framework for developing modular class interfaces",
 author: "ianmacdougald", 
 version: "0.3.0", 
 copyright: "ianmacdougald", 
-license: "GPLF"
+license: "GPL"
 )
