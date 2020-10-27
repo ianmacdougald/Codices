@@ -1,8 +1,8 @@
 (
-name:           "CodexIan",
-summary:        "Modular framework for music development",
-version:        "0.3.0",
-dependencies:	[],		
-author:		"ianmacdougald",
-url:		"https://github.com/ianmacdougald/CodexIan"
+name: "CodexIan", 
+summary: "Framework for developing modular class interfaces", 
+author: "ianmacdougald", 
+version: "0.3.0", 
+copyright: "ianmacdougald", 
+license: "GPLF"
 )
