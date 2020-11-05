@@ -199,8 +199,11 @@ CodexComposite {
 		| shell("sh"), neovim(false), vertically(false) ...keys |
 		var cmd = "vim", paths = "";
 		keys.do({ | item |
-			paths = paths++this.moduleFolder
-			+/+item.asString++".scd ";
+			var current = this.moduleFolder+/+item.asString++".scd";
+			if(File.exists(current))
+			{
+				paths = paths++current++" ";
+			};
 		});
 		if(neovim, { cmd = $n++cmd });
 		if(vertically, { cmd = cmd++" -o "}, { cmd = cmd++" -O " });
