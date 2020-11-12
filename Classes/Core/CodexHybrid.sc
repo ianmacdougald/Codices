@@ -29,8 +29,19 @@ CodexHybrid : CodexComposite {
 
 	*findSynthDefs { | key |
 		^this.cache[key].select({ | module |
-			module.isKindOf(SynthDef);
-		}).asArray;
+			module.isKindOf(SynthDef) or: {
+				var bool = false;
+				if(module.isCollection, {
+					block { | break |
+						module.flat.do { | submodule |
+							bool = submodule.isKindOf(SynthDef);
+							if(bool, { break.value(999) });
+						};
+					};
+				});
+				bool;
+			};
+		}).asArray.flat;
 	}
 
 	*namedSynthDefs { | key |
