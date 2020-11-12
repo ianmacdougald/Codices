@@ -2,10 +2,13 @@ CodexProxyGraph : CodexComposite {
 	var <nodes, <cleanup_list, <server;
 
 	*makeTemplates { | templater |
-		templater.codex_proxyGraph("graph");
+		templater.codexProxyGraph("graph");
 	}
 
 	initComposite {
+		cleanup_list ?? {
+			cleanup_list = List.new;
+		} !? { this.free };
 		nodes = CodexModules.new;
 		modules.keysValuesDo({ | key, value |
 			if(key!=\graph){
@@ -14,12 +17,12 @@ CodexProxyGraph : CodexComposite {
 				{
 					var node = NodeProxy.new.source_(value);
 					nodes.add(key -> node);
-					cleanup_list.add({ node.clear });
+					cleanup_list.add({ node.release });
 				}
 				{ value.isKindOf(NodeProxy) }
 				{
 					nodes.add(key -> value);
-					cleanup_list.add({ value.clear });
+					cleanup_list.add({ value.release });
 				};
 			};
 		});
@@ -32,6 +35,7 @@ CodexProxyGraph : CodexComposite {
 
 	free {
 		cleanup_list.do(_.value);
+		cleanup_list.clear;
 	}
 
 	storeNode { | key, node |
@@ -55,7 +59,7 @@ CodexProxyGraph : CodexComposite {
 		//else
 		{
 			"Could not store new module. Make sure all functions are closed".warn;
-		}
-
+		};
+		this.reloadScripts;
 	}
 }
