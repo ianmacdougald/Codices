@@ -6,7 +6,7 @@ CodexProxyGraph : CodexComposite {
 	}
 
 	initComposite {
-		nodes = ();
+		nodes = CodexModules.new;
 		modules.keysValuesDo({ | key, value |
 			if(key!=\graph){
 				case
@@ -27,7 +27,7 @@ CodexProxyGraph : CodexComposite {
 	}
 
 	makeGraph {
-		modules.graph(nodes, cleanup_list);
+		modules[\graph].value(nodes, cleanup_list);
 	}
 
 	free {
