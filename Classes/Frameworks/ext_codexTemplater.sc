@@ -34,4 +34,12 @@
 			+/+"codexPanel.scd"
 		);
 	}
+
+	codexProxyGraph { | templateName("graph") |
+		this.makeTemplate(
+			templateName, 
+			this.codexFrameworks_path
+			+/+"codexProxyGraph.scd"
+		);
+	}
 }

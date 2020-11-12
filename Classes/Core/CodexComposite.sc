@@ -64,7 +64,7 @@ CodexComposite {
 	}
 
 	*loadScripts { | at |
-		var return = ();
+		var return = CodexModules.new;
 		this.asPath(at).getScriptPaths.do({ | script |
 			return.add(this.scriptKey(script) -> script.load);
 		});
@@ -267,4 +267,8 @@ CodexComposite {
 			this.reloadScripts;
 		}, { warn("Module already exists.") });
 	}
+}
+
+CodexModules : Environment {
+	*new { ^super.new.know_(true) }
 }
