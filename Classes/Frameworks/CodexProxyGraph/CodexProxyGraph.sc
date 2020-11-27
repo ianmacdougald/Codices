@@ -12,6 +12,8 @@ CodexProxyGraph : CodexComposite {
 			cleanup_list = List.new;
 		} !? { this.free };
 
+		CmdPeriod.doOnce({ this.free });
+
 		nodes = CodexModules.new;
 
 		modules.keysValuesDo({ | key, value |
@@ -79,9 +81,6 @@ CodexProxyGraph : CodexComposite {
 				);
 			};
 			if(selector.isSetter, {
-				if(args[0].isFunction, {
-					args[0] = NodeProxy.new(server).source = args[0];
-				});
 				^nodes[selector.asGetter].source = args[0];
 			}, { ^this });
 		});

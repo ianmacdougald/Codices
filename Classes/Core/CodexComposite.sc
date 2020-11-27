@@ -230,7 +230,12 @@ CodexComposite {
 
 	*clearCache { cache.removeAt(this.name).clear }
 
-	*cache { ^cache.at(this.name) }
+	*cache {
+		if(this==CodexComposite){
+			Error("CodexComposite has no cache. Did you mean to call 'allCaches' instead?").throw;
+		};
+		^cache.at(this.name);
+	}
 
 	*allCaches { ^cache }
 
