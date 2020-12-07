@@ -1,9 +1,7 @@
 CodexStorage  {
 	classvar dictionary, <storagePath;
 
-	*parse { ^storagePath.parseYAMLFile }
-
-	*write { |item|
+	*write { | item |
 		var fd = File.open(storagePath, "w+");
 		fd.write(item.asYAMLString);
 		fd.close;
@@ -21,10 +19,10 @@ CodexStorage  {
 
 	*checkDictionary {
 		if(dictionary.isNil){
-			dictionary = this.parse;
+			dictionary = storagePath.parseYAMLFile;
 			if(dictionary.isNil,
-				{dictionary = Dictionary.new},
-				{dictionary = dictionary.withSymbolKeys}
+				{ dictionary = Dictionary.new },
+				{ dictionary = dictionary.withSymbolKeys }
 			);
 		};
 	}
