@@ -4,5 +4,7 @@ summary: "Framework for developing modular class interfaces",
 author: "ianmacdougald", 
 version: "0.3.2", 
 copyright: "ianmacdougald", 
+schelp: "Guides/CodexIan",
+dependencies: [],
 license: "GPL"
 )
