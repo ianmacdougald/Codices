@@ -3,7 +3,7 @@ HybridExample : CodexHybrid {
 
 	*contribute { | versions |
 		var toQuark = Main.packages.asDict.at(\CodexIan);
-		var toExample = toQuark+/+"Classes/Examples/example_modules";
+		var toExample = toQuark+/+"Classes/Examples/Modules";
 
 		versions.add(
 			[\example, toExample]
@@ -13,7 +13,7 @@ HybridExample : CodexHybrid {
 	initHybrid {}
 
 	*makeTemplates { | templater |
-		templater.hybridExample_function( "sequence" );
+		templater.hybridExampleFunction( "sequence" );
 		templater.synthDef( "synthDef" );
 	}
 
