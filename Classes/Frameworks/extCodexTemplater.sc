@@ -1,36 +1,36 @@
 + CodexTemplater {
-	codexFrameworks_path { 
+	codexFrameworksPath { 
 		^Main.packages.asDict.at(\CodexIan)+/+"Classes/Frameworks";
 	}
 
-	codexProxier_section { | templateName("section") |
+	codexProxierSection { | templateName("section") |
 		this.makeTemplate(
 			templateName, 
-			this.codexFrameworks_path
-			+/+"codexProxier_section.scd"
+			this.codexFrameworksPath
+			+/+"codexProxierSection.scd"
 		);
 	}
 
-	codexInstrument_synthDef { | templateName("synthDef") |
+	codexInstrumentSynthDef { | templateName("synthDef") |
 		this.makeTemplate(
 			templateName, 
-			this.codexFrameworks_path
-			+/+"codexInstrument_synthDef.scd"
+			this.codexFrameworksPath
+			+/+"codexInstrumentSynthDef.scd"
 		);
 	}
 
-	codexPanel_function { | templateName("function") |
+	codexPanelFunction { | templateName("function") |
 		this.makeTemplate(
 			templateName, 
-			this.codexFrameworks_path
-			+/+"codexPanel_function.scd"
+			this.codexFrameworksPath
+			+/+"codexPanelFunction.scd"
 		);
 	}
 
 	codexPanel { | templateName("panel") |
 		this.makeTemplate(
 			templateName, 
-			this.codexFrameworks_path
+			this.codexFrameworksPath
 			+/+"codexPanel.scd"
 		);
 	}
@@ -38,7 +38,7 @@
 	codexProxyGraph { | templateName("graph") |
 		this.makeTemplate(
 			templateName, 
-			this.codexFrameworks_path
+			this.codexFrameworksPath
 			+/+"codexProxyGraph.scd"
 		);
 	}

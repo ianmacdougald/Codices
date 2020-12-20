@@ -7,7 +7,7 @@ CodexPanel : CodexComposite {
 		+/+"Classes/Frameworks/CodexPanel";
 
 		versions.add(
-			[\ian_sonata, path+/+"ian_sonata"]
+			[\ianSonata, path+/+"ianSonata"]
 		);
 	}
 
