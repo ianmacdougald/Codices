@@ -1,7 +1,7 @@
 + CodexTemplater {
-	hybridExample_function { | templateName("sequence") |
+	hybridExampleFunction { | templateName("sequence") |
 		var path = Main.packages.asDict.at(\CodexIan)
-		+/+"Classes/Examples/hybridExample_function.scd";
+		+/+"Classes/Examples/hybridExampleFunction.scd";
 		this.makeTemplate(
 			templateName,
 			path
