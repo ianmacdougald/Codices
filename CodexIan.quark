@@ -2,7 +2,7 @@
 name: "CodexIan", 
 summary: "Framework for developing modular class interfaces", 
 author: "ianmacdougald", 
-version: "0.3.2", 
+version: "0.3.3", 
 copyright: "ianmacdougald", 
 schelp: "Guides/CodexIan",
 dependencies: [],
