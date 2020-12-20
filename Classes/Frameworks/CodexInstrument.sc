@@ -4,7 +4,7 @@ CodexInstrument : CodexHybrid {
 	var inputArray, outputArray, desc;
 
 	*makeTemplates { | templater |
-		templater.codexInstrument_synthDef;
+		templater.codexInstrumentSynthDef;
 	}
 
 	initHybrid {

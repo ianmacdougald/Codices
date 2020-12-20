@@ -7,7 +7,7 @@ CodexProxier : CodexComposite {
 	}
 
 	*sectionTemplate { | templater |
-		templater.codexProxier_section("section0");
+		templater.codexProxierSection("section0");
 	}
 
 	*otherTemplates { | templater | }
