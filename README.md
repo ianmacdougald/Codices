@@ -13,4 +13,5 @@ In SuperCollider, evaluate the following:
 ## Changelog 
 
 **January 9 2020** 
+
 Added pseudo-method lookups to CodexStorage dictionary from String instances. 
