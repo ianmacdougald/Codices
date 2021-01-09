@@ -16,13 +16,13 @@ A symbol.
 
 method::setAt
 Sets the path stored at the key symbol. 
-argument::newpath
-A string representing a new path. 
 argument::key
 A symbol.
+argument::item
+An object to be stored at the key.
 
 returns:: 
-The path that was set.
+The object that was set.
 
 method::removeAt
 Removes the path at the symbol key from storage. 
@@ -43,7 +43,7 @@ private::storagePath
 EXAMPLES::
 code::
 //Set a path using the key \test.
-CodexStorage.setAt("~/Documents/Example/Path".standardizePath, \test); 
+CodexStorage.setAt(\test, "~/Documents/Example/Path".standardizePath);
 
 //Get the path from the same key.
 CodexStorage.at(\test).postln; 
@@ -53,10 +53,10 @@ CodexStorage.at(\test).postln;
 CodexStorage.at(\test).postln; 
 
 //Change the path and reboot again to see that configurations stick.
-CodexStorage.setAt("~/Whatever/Path".standardizePath, \test);
+CodexStorage.setAt(\test, "~/Whatever/Path".standardizePath);
 
 //Add a new key.
-CodexStorage.setAt("~/New/Path".standardizePath, \test2); 
+CodexStorage.setAt(\test2, "~/New/Path".standardizePath); 
 
 //Get the keys associated with the paths stored.
 CodexStorage.keys.postln; 
@@ -71,4 +71,21 @@ CodexStorage.keys.postln;
 //Test.
 CodexStorage.at(\test); 
 CodexStorage.at(\test2);
+::
+
+CodexStorage can also be made to work with strings, prepending its items to quickly return common addresses in the style of link::Classes/String#-standardizePath#:: using pseudo-method lookups similar to link::Classes/IdentityDictionary#-know#IdentityDictionary::.
+code::
+//Enable the use of CodexStorage data with strings.
+//This configuration will persist across interpreter sessions.
+String.useCodexStorage(true);
+
+//Store a path using an empty string and a unique pseudo-method name. 
+"".foobar = "~/Desktop".standardizePath; 
+
+//Use this pseudo-method to quickly prepend its path with other strings. 
+"hello_world.wav".foobar.postln; 
+
+//Stop this behavior by changing the flag set through the String class.
+String.useCodexStorage(false);
+"hello_world.wav".foobar;
 ::
