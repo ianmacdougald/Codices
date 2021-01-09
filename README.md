@@ -9,3 +9,8 @@ For more on how to work with CodexIan, consult the HelpSource guide.
 In SuperCollider, evaluate the following: 
 
 `Quarks.install("https://github.com/ianmacdougald/CodexIan");`
+
+## Changelog 
+
+**January 9 2020** 
+Added pseudo-method lookups to CodexStorage dictionary from String instances. 
