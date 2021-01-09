@@ -27,9 +27,9 @@ CodexStorage  {
 		};
 	}
 
-	*setAt { | newpath, key |
-		if((dictionary[key]==newpath).not, {
-			dictionary.add(key->(newpath+/+""));
+	*setAt { | key, item |
+		if((dictionary[key]==item).not, {
+			dictionary.add(key->item.asString);
 			this.write(dictionary);
 		});
 		^dictionary[key];
@@ -43,4 +43,25 @@ CodexStorage  {
 	}
 
 	*keys { ^dictionary.keys }
+}
+
++ String {
+
+	*useCodexStorage { | bool(true) |
+		CodexStorage.setAt(\useWithStrings, bool);
+	}
+
+	doesNotUnderstand { | selector ... args |
+		var bool = CodexStorage.at(\useWithStrings);
+		if(bool.notNil and: { bool.interpret }){
+			var path = CodexStorage.at(selector);
+			path !? { ^(path+/+this) };
+			if(selector.isSetter){
+				selector = selector.asGetter;
+				CodexStorage.setAt(selector, args[0]);
+				^(args[0]+/+this);
+			};
+		};
+		^this.superPerformList(\doesNotUnderstand, selector, args);
+	}
 }

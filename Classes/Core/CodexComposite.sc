@@ -8,9 +8,9 @@ CodexComposite {
 		Class.initClassTree(List);
 		directory = CodexStorage.at(id) ?? {
 			CodexStorage.setAt(
+				id,
 				Main.packages.asDict.at(\CodexIan)
-				+/+"scmodules",
-				id
+				+/+"scmodules"
 			);
 		};
 		cache = CodexCache.new;
@@ -163,8 +163,8 @@ CodexComposite {
 
 	moduleSets { ^this.class.moduleSets }
 
-	*directory_{ | newPath |
-		directory = CodexStorage.setAt(newPath, id);
+	*directory_{ | newPath("~/".standardizePath) |
+		directory = CodexStorage.setAt(id, newPath);
 	}
 
 	open { | ... keys |
