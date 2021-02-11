@@ -47,8 +47,12 @@ CodexStorage  {
 
 + String {
 
-	*useCodexStorage { | bool(true) |
+	*codexStorageEnabled_{ | bool(true) |
 		CodexStorage.setAt(\useWithStrings, bool);
+	}
+
+	*codexStorageEnabled {
+		^CodexStorage.at(\useWithStrings);
 	}
 
 	fromCodexStorage { | key |
