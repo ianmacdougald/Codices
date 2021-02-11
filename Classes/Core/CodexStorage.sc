@@ -48,11 +48,11 @@ CodexStorage  {
 + String {
 
 	*codexStorageEnabled_{ | bool(true) |
-		CodexStorage.setAt(\useWithStrings, bool);
+		CodexStorage.setAt('__ENABLE_STRING_PSEUDOS__', bool);
 	}
 
 	*codexStorageEnabled {
-		^CodexStorage.at(\useWithStrings);
+		^CodexStorage.at('__ENABLE_STRING_PSEUDOS__');
 	}
 
 	fromCodexStorage { | key |
