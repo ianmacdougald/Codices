@@ -73,7 +73,7 @@ CodexStorage  {
 	}
 
 	doesNotUnderstand { | selector ... args |
-		var bool = CodexStorage.at(\useWithStrings);
+		var bool = CodexStorage.at('__ENABLE_STRING_PSEUDOS__');
 		if(bool.notNil and: { bool.interpret }){
 			if(selector.isSetter){
 				selector = selector.asGetter;
