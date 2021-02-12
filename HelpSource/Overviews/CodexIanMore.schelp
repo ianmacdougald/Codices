@@ -8,6 +8,7 @@ Description::
 CodexIanMore adds more classes and frameworks for playing with the procedures established by link::Guides/CodexIan::.
 
 section::Classes
+definitionlist::
 ##link::Classes/CodexProxier::
 ||Manipulates data in a link::Classes/ProxySpace::.
 ##link::Classes/CodexSonata::
