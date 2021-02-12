@@ -1,0 +1,1 @@
+CodexPanel(\blank_window);
