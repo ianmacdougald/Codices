@@ -19,4 +19,4 @@ Quarks.install("https://github.com/ianmacdougald/CodexIanMore");
 
 **0.2.1** 
 
-Transferred CodexGuiKit to this repository.
+* Transferred CodexGuiKit to this repository.
