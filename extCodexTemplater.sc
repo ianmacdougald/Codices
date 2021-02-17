@@ -8,7 +8,7 @@
 		this.makeTemplate(
 			templateName,
 			this.morePath
-			+/+"codexProxierSection.scd"
+			+/+"proxierSection.scd"
 		);
 	}
 
@@ -16,7 +16,7 @@
 		this.makeTemplate(
 			templateName,
 			this.morePath
-			+/+"codexInstrumentSynthDef.scd"
+			+/+"instrumentSynthDef.scd"
 		);
 	}
 
@@ -24,7 +24,7 @@
 		this.makeTemplate(
 			templateName,
 			this.morePath
-			+/+"codexPanelFunction.scd"
+			+/+"panelFunction.scd"
 		);
 	}
 
@@ -32,7 +32,7 @@
 		this.makeTemplate(
 			templateName,
 			this.morePath
-			+/+"codexPanel.scd"
+			+/+"panel.scd"
 		);
 	}
 
@@ -40,7 +40,7 @@
 		this.makeTemplate(
 			templateName,
 			this.morePath
-			+/+"codexProxyGraph.scd"
+			+/+"proxyGraph.scd"
 		);
 	}
 
@@ -50,30 +50,30 @@
 	}
 
 	knob { | templateName("knob") |
-		this.makeTemplate(templateName, this.guiPath+/+"codexGuiKnob.scd");
+		this.makeTemplate(templateName, this.guiPath+/+"knob.scd");
 	}
 
 	labeledKnob { | templateName("labeledKnob") |
-		this.makeTemplate(templateName, this.guiPath+/+"codexGuiLabeledKnob.scd");
+		this.makeTemplate(templateName, this.guiPath+/+"labeledKnob.scd");
 	}
 
 	staticText { | templateName("staticText") |
-		this.makeTemplate(templateName, this.guiPath+/+"codexGuiStaticText.scd");
+		this.makeTemplate(templateName, this.guiPath+/+"staticText.scd");
 	}
 
 	numberBox { | templateName("numberBox") |
-		this.makeTemplate(templateName, this.guiPath+/+"codexGuiNumberBox.scd");
+		this.makeTemplate(templateName, this.guiPath+/+"numberBox.scd");
 	}
 
 	slider { | templateName("slider") |
-		this.makeTemplate(templateName, this.guiPath+/+"codexGuiSlider.scd");
+		this.makeTemplate(templateName, this.guiPath+/+"slider.scd");
 	}
 
 	labeledSlider { | templateName("labeledSlider") |
-		this.makeTemplate(templateName, this.guiPath+/+"codexGuiLabeledSlider.scd");
+		this.makeTemplate(templateName, this.guiPath+/+"labeledSlider.scd");
 	}
 
 	button { | templateName("button") |
-		this.makeTemplate(templateName, this.guiPath+/+"codexGuiButton.scd");
+		this.makeTemplate(templateName, this.guiPath+/+"button.scd");
 	}
 }
