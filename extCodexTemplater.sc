@@ -36,11 +36,11 @@
 		);
 	}
 
-	proxyGraph { | templateName("graph") |
+	nodeGraph { | templateName("graph") |
 		this.makeTemplate(
 			templateName,
 			this.morePath
-			+/+"proxyGraph.scd"
+			+/+"nodeGraph.scd"
 		);
 	}
 

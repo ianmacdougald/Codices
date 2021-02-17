@@ -9,6 +9,8 @@ CodexIanMore adds more classes and frameworks for playing with the procedures es
 
 section::Classes
 definitionlist::
+##link::Classes/CodexNodeGraph:: 
+||Configures link::Classes/NodeProxy##NodeProxies:: in a link::Classes/ProxySpace::.
 ##link::Classes/CodexProxier::
 ||Manipulates data in a link::Classes/ProxySpace::.
 ##link::Classes/CodexSonata::

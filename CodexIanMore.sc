@@ -113,11 +113,11 @@ CodexInstrument : CodexHybrid {
 	}
 }
 
-CodexProxyGraph : CodexComposite {
+CodexNodeGraph : CodexComposite {
 	var <nodes, <cleanup_list, <server;
 
 	*makeTemplates { | templater |
-		templater.proxyGraph("graph");
+		templater.nodeGraph("graph");
 	}
 
 	initComposite {
