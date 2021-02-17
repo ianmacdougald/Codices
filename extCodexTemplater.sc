@@ -44,36 +44,31 @@
 		);
 	}
 
-	guiPath {
-		^(thisMethod.filenameString.dirname
-			+/+"Templates"+/+"CodexGuiKit");
-	}
-
 	knob { | templateName("knob") |
-		this.makeTemplate(templateName, this.guiPath+/+"knob.scd");
+		this.makeTemplate(templateName, this.morePath+/+"knob.scd");
 	}
 
 	labeledKnob { | templateName("labeledKnob") |
-		this.makeTemplate(templateName, this.guiPath+/+"labeledKnob.scd");
+		this.makeTemplate(templateName, this.morePath+/+"labeledKnob.scd");
 	}
 
 	staticText { | templateName("staticText") |
-		this.makeTemplate(templateName, this.guiPath+/+"staticText.scd");
+		this.makeTemplate(templateName, this.morePath+/+"staticText.scd");
 	}
 
 	numberBox { | templateName("numberBox") |
-		this.makeTemplate(templateName, this.guiPath+/+"numberBox.scd");
+		this.makeTemplate(templateName, this.morePath+/+"numberBox.scd");
 	}
 
 	slider { | templateName("slider") |
-		this.makeTemplate(templateName, this.guiPath+/+"slider.scd");
+		this.makeTemplate(templateName, this.morePath+/+"slider.scd");
 	}
 
 	labeledSlider { | templateName("labeledSlider") |
-		this.makeTemplate(templateName, this.guiPath+/+"labeledSlider.scd");
+		this.makeTemplate(templateName, this.morePath+/+"labeledSlider.scd");
 	}
 
 	button { | templateName("button") |
-		this.makeTemplate(templateName, this.guiPath+/+"button.scd");
+		this.makeTemplate(templateName, this.morePath+/+"button.scd");
 	}
 }
