@@ -22,3 +22,6 @@ Quarks.install("https://github.com/ianmacdougald/CodexIanMore");
 
 **0.3.0**
 * Removed "codex" prefixes from template files and method extensions.
+
+**0.4.0**
+* Changed CodexProxyGraph to CodexNodeGraph.
