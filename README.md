@@ -1,6 +1,6 @@
 # CodexIanMore
 
-CodexIanMore adds more classes and frameworks for playing with the procedures established by [CodexIan](https://github.com/ianmacdougald/CodexIan), most of which are only half-baked and are also undocumented.
+CodexIanMore adds more classes and frameworks for playing with the procedures established by [CodexIan](https://github.com/ianmacdougald/CodexIan). For the time being, these additions are largely half-baked and undocumented.
 
 ## Installation
 
