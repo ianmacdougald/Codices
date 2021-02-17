@@ -1,0 +1,1 @@
+{ | modules, parent, bounds | Slider(parent, bounds) };

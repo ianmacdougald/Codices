@@ -16,3 +16,6 @@ Quarks.install("https://github.com/ianmacdougald/CodexIanMore");
 **0.2.0**
 * Restructured directories and associated references. 
 * Added CodexEnvir, which I might just integrate with CodexComposite in the future.
+
+**0.2.1** 
+Transferred CodexGuiKit to this repository.

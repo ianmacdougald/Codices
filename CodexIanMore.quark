@@ -2,7 +2,7 @@
 name: "CodexIanMore", 
 summary: "More classes and tools built on the CodexIan framework",
 author: "ianmacdougald", 
-version: "0.2.0", 
+version: "0.2.1", 
 copyright: "ianmacdougald", 
 schelp: "Overviews/CodexIanMore",
 dependencies: [],

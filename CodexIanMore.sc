@@ -616,3 +616,15 @@ CodexEnvir : CodexComposite {
 		};
 	}
 }
+
+CodexGuiKit : CodexComposite { 
+	*makeTemplates { | templater |
+		templater.knob; 
+		templater.labeledKnob; 
+		templater.staticText;
+		templater.numberBox; 
+		templater.slider; 
+		templater.labeledSlider; 
+		templater.button;
+	}
+}

@@ -1,0 +1,61 @@
+TITLE::CodexGuiKit
+summary::A kit for making guis with modules
+categories::Libraries>CodexIan 
+related::Classes/CodexComposite
+
+DESCRIPTION::
+CodexGuiKit is a modularized kit designed for the development of complex gui interfaces. It defines a set of default modules, all of which take as arguments a parent and bounds like any other link::Classes/View#*new#view::. Yet, like any other class defined within the link::Guides/CodexIan##CodexIan framework::, these modules can be edited and cloned to create many variations of the same kit. 
+
+Currently, the modules available to the kit are as follows: 
+list::
+## link::Classes/Button##button::
+## link::Classes/Knob##knob::
+## link::Classes/Slider##slider::
+## link::Classes/StaticText##staticText::
+## link::Classes/NumberBox##numberBox::
+## labeledKnob
+## labeledSlider
+::
+
+These last two modules—labeledKnob and labeledSlider—return link::Classes/Event##events:: rather than views. The field teletype::\view:: within the event references a link::Classes/CompositeView:: that organizes object, staticText, and numberBox modules within a link::Classes/VLayout::. The teletype::\action:: field references a function that is evaluated by the link::Classes/View#-action#action:: of the associated object, which has been configured by default to also update the NumberBox according to the link::Classes/ControlSpec:: within the event.
+
+CLASSMETHODS::
+private::makeTemplates
+
+EXAMPLES::
+
+code::
+k = CodexGuiKit.new; 
+
+(
+//Assign modules to a window
+w = Window.new.front.alwaysOnTop_(true).background_(Color.white); 
+w.layout = VLayout();
+w.layout.add(k.modules.button); 
+w.layout.add(k.modules.slider);
+w.layout.add(k.modules.staticText.string_("Some text"));
+w.layout.add(k.modules.numberBox.value_(exprand(2, 256)));
+)
+
+(
+//Use labeled modules with a window.
+var lknob = k.modules.labeledKnob; 
+var lslider = k.modules.labeledSlider;
+
+lknob.spec.minval_(3).maxval_(3.pow(10)).warp_(\exp);
+lknob.action = { 
+	var value = lknob.spec.map(lknob.object.value); 
+	format("Knob value : %", value).postln; 
+}; 
+lknob.label.string = "This is my knob"; 
+
+lslider.spec.minval_(2).maxval_(2.pow(10)).warp_(\exp);
+lslider.action = { | event | lknob.object.valueAction_(event.object.value) }; 
+lslider.label.string = "Slider controls knob";
+
+x = Window.new.front.alwaysOnTop_(true).background_(Color.white);
+x.layout = HLayout(); 
+x.layout.add(lknob.view);
+x.layout.add(lslider.view);
+)
+::

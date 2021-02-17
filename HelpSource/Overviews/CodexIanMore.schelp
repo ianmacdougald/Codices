@@ -21,4 +21,8 @@ definitionlist::
 ||Establishes a foundation for developing instruments.
 ##link::Classes/CodexPanel::
 ||Establishes a foundation for creating GUIs.
+##link::Classes/CodexEnvir::
+||Loads modules within an link::Classes/Environment::. 
+##link::Classes/CodexGuiKit::
+||Instantiates GUI-making functions as modules.
 ::
