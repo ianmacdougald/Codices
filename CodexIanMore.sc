@@ -4,7 +4,7 @@ CodexInstrument : CodexHybrid {
 	var inputArray, outputArray, desc;
 
 	*makeTemplates { | templater |
-		templater.codexInstrumentSynthDef;
+		templater.instrumentSynthDef;
 	}
 
 	initHybrid {
@@ -117,7 +117,7 @@ CodexProxyGraph : CodexComposite {
 	var <nodes, <cleanup_list, <server;
 
 	*makeTemplates { | templater |
-		templater.codexProxyGraph("graph");
+		templater.proxyGraph("graph");
 	}
 
 	initComposite {
@@ -225,7 +225,7 @@ CodexProxier : CodexComposite {
 	}
 
 	*sectionTemplate { | templater |
-		templater.codexProxierSection("section0");
+		templater.proxierSection("section0");
 	}
 
 	*otherTemplates { | templater | }
@@ -391,7 +391,7 @@ CodexSonata : CodexProxier {
 
 CodexSonataViewer : CodexSonata {
 	*otherTemplates { | templater |
-		templater.codexPanel("panel");
+		templater.panel("panel");
 	}
 
 	initProxier {
@@ -560,7 +560,7 @@ CodexPanel : CodexComposite {
 	}
 
 	*makeTemplates { | templater |
-		templater.codexPanel_function("function");
+		templater.panelFunction("function");
 	}
 
 	connectTo { | newObject |

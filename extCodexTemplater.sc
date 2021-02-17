@@ -1,45 +1,45 @@
 + CodexTemplater {
-	codexMorePath {
+	morePath {
 		^(Main.packages.asDict
 			.at(\CodexIanMore)+/+"Templates");
 	}
 
-	codexProxierSection { | templateName("section") |
+	proxierSection { | templateName("section") |
 		this.makeTemplate(
 			templateName,
-			this.codexMorePath
+			this.morePath
 			+/+"codexProxierSection.scd"
 		);
 	}
 
-	codexInstrumentSynthDef { | templateName("synthDef") |
+	instrumentSynthDef { | templateName("synthDef") |
 		this.makeTemplate(
 			templateName,
-			this.codexMorePath
+			this.morePath
 			+/+"codexInstrumentSynthDef.scd"
 		);
 	}
 
-	codexPanelFunction { | templateName("function") |
+	panelFunction { | templateName("function") |
 		this.makeTemplate(
 			templateName,
-			this.codexMorePath
+			this.morePath
 			+/+"codexPanelFunction.scd"
 		);
 	}
 
-	codexPanel { | templateName("panel") |
+	panel { | templateName("panel") |
 		this.makeTemplate(
 			templateName,
-			this.codexMorePath
+			this.morePath
 			+/+"codexPanel.scd"
 		);
 	}
 
-	codexProxyGraph { | templateName("graph") |
+	proxyGraph { | templateName("graph") |
 		this.makeTemplate(
 			templateName,
-			this.codexMorePath
+			this.morePath
 			+/+"codexProxyGraph.scd"
 		);
 	}
