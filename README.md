@@ -18,5 +18,7 @@ Quarks.install("https://github.com/ianmacdougald/CodexIanMore");
 * Added CodexEnvir, which I might just integrate with CodexComposite in the future.
 
 **0.2.1** 
-
 * Transferred CodexGuiKit to this repository.
+
+**0.3.0**
+* Removed "codex" prefixes from template files and method extensions.
