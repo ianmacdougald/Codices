@@ -552,7 +552,7 @@ CodexPanel : CodexComposite {
 	var <>inputs = 2, <>outputs = 2;
 
 	*contribute { | versions |
-		var path = Main.packages.asDict.at(\CodexIanMore)
+		var path = Main.packages.asDict.at(\CodicesMore)
 		+/+"Contributions"+/+"CodexPanel";
 
 		versions.add(

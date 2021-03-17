@@ -1,7 +1,7 @@
 + CodexTemplater {
 	morePath {
 		^(Main.packages.asDict
-			.at(\CodexIanMore)+/+"Templates");
+			.at(\CodicesMore)+/+"Templates");
 	}
 
 	proxierSection { | templateName("section") |
