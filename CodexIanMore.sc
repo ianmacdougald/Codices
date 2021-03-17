@@ -1,7 +1,8 @@
 CodexInstrument : CodexHybrid {
-	var <input, <output;
+	var <input, <output, desc;
 	var <>group, <synth, <window;
-	var inputArray, outputArray, desc;
+	var inputArray, outputArray;
+	// var inputArray, <outputArray, desc;
 
 	*makeTemplates { | templater |
 		templater.instrumentSynthDef;
@@ -19,7 +20,7 @@ CodexInstrument : CodexHybrid {
 		synth = Synth(
 			modules.synthDef.name,
 			this.getArguments(modules.synthDef.specs)
-			++inputArray++outputArray,
+			++[]++[\out, output],
 			group ?? { server.defaultGroup }
 		).register;
 		^synth;
@@ -32,7 +33,7 @@ CodexInstrument : CodexHybrid {
 		}
 	}
 
-	setIO { | ios, val, arr |
+	/*setIO { | ios, val, arr |
 		if(ios.notEmpty, {
 			var offset = 0;
 			// arr !? { arr.do(_.free) };
@@ -56,7 +57,7 @@ CodexInstrument : CodexHybrid {
 			^arr
 		});
 		^[];
-	}
+	}*/
 
 	setOutputs {
 		this.checkDesc;
@@ -617,14 +618,14 @@ CodexEnvir : CodexComposite {
 	}
 }
 
-CodexGuiKit : CodexComposite { 
+CodexGuiKit : CodexComposite {
 	*makeTemplates { | templater |
-		templater.knob; 
-		templater.labeledKnob; 
+		templater.knob;
+		templater.labeledKnob;
 		templater.staticText;
-		templater.numberBox; 
-		templater.slider; 
-		templater.labeledSlider; 
+		templater.numberBox;
+		templater.slider;
+		templater.labeledSlider;
 		templater.button;
 	}
 }
