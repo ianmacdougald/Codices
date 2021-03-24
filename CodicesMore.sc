@@ -366,6 +366,14 @@ CodexProxier : CodexComposite {
 		super.reloadScripts;
 	}
 
+	use { | function |
+		modules.proxySpace.use(function);
+	}
+
+	make { | function |
+		modules.proxySpace.make(function);
+	}
+
 }
 
 CodexProxierModules : CodexModules {
