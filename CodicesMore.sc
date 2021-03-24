@@ -34,29 +34,29 @@ CodexInstrument : CodexHybrid {
 	}
 
 	/*setIO { | ios, val, arr |
-		if(ios.notEmpty, {
-			var offset = 0;
-			// arr !? { arr.do(_.free) };
-			arr = [];
-			val !? {
-				if(val.isCollection.not, { val = [val] });
-				val.do{ | item |
-					arr = arr.add(ios[0].startingChannel.asSymbol);
-					if(item.isKindOf(Bus).not, {
-						arr = arr.add(Bus.new(\audio, item, ios[0].numberOfChannels, server));
-					}, { arr = arr.add(item) });
-				};
-				offset = val.size;
-			};
-			if(ios.size > offset, {
-				ios[offset..(ios.size - 1)].do { | io, index |
-					arr = arr.add(io.startingChannel.asSymbol);
-					arr = arr.add(Bus.audio(server, io.numberOfChannels));
-				};
-			});
-			^arr
-		});
-		^[];
+	if(ios.notEmpty, {
+	var offset = 0;
+	// arr !? { arr.do(_.free) };
+	arr = [];
+	val !? {
+	if(val.isCollection.not, { val = [val] });
+	val.do{ | item |
+	arr = arr.add(ios[0].startingChannel.asSymbol);
+	if(item.isKindOf(Bus).not, {
+	arr = arr.add(Bus.new(\audio, item, ios[0].numberOfChannels, server));
+	}, { arr = arr.add(item) });
+	};
+	offset = val.size;
+	};
+	if(ios.size > offset, {
+	ios[offset..(ios.size - 1)].do { | io, index |
+	arr = arr.add(io.startingChannel.asSymbol);
+	arr = arr.add(Bus.audio(server, io.numberOfChannels));
+	};
+	});
+	^arr
+	});
+	^[];
 	}*/
 
 	setOutputs {
@@ -217,7 +217,7 @@ CodexNodeGraph : CodexComposite {
 	}
 }
 
-CodexProxier : CodexComposite {
+CodexProxierOld : CodexComposite {
 	var <proxySpace, <sections, <cleanup_list;
 
 	*makeTemplates { | templater |
@@ -296,7 +296,116 @@ CodexProxier : CodexComposite {
 	}
 }
 
-CodexSonata : CodexProxier {
+CodexProxier : CodexComposite {
+	var order, index, <>wrap = false;
+
+	*makeTemplates { | templater |
+		templater.blank("section0");
+	}
+
+	*addModules { | key |
+		this.cache.add(key -> CodexProxierModules(this.asPath(key)));
+	}
+
+	addSection {
+		this.class.makeTemplates(CodexTemplater(this.moduleFolder));
+		this.modules.compileFolder(this.moduleFolder);
+		order = this.arrange;
+	}
+
+	toSection { | newIndex(0) |
+		index = newIndex.clip(0, order.size - 1) - 1;
+		this.next;
+	}
+
+	*sectionTemplate { | templater |
+		templater.blank("section0");
+	}
+
+	*otherTemplates { | templater | }
+
+	initComposite {
+		order = this.arrange;
+		index = -1;
+	}
+
+	next {
+		index = index + 1;
+		if(wrap){ index = index % order.size };
+		if(index < order.size){
+			modules[order[index]].value;
+		};
+	}
+
+	previous {
+		if(index > 0){
+			index = index - 1;
+			modules[order[index]].value;
+		} { this.clear };
+	}
+
+	fadeTime { ^modules.proxySpace.fadeTime }
+	fadeTime_{ | dt | modules.proxySpace.fadeTime_(dt) }
+
+	arrange {
+		var keys = modules.keys.asArray;
+		keys.remove(\proxySpace);
+
+		^keys.collect(_.asString)
+		.sort({ | a, b | a.endNumber < b.endNumber })
+		.collect(_.asSymbol)
+	}
+
+	clear {
+		modules.proxySpace.clear;
+		index = -1;
+	}
+
+	reloadScripts {
+		this.clear;
+		super.reloadScripts;
+	}
+
+}
+
+CodexProxierModules : CodexModules {
+	*new { | folder |
+		var obj = super.new.know_(true).make({
+			~proxySpace = ProxySpace.new(Server.default);
+		});
+		folder !? { obj.compileFolder(folder) };
+		^obj;
+	}
+
+	addToEnvir { | key, func |
+		this.add(key -> CodexProxierSection(key, func));
+	}
+
+	loadAll {
+		this.shouldNotImplement(thisMethod);
+	}
+
+	printItemsOn { arg stream, itemsPerLine = 5;
+		var itemsPerLinem1 = itemsPerLine - 1;
+		var last = this.size - 1;
+		this.associationsDo({ arg item, i;
+			if(item.value.isKindOf(ProxySpace)){
+				stream << "(" << item.key << " -> " << "ProxySpace ()" << ")"
+			} { item.printOn(stream) };
+			if (i < last, { stream.comma.space;
+				if (i % itemsPerLine == itemsPerLinem1, { stream.nl.space.space });
+			});
+		});
+	}
+}
+
+CodexProxierSection : CodexTmpModule {
+	value { | ... args |
+		envir[\proxySpace].use({ func.value(*args) });
+	}
+}
+
+CodexSonata : CodexProxierOld {
 	var <sectionIndex = -1;
 	var <task, <timeRemaining;
 	var <onLoop, <onLoopEnd;
@@ -419,7 +528,7 @@ CodexSonataViewer : CodexSonata {
 	}
 }
 
-CodexMovement : CodexProxier {
+CodexMovement : CodexProxierOld {
 	*symphony { ^nil }
 
 	*classFolder {
