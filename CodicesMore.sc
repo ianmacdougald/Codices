@@ -374,6 +374,10 @@ CodexProxier : CodexComposite {
 		modules.proxySpace.make(function);
 	}
 
+	push { modules.proxySpace.push }
+
+	pop { modules.proxySpace.pop }
+
 }
 
 CodexProxierModules : CodexModules {
