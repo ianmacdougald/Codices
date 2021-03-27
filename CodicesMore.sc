@@ -752,9 +752,12 @@ CodexGuiKit : CodexComposite {
 }
 
 CodexSingelton : CodexComposite {
-	classvar object;
+	classvar <>object;
 	*new { | moduleSet, from |
 		object = super.new(moduleSet, from);
+		if(this!=CodexSingelton){
+			this.object = this.superclass.object;
+		};
 	}
 
 	initComposite {
@@ -768,6 +771,8 @@ CodexSingelton : CodexComposite {
 	*reloadScripts { object.reloadScripts }
 
 	*reloadModules { object.reloadModules }
+
+	*modules { ^object.modules }
 
 	*moduleSet_{ | newSet, from |
 		object.moduleSet_(newSet, from);
