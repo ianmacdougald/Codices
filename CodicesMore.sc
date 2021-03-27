@@ -750,3 +750,48 @@ CodexGuiKit : CodexComposite {
 		templater.button;
 	}
 }
+
+CodexSingelton : CodexComposite {
+	classvar object;
+	*new { | moduleSet, from |
+		object = super.new(moduleSet, from);
+	}
+
+	initComposite {
+		this.class.initSingelton;
+	}
+
+	*initSingelton {}
+
+	*moduleFolder { ^object.moduleFolder }
+
+	*reloadScripts { object.reloadScripts }
+
+	*reloadModules { object.reloadModules }
+
+	*moduleSet_{ | newSet, from |
+		object.moduleSet_(newSet, from);
+	}
+
+	*moduleSet { ^object.moduleSet }
+
+	*open { | ... keys |
+		object.open(*keys);
+	}
+
+	*open_scqt { | ... keys |
+		object.open_scqt(*keys);
+	}
+
+	*open_scvim { | shell("sh"), neovim(false), vertically(false) ... keys |
+		object.open_scvim(shell, neovim, vertically, *keys);
+	}
+
+	*openModules {
+		object.open(keys: object.modules.keys.asArray.sort);
+	}
+
+	*doesNotUnderstand { | selector ... args |
+		^object.doesNotUnderstand(selector, *args)
+	}
+}
