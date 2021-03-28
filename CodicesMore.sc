@@ -1,118 +1,123 @@
-//TippyTaps depends on this, but it needs updating
-//Should be a simple interface for inspecting SynthDefs
-//And making associated nodes
+//Makes a synth with modular arguments
 CodexInstrument : CodexHybrid {
-	var <input, <output, desc;
-	var <>group, <synth, <window;
-	var inputArray, outputArray;
-	// var inputArray, <outputArray, desc;
+	var <synth;
 
 	*makeTemplates { | templater |
-		templater.instrumentSynthDef;
+		templater.synthDef;
 	}
 
 	initHybrid {
+		var coll = modules.synthDef.allControlNames;
+		var names = coll.collect(_.name);
+		coll.do { | item, index |
+			modules.add(names[index] -> item.defaultValue);
+		};
 		this.initInstrument;
 	}
 
 	initInstrument { }
 
-	getArguments { | specs | }
-
-	makeSynth {
-		synth = Synth(
-			modules.synthDef.name,
-			this.getArguments(modules.synthDef.specs)
-			++[]++[\out, output],
-			group ?? { server.defaultGroup }
-		).register;
-		^synth;
+	setFromSpec { | ... args |
+		var specs = modules.synthDef.specs;
+		var dict = args.asDict;
+		dict.keys.copy.do { | key |
+			var currentval = dict[key];
+			specs[key] !? {
+				dict[key] = currentval = specs[key].map(currentval.clip(0.0, 1.0));
+				modules[key] = dict[key];
+			} ?? { dict.removeAt(key) };
+		};
+		if(synth.isPlaying){
+			synth.set(*dict.asPairs);
+		};
 	}
 
-	freeSynth {
-		if(synth.isPlaying)
-		{
+	set { | ... args |
+		var dict = args.asDict;
+		dict.keys.copy.do { | key |
+			var currentval = dict[key];
+			modules[key] !? {
+				modules[key] = currentval;
+			} ?? { dict.removeAt(key) };
+		};
+		if(synth.isPlaying){
+			synth.set(*dict.asPairs);
+		};
+	}
+
+	makeSynth { | target, addAction(\addToHead) |
+		var arguments = modules.copy;
+		arguments.removeAt(\synthDef);
+		arguments = arguments.asPairs;
+		if(synth.isPlaying.not){
+			synth = Synth(
+				modules.synthDef.name,
+				arguments.asPairs,
+				target,
+				addAction
+			);
+			synth.register;
+		};
+	}
+
+	free {
+		if(synth.isPlaying){
 			synth.free;
 		}
 	}
 
-	/*setIO { | ios, val, arr |
-	if(ios.notEmpty, {
-	var offset = 0;
-	// arr !? { arr.do(_.free) };
-	arr = [];
-	val !? {
-	if(val.isCollection.not, { val = [val] });
-	val.do{ | item |
-	arr = arr.add(ios[0].startingChannel.asSymbol);
-	if(item.isKindOf(Bus).not, {
-	arr = arr.add(Bus.new(\audio, item, ios[0].numberOfChannels, server));
-	}, { arr = arr.add(item) });
-	};
-	offset = val.size;
-	};
-	if(ios.size > offset, {
-	ios[offset..(ios.size - 1)].do { | io, index |
-	arr = arr.add(io.startingChannel.asSymbol);
-	arr = arr.add(Bus.audio(server, io.numberOfChannels));
-	};
-	});
-	^arr
-	});
-	^[];
-	}*/
-
-	setOutputs {
-		this.checkDesc;
-		outputArray = this.setIO(
-			desc.outputs,
-			output,
-			outputArray ? []
-		);
-	}
-
-	output_{ | newBus |
-		output = newBus;
-		this.setOutputs;
-	}
-
-	setInputs {
-		this.checkDesc;
-		inputArray = this.setIO(
-			desc.inputs,
-			input,
-			inputArray ? []
-		);
-	}
-
-	input_{ | newBus |
-		input = newBus;
-		this.setInputs;
-	}
-
-	checkDesc {
-		desc ?? {
-			desc = this.class.cache.at(moduleSet).synthDef.desc;
+	release { | time(1.0) |
+		if(synth.isPlaying){
+			synth.release(time);
 		}
 	}
 
-	window_{ | newWindow |
-		if((window.isNil || try{ window.isClosed }) && newWindow.isKindOf(Window))
-		{
-			window = newWindow;
-		}
+	moduleSet_{ | newSet, from |
+		this.free;
+		super.moduleSet_(newSet, from);
 	}
 
-	close {
-		if(window.notNil and: { window.isClosed.not })
-		{
-			window.close;
-		}
+	specs { ^modules.synthDef.specs }
+
+	printOn { | stream |
+		if (stream.atLimit) { ^this };
+		stream << this.class.name << "[ " << Char.nl ;
+		this.printItemsOn(stream);
+		stream << " ]" << Char.nl;
 	}
 
-	moduleSet_{ | to, from |
-		this.close;
-		super.moduleSet_(to, from);
+	printItemsOn { | stream |
+		var addComma = false;
+		var synthArgs = modules.copy.asDict;
+		synthArgs.removeAt(\synthDef);
+		synthArgs = synthArgs.asPairs;
+		forBy(0, synthArgs.size - 1, 2, { | i |
+			if(stream.atLimit){ ^this };
+			i = i + 1;
+			stream.tab;
+			stream << "\\";
+			synthArgs[i - 1].printOn(stream);
+			stream.comma.space;
+			synthArgs[i].printOn(stream);
+			stream << Char.comma << Char.nl;
+		});
+	}
+
+	doesNotUnderstand { | selector ... args |
+		if(know, {
+			var module = modules[selector];
+			module !? {
+				^module.functionPerformList(
+					\value,
+					modules,
+					args
+				);
+			};
+			if(selector.isSetter, {
+				^this.set(selector.asGetter, args[0]);
+			});
+		});
+		^this.superPerformList(\doesNotUnderstand, selector, args);
 	}
 }
 
