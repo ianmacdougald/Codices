@@ -408,8 +408,10 @@ CodexSingelton : CodexComposite {
 	*modules { ^(object !? { object.modules } ? nil) }
 
 	*moduleSet_{ | newSet, from |
-		object.moduleSet_(newSet, from);
-		this.initSingelton;
+		object ?? { this.new(newSet, from) } !? {
+			object.moduleSet_(newSet, from);
+			this.initSingelton;
+		};
 	}
 
 	*moduleSet { ^object.moduleSet }
