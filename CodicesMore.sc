@@ -123,7 +123,7 @@ CodexInstrument : CodexHybrid {
 
 //Sequences whole script modules within ProxySpace
 CodexProxier : CodexComposite {
-	var order, index, <>wrap = false;
+	var order, <index, <>wrap = false;
 
 	*makeTemplates { | templater |
 		templater.blank("section0");
