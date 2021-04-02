@@ -208,11 +208,9 @@ CodexProxier : CodexComposite {
 
 CodexProxierModules : CodexModules {
 	*new { | folder |
-		var obj = super.new.know_(true).make({
+		^super.new(folder).make({
 			~proxySpace = ProxySpace.new(Server.default);
 		});
-		folder !? { obj.compileFolder(folder) };
-		^obj;
 	}
 
 	addToEnvir { | key, func |
@@ -237,7 +235,7 @@ CodexProxierModules : CodexModules {
 	}
 }
 
-CodexProxierSection : CodexTmpModule {
+CodexProxierSection : CodexModule {
 	value { | ... args |
 		envir[\proxySpace].use({ func.value(*args) });
 	}
@@ -390,24 +388,28 @@ CodexSingelton : CodexComposite {
 		if(this!=CodexSingelton){
 			this.object = this.superclass.object;
 		};
-	}
-
-	initComposite {
-		this.class.initSingelton;
+		this.initSingelton;
 	}
 
 	*initSingelton {}
 
 	*moduleFolder { ^object.moduleFolder }
 
-	*reloadScripts { object.reloadScripts }
+	*reloadScripts {
+		object.reloadScripts;
+		this.initSingelton;
+	}
 
-	*reloadModules { object.reloadModules }
+	*reloadModules {
+		object.reloadModules;
+		this.initSingelton;
+	}
 
-	*modules { ^object.modules }
+	*modules { ^(object !? { object.modules } ? nil) }
 
 	*moduleSet_{ | newSet, from |
 		object.moduleSet_(newSet, from);
+		this.initSingelton;
 	}
 
 	*moduleSet { ^object.moduleSet }
