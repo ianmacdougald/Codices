@@ -1,4 +1,4 @@
-CodexNodeGraph : CodexComposite {
+CodexNodeGraph : Codex {
 	var <nodes, <cleanup_list, <server;
 
 	*makeTemplates { | templater |
@@ -101,7 +101,7 @@ CodexNodeGraph : CodexComposite {
 	}
 }
 
-CodexProxierOld : CodexComposite {
+CodexProxierOld : Codex {
 	var <proxySpace, <sections, <cleanup_list;
 
 	*makeTemplates { | templater |

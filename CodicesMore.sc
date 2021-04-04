@@ -1,5 +1,5 @@
 //Makes a synth with modular arguments
-CodexInstrument : CodexComposite {
+CodexInstrument : Codex {
 	var <synth;
 
 	*makeTemplates { | templater |
@@ -122,7 +122,7 @@ CodexInstrument : CodexComposite {
 }
 
 //Sequences whole script modules within ProxySpace
-CodexProxier : CodexComposite {
+CodexProxier : Codex {
 	var order, <index, <>wrap = false;
 
 	*makeTemplates { | templater |
@@ -323,7 +323,7 @@ CodexSonata : CodexProxier {
 }
 
 //A gui class for working with Codices (need to rethink)
-CodexPanel : CodexComposite {
+CodexPanel : Codex {
 	var <codexObject, <window;
 	var <>inputs = 2, <>outputs = 2;
 
@@ -373,7 +373,7 @@ CodexPanel : CodexComposite {
 	}
 }
 
-CodexGuiKit : CodexComposite {
+CodexGuiKit : Codex {
 	*makeTemplates { | templater |
 		templater.knob;
 		templater.labeledKnob;
@@ -385,7 +385,7 @@ CodexGuiKit : CodexComposite {
 	}
 }
 
-CodexSingelton : CodexComposite {
+CodexSingelton : Codex {
 	classvar <>object;
 	*new { | moduleSet, from |
 		super.new(moduleSet, from);
