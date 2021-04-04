@@ -1,5 +1,5 @@
 //Makes a synth with modular arguments
-CodexInstrument : CodexHybrid {
+CodexInstrument : CodexComposite {
 	var <synth;
 
 	*makeTemplates { | templater |
@@ -130,7 +130,7 @@ CodexProxier : CodexComposite {
 	}
 
 	*addModules { | key |
-		this.cache.add(key -> CodexProxierModules(this.asPath(key)));
+		this.cache.add(key -> CodexProxierModules(this.classFolder+/+key));
 	}
 
 	addSection {
@@ -217,8 +217,12 @@ CodexProxierModules : CodexModules {
 		this.add(key -> CodexProxierSection(key, func));
 	}
 
-	loadAll {
-		this.shouldNotImplement(thisMethod);
+	loadAll { | ... args | }
+
+	loadModule { | key ... args |
+		^this.make({
+			this[key].value(*args);
+		});
 	}
 
 	printItemsOn { arg stream, itemsPerLine = 5;
@@ -384,55 +388,54 @@ CodexGuiKit : CodexComposite {
 CodexSingelton : CodexComposite {
 	classvar <>object;
 	*new { | moduleSet, from |
-		object = super.new(moduleSet, from);
-		if(this!=CodexSingelton){
-			this.object = this.superclass.object;
-		};
+		super.new(moduleSet, from);
 		this.initSingelton;
 	}
 
+	initComposite { this.class.object = this }
+
 	*initSingelton {}
 
-	*moduleFolder { ^object.moduleFolder }
+	*moduleFolder { ^this.object.moduleFolder }
 
 	*reloadScripts {
-		object.reloadScripts;
+		this.object.reloadScripts;
 		this.initSingelton;
 	}
 
 	*reloadModules {
-		object.reloadModules;
+		this.object.reloadModules;
 		this.initSingelton;
 	}
 
-	*modules { ^(object !? { object.modules } ? nil) }
+	*modules { ^(this.object !? { this.object.modules } ? nil) }
 
 	*moduleSet_{ | newSet, from |
-		object ?? { this.new(newSet, from) } !? {
-			object.moduleSet_(newSet, from);
+		this.object ?? { this.new(newSet, from) } !? {
+			this.object.moduleSet_(newSet, from);
 			this.initSingelton;
 		};
 	}
 
-	*moduleSet { ^object.moduleSet }
+	*moduleSet { ^this.object.moduleSet }
 
 	*open { | ... keys |
-		object.open(*keys);
+		this.object.open(*keys);
 	}
 
 	*open_scqt { | ... keys |
-		object.open_scqt(*keys);
+		this.object.open_scqt(*keys);
 	}
 
 	*open_scvim { | shell("sh"), neovim(false), vertically(false) ... keys |
-		object.open_scvim(shell, neovim, vertically, *keys);
+		this.object.open_scvim(shell, neovim, vertically, *keys);
 	}
 
 	*openModules {
-		object.open(keys: object.modules.keys.asArray.sort);
+		this.object.open(keys: object.modules.keys.asArray.sort);
 	}
 
-	*doesNotUnderstand { | selector ... args |
-		^object.doesNotUnderstand(selector, *args)
-	}
+	/*	*doesNotUnderstand { | selector ... args |
+	^object.doesNotUnderstand(selector, *args);
+	}*/
 }
