@@ -123,14 +123,14 @@ CodexInstrument : Codex {
 
 //Sequences whole script modules within ProxySpace
 CodexProxier : Codex {
-	var order, <index, <>wrap = false;
+	var <order, <index = -1, <>wrap = false;
 
 	*makeTemplates { | templater |
 		templater.blank("section0");
 	}
 
-	*addModules { | key |
-		this.cache.add(key -> CodexProxierModules(this.classFolder+/+key));
+	*loadScripts { | set |
+		this.cache.add(set -> CodexProxierModules(this.classFolder+/+set));
 	}
 
 	addSection {
@@ -148,19 +148,19 @@ CodexProxier : Codex {
 		templater.blank("section0");
 	}
 
-	*otherTemplates { | templater | }
-
-	initComposite {
+	initCodex {
 		order = this.arrange;
 		index = -1;
 	}
 
 	next {
 		index = index + 1;
-		if(wrap){ index = index % order.size };
-		if(index < order.size){
-			modules[order[index]].value;
+		if(wrap){
+			index = index % order.size
+		}{
+			index = index.clip(0.0, order.size - 1);
 		};
+		modules[order[index]].value;
 	}
 
 	previous {
@@ -176,10 +176,7 @@ CodexProxier : Codex {
 	arrange {
 		var keys = modules.keys.asArray.copy;
 		keys.remove(\proxySpace);
-
-		^keys.collect(_.asString)
-		.sort({ | a, b | a.endNumber < b.endNumber })
-		.collect(_.asSymbol)
+		^keys.sort({ | a, b | a.endNumber < b.endNumber });
 	}
 
 	clear {
@@ -213,17 +210,9 @@ CodexProxierModules : CodexModules {
 		});
 	}
 
-	addToEnvir { | key, func |
-		this.add(key -> CodexProxierSection(key, func));
-	}
+	*object { ^CodexProxierSection }
 
-	loadAll { | ... args | }
-
-	loadModule { | key ... args |
-		^this.make({
-			this[key].value(*args);
-		});
-	}
+	initialize { | label | }
 
 	printItemsOn { arg stream, itemsPerLine = 5;
 		var itemsPerLinem1 = itemsPerLine - 1;
@@ -239,9 +228,9 @@ CodexProxierModules : CodexModules {
 	}
 }
 
-CodexProxierSection : CodexModule {
+CodexProxierSection : CodexObject {
 	value { | ... args |
-		envir[\proxySpace].use({ func.value(*args) });
+		envir[\proxySpace].use({ function.value(*args) });
 	}
 }
 
@@ -328,12 +317,9 @@ CodexPanel : Codex {
 	var <>inputs = 2, <>outputs = 2;
 
 	*contribute { | versions |
-		var path = Main.packages.asDict.at(\CodicesMore)
+		var toQuark = Main.packages.asDict.at(\Codices)
 		+/+"Contributions"+/+"CodexPanel";
-
-		versions.add(
-			[\ianSonata, path+/+"ianSonata"]
-		);
+		versions.add(\ianSonata -> (toQuark+/+"ianSonata"));
 	}
 
 	*makeTemplates { | templater |
@@ -341,10 +327,10 @@ CodexPanel : Codex {
 	}
 
 	connectTo { | newObject |
-		if(newObject.isKindOf(CodexComposite), {
+		if(newObject.isKindOf(Codex), {
 			codexObject = newObject;
 			this.build;
-		}, { Error("Can only connect to object of type CodexComposite").throw });
+		}, { Error("Can to an object of type Codex").throw });
 	}
 
 	alwaysOnTop { ^window.alwaysOnTop }
@@ -392,7 +378,7 @@ CodexSingelton : Codex {
 		this.initSingelton;
 	}
 
-	initComposite { this.class.object = this }
+	initCodex { this.class.object = this }
 
 	*initSingelton {}
 
@@ -435,7 +421,10 @@ CodexSingelton : Codex {
 		this.object.open(keys: object.modules.keys.asArray.sort);
 	}
 
-	/*	*doesNotUnderstand { | selector ... args |
-	^object.doesNotUnderstand(selector, *args);
-	}*/
+	*doesNotUnderstand { | selector ... args |
+		^try { object.perform(selector, *args) }{
+			this.superPerformList(\doesNotUnderstand, selector, *args);
+		};
+	}
+
 }

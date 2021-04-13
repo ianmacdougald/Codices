@@ -1,10 +1,10 @@
 (
-name: "CodicesMore", 
+name: "Codices", 
 summary: "More classes and tools built on the Codices framework",
 author: "ianmacdougald", 
 version: "0.1.0", 
 copyright: "ianmacdougald", 
-schelp: "Overviews/CodicesMore",
+schelp: "Overviews/Codices",
 dependencies: [],
 license: "GPL"
 )
