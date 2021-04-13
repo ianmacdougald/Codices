@@ -1,0 +1,10 @@
+(
+name: "Codices", 
+summary: "Extensions for the Codex framework",
+author: "ianmacdougald", 
+version: "0.1.0", 
+copyright: "ianmacdougald", 
+schelp: "Overviews/Codices",
+dependencies: [],
+license: "GPL"
+)
