@@ -121,6 +121,51 @@ CodexInstrument : Codex {
 	}
 }
 
+CodexLCE : Codex {
+	*makeTemplates { | templater |
+		templater.blank("setup");
+	}
+
+	*preload { | modules |
+		modules.put(\proxySpace, ProxySpace.new);
+	}
+
+	proxySpace { ^this.modules[\proxySpace] }
+
+	clock_{ | newClock |
+		this.proxySpace.clock = newClock;
+		this.quant = newClock.beatsPerBar;
+	}
+
+	clock { ^this.proxySpace.clock }
+
+	tempo_{ | newTempo |
+		this.clock !? { this.clock.tempo = newTempo };
+	}
+
+	tempo {
+		if (this.clock.notNil) {
+			^this.clock.tempo
+		} /* else */ {
+			"Can't get tempo. No clock found".warn;
+			^nil;
+		};
+	}
+
+	quant_{ | newQuant |
+		this.proxySpace.quant = newQuant;
+	}
+
+	quant { ^this.proxySpace.quant }
+
+	push { this.proxySpace.push }
+
+	pop { this.proxySpace.pop }
+
+	clear { this.proxySpace.clear }
+
+}
+
 //Sequences whole script modules within ProxySpace
 CodexProxier : Codex {
 	var <order, <index = -1, <>wrap = false;
