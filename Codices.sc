@@ -134,7 +134,7 @@ CodexSonata : CodexSectioner {
 	}
 }
 
-CodexProxySpace : Codex {
+CodexJIT : Codex {
 	*preload { | modules |
 		modules.put(\proxySpace, ProxySpace.new);
 	}
@@ -178,9 +178,7 @@ CodexProxySpace : Codex {
 	fadeTime { ^this.proxySpace.fadeTime }
 }
 
-CodexLCE : CodexProxySpace { }
-
-CodexProxier : CodexProxySpace {
+CodexProxier : CodexJIT {
 	var <order, <index = -1, <>wrap = false;
 
 	*makeTemplates { | templater |
