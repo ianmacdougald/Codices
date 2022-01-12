@@ -152,6 +152,7 @@ CodexProxier : CodexJIT {
 
 CodexSingelton : Codex {
 	classvar <>object;
+
 	*new { | moduleSet, from |
 		super.new(moduleSet, from);
 		this.initSingelton;
@@ -188,12 +189,12 @@ CodexSingelton : Codex {
 		this.object.open(*keys);
 	}
 
-	*open_scqt { | ... keys |
-		this.object.open_scqt(*keys);
+	*openSCQt { | ... keys |
+		this.object.openSCQt(*keys);
 	}
 
-	*open_scvim { | shell("sh"), neovim(false), vertically(false) ... keys |
-		this.object.open_scvim(shell, neovim, vertically, *keys);
+	*openSCVim { | shell("sh"), neovim(false), vertically(false) ... keys |
+		this.object.openSCVim(shell, neovim, vertically, *keys);
 	}
 
 	*openModules {
