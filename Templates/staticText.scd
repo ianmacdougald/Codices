@@ -1,1 +1,0 @@
-{ | parent, bounds | StaticText(parent, bounds) }
