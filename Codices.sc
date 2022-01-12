@@ -1,181 +1,14 @@
-//Makes a synth with modular arguments
-CodexInstrument : Codex {
-	var <synth;
-
+CodexScript : Codex {
 	*makeTemplates { | templater |
-		templater.synthDef;
-	}
-
-	initHybrid {
-		var coll = modules.synthDef.allControlNames;
-		var names = coll.collect(_.name);
-		coll.do { | item, index |
-			modules.add(names[index] -> item.defaultValue);
-		};
-		this.initInstrument;
-	}
-
-	initInstrument { }
-
-	setFromSpec { | ... args |
-		var specs = modules.synthDef.specs;
-		var dict = args.asDict;
-		dict.keys.copy.do { | key |
-			var currentval = dict[key];
-			specs[key] !? {
-				dict[key] = currentval = specs[key].map(currentval.clip(0.0, 1.0));
-				modules[key] = dict[key];
-			} ?? { dict.removeAt(key) };
-		};
-		if(synth.isPlaying){
-			synth.set(*dict.asPairs);
-		};
-	}
-
-	set { | ... args |
-		var dict = args.asDict;
-		dict.keys.copy.do { | key |
-			var currentval = dict[key];
-			modules[key] !? {
-				modules[key] = currentval;
-			} ?? { dict.removeAt(key) };
-		};
-		if(synth.isPlaying){
-			synth.set(*dict.asPairs);
-		};
-	}
-
-	makeSynth { | target, addAction(\addToHead) |
-		var arguments = modules.copy;
-		arguments.removeAt(\synthDef);
-		arguments = arguments.asPairs;
-		if(synth.isPlaying.not){
-			synth = Synth(
-				modules.synthDef.name,
-				arguments.asPairs,
-				target,
-				addAction
-			);
-			synth.register;
-		};
-	}
-
-	free {
-		if(synth.isPlaying){
-			synth.free;
-		}
-	}
-
-	release { | time(1.0) |
-		if(synth.isPlaying){
-			synth.release(time);
-		}
-	}
-
-	moduleSet_{ | newSet, from |
-		this.free;
-		super.moduleSet_(newSet, from);
-	}
-
-	specs { ^modules.synthDef.specs }
-
-	printOn { | stream |
-		if (stream.atLimit) { ^this };
-		stream << this.class.name << "[ " << Char.nl ;
-		this.printItemsOn(stream);
-		stream << " ]" << Char.nl;
-	}
-
-	printItemsOn { | stream |
-		var addComma = false;
-		var synthArgs = modules.copy.asDict;
-		synthArgs.removeAt(\synthDef);
-		synthArgs = synthArgs.asPairs;
-		forBy(0, synthArgs.size - 1, 2, { | i |
-			if(stream.atLimit){ ^this };
-			i = i + 1;
-			stream.tab;
-			stream << "\\";
-			synthArgs[i - 1].printOn(stream);
-			stream.comma.space;
-			synthArgs[i].printOn(stream);
-			stream << Char.comma << Char.nl;
-		});
-	}
-
-	doesNotUnderstand { | selector ... args |
-		if(know, {
-			var module = modules[selector];
-			module !? {
-				^module.functionPerformList(
-					\value,
-					modules,
-					args
-				);
-			};
-			if(selector.isSetter, {
-				^this.set(selector.asGetter, args[0]);
-			});
-		});
-		^this.superPerformList(\doesNotUnderstand, selector, args);
+		templater.blank("main");
 	}
 }
 
-CodexLCE : Codex {
-	*makeTemplates { | templater |
-		templater.blank("setup");
-	}
-
-	*preload { | modules |
-		modules.put(\proxySpace, ProxySpace.new);
-	}
-
-	proxySpace { ^this.modules[\proxySpace] }
-
-	clock_{ | newClock |
-		this.proxySpace.clock = newClock;
-		this.quant = newClock.beatsPerBar;
-	}
-
-	clock { ^this.proxySpace.clock }
-
-	tempo_{ | newTempo |
-		this.clock !? { this.clock.tempo = newTempo };
-	}
-
-	tempo {
-		if (this.clock.notNil) {
-			^this.clock.tempo
-		} /* else */ {
-			"Can't get tempo. No clock found".warn;
-			^nil;
-		};
-	}
-
-	quant_{ | newQuant |
-		this.proxySpace.quant = newQuant;
-	}
-
-	quant { ^this.proxySpace.quant }
-
-	push { this.proxySpace.push }
-
-	pop { this.proxySpace.pop }
-
-	clear { this.proxySpace.clear }
-
-}
-
-//Sequences whole script modules within ProxySpace
-CodexProxier : Codex {
+CodexScripter : CodexScript {
 	var <order, <index = -1, <>wrap = false;
 
 	*makeTemplates { | templater |
 		templater.blank("section0");
-	}
-
-	*loadScripts { | set |
-		this.cache.add(set -> CodexProxierModules(this.classFolder+/+set));
 	}
 
 	addSection {
@@ -201,7 +34,7 @@ CodexProxier : Codex {
 	next {
 		index = index + 1;
 		if(wrap){
-			index = index % order.size
+			index = index % order.size;
 		}{
 			index = index.clip(0.0, order.size - 1);
 		};
@@ -215,17 +48,13 @@ CodexProxier : Codex {
 		} { this.clear };
 	}
 
-	fadeTime { ^modules.proxySpace.fadeTime }
-	fadeTime_{ | dt | modules.proxySpace.fadeTime_(dt) }
-
 	arrange {
 		var keys = modules.keys.asArray.copy;
-		keys.remove(\proxySpace);
 		^keys.sort({ | a, b | a.endNumber < b.endNumber });
 	}
 
 	clear {
-		modules.proxySpace.clear;
+		super.clear;
 		index = -1;
 	}
 
@@ -233,54 +62,9 @@ CodexProxier : Codex {
 		this.clear;
 		super.reloadScripts;
 	}
-
-	use { | function |
-		^modules.proxySpace.use(function);
-	}
-
-	make { | function |
-		modules.proxySpace.make(function);
-	}
-
-	push { modules.proxySpace.push }
-
-	pop { modules.proxySpace.pop }
-
 }
 
-CodexProxierModules : CodexModules {
-	*new { | folder |
-		^super.new(folder).make({
-			~proxySpace = ProxySpace.new(Server.default);
-		});
-	}
-
-	*object { ^CodexProxierSection }
-
-	initialize { | label | }
-
-	printItemsOn { arg stream, itemsPerLine = 5;
-		var itemsPerLinem1 = itemsPerLine - 1;
-		var last = this.size - 1;
-		this.associationsDo({ arg item, i;
-			if(item.value.isKindOf(ProxySpace)){
-				stream << "(" << item.key << " -> " << "ProxySpace ()" << ")"
-			} { item.printOn(stream) };
-			if (i < last, { stream.comma.space;
-				if (i % itemsPerLine == itemsPerLinem1, { stream.nl.space.space });
-			});
-		});
-	}
-}
-
-CodexProxierSection : CodexObject {
-	value { | ... args |
-		envir[\proxySpace].use({ function.value(*args) });
-	}
-}
-
-//Adds a timing process to CodexProxier if module returns number
-CodexSonata : CodexProxier {
+CodexSonata : CodexScripter {
 	var <task, <timeRemaining;
 	var <onLoop, <onLoopEnd;
 	var <>loopDelta = 0.1;
@@ -356,63 +140,189 @@ CodexSonata : CodexProxier {
 	}
 }
 
-//A gui class for working with Codices (need to rethink)
-CodexPanel : Codex {
-	var <codexObject, <window;
-	var <>inputs = 2, <>outputs = 2;
-
-	*contribute { | versions |
-		var toQuark = Main.packages.asDict.at(\Codices)
-		+/+"Contributions"+/+"CodexPanel";
-		versions.add(\ianSonata -> (toQuark+/+"ianSonata"));
+CodexProxyScript : CodexScript {
+	*preload { | modules |
+		modules.put(\proxySpace, ProxySpace.new);
 	}
 
-	*makeTemplates { | templater |
-		templater.panelFunction("function");
+	proxySpace { ^this.modules[\proxySpace] }
+
+	clock_{ | newClock |
+		this.proxySpace.clock = newClock;
+		this.quant = newClock.beatsPerBar;
 	}
 
-	connectTo { | newObject |
-		if(newObject.isKindOf(Codex), {
-			codexObject = newObject;
-			this.build;
-		}, { Error("Can to an object of type Codex").throw });
+	clock { ^this.proxySpace.clock }
+
+	tempo_{ | newTempo |
+		this.clock !? { this.clock.tempo = newTempo };
 	}
 
-	alwaysOnTop { ^window.alwaysOnTop }
-
-	alwaysOnTop_{ | bool(false) |
-		window.alwaysOnTop = bool;
-	}
-
-	build {
-		codexObject !? {
-			window = modules.function(codexObject);
-			window.front;
+	tempo {
+		if (this.clock.notNil) {
+			^this.clock.tempo
+		} /* else */ {
+			"Can't get tempo. No clock found".warn;
+			^nil;
 		};
 	}
 
-	close {
-		window !? { window.close };
+	quant_{ | newQuant |
+		this.proxySpace.quant = newQuant;
 	}
 
-	moduleSet_{ | newSet, from |
-		var bool = this.alwaysOnTop;
-		this.close;
-		super.moduleSet_(newSet, from);
-		this.build;
-		this.alwaysOnTop = bool;
+	quant { ^this.proxySpace.quant }
+
+	push { this.proxySpace.push }
+
+	pop { this.proxySpace.pop }
+
+	clear { this.proxySpace.clear }
+
+	fadeTime_{ | dt | this.proxySpace.fadeTime_(dt) }
+
+	fadeTime { ^this.proxySpace.fadeTime }
+}
+
+CodexLCE : CodexProxyScript { }
+
+CodexProxier : CodexProxyScript {
+	var <order, <index = -1, <>wrap = false;
+
+	*makeTemplates { | templater |
+		templater.blank("section0");
+	}
+
+	addSection {
+		this.class.makeTemplates(CodexTemplater(this.moduleFolder));
+		this.modules.compileFolder(this.moduleFolder);
+		order = this.arrange;
+	}
+
+	toSection { | newIndex(0) |
+		index = newIndex.clip(0, order.size - 1) - 1;
+		this.next;
+	}
+
+	*sectionTemplate { | templater |
+		templater.blank("section0");
+	}
+
+	initCodex {
+		order = this.arrange;
+		index = -1;
+	}
+
+	next {
+		index = index + 1;
+		if(wrap){
+			index = index % order.size;
+		}{
+			index = index.clip(0.0, order.size - 1);
+		};
+		modules[order[index]].value;
+	}
+
+	previous {
+		if(index > 0){
+			index = index - 1;
+			modules[order[index]].value;
+		} { this.clear };
+	}
+
+	fadeTime { ^modules.proxySpace.fadeTime }
+	fadeTime_{ | dt | modules.proxySpace.fadeTime_(dt) }
+
+	arrange {
+		var keys = modules.keys.asArray.copy;
+		keys.remove(\proxySpace);
+		^keys.sort({ | a, b | a.endNumber < b.endNumber });
+	}
+
+	clear {
+		super.clear;
+		index = -1;
+	}
+
+	reloadScripts {
+		this.clear;
+		super.reloadScripts;
 	}
 }
 
-CodexGuiKit : Codex {
-	*makeTemplates { | templater |
-		templater.knob;
-		templater.labeledKnob;
-		templater.staticText;
-		templater.numberBox;
-		templater.slider;
-		templater.labeledSlider;
-		templater.button;
+CodexProxySonata : CodexProxier {
+	var <task, <timeRemaining;
+	var <onLoop, <onLoopEnd;
+	var <>loopDelta = 0.1;
+
+	onLoop_{ | function |
+		if(function.isFunction, { onLoop = function });
+	}
+
+	onLoopEnd_{ | function |
+		if(function.isFunction, { onLoopEnd = function });
+	}
+
+	next {
+		this.stop;
+		index = index + 1;
+		if(wrap){ index = index % order.size };
+		if(index < order.size){
+			this.makeTask(modules[order[index]].value);
+		};
+	}
+
+	previous {
+		this.stop;
+		if(index > 0){
+			index = index - 1;
+			this.makeTask(modules[order[index]].value);
+		} { this.clear };
+	}
+
+	stop {
+		if(task.isPlaying){
+			task.stop;
+		};
+	}
+
+	makeTask { | duration |
+		if(duration.isNumber){
+			task = Task({
+				timeRemaining = duration;
+				while({ timeRemaining > 0 }, {
+					onLoop.value(timeRemaining);
+					timeRemaining = (timeRemaining - loopDelta)
+					.clip(0, duration);
+					loopDelta.wait;
+				});
+				timeRemaining = nil;
+				onLoopEnd.value;
+				fork { this.next };
+			}).play;
+		};
+	}
+
+	pause {
+		if(task.isPlaying){ task.pause };
+	}
+
+	resume {
+		if(task.notNil and: { task.isPlaying.not }, {
+			task.resume;
+		});
+	}
+
+	isPlaying { ^task.isPlaying }
+
+	reset {
+		this.stop;
+		index = -1;
+	}
+
+	clear {
+		this.reset;
+		super.clear;
 	}
 }
 
