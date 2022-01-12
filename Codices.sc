@@ -16,10 +16,6 @@ CodexSectioner : Codex {
 		this.next;
 	}
 
-	*sectionTemplate { | templater |
-		templater.blank("section0");
-	}
-
 	initCodex {
 		order = this.arrange;
 		index = -1;
@@ -39,7 +35,7 @@ CodexSectioner : Codex {
 		if(index > 0){
 			index = index - 1;
 			modules[order[index]].value;
-		} { this.clear };
+		} { this.reset };
 	}
 
 	arrange {
@@ -47,90 +43,9 @@ CodexSectioner : Codex {
 		^keys.sort({ | a, b | a.endNumber < b.endNumber });
 	}
 
-	clear {
-		super.clear;
-		index = -1;
-	}
-
-	reloadScripts {
-		this.clear;
-		super.reloadScripts;
-	}
-}
-
-CodexSonata : CodexSectioner {
-	var <task, <timeRemaining;
-	var <onLoop, <onLoopEnd;
-	var <>loopDelta = 0.1;
-
-	onLoop_{ | function |
-		if(function.isFunction, { onLoop = function });
-	}
-
-	onLoopEnd_{ | function |
-		if(function.isFunction, { onLoopEnd = function });
-	}
-
-	next {
-		this.stop;
-		index = index + 1;
-		if(wrap){ index = index % order.size };
-		if(index < order.size){
-			this.makeTask(modules[order[index]].value);
-		};
-	}
-
-	previous {
-		this.stop;
-		if(index > 0){
-			index = index - 1;
-			this.makeTask(modules[order[index]].value);
-		} { this.clear };
-	}
-
-	stop {
-		if(task.isPlaying){
-			task.stop;
-		};
-	}
-
-	makeTask { | duration |
-		if(duration.isNumber){
-			task = Task({
-				timeRemaining = duration;
-				while({ timeRemaining > 0 }, {
-					onLoop.value(timeRemaining);
-					timeRemaining = (timeRemaining - loopDelta)
-					.clip(0, duration);
-					loopDelta.wait;
-				});
-				timeRemaining = nil;
-				onLoopEnd.value;
-				fork { this.next };
-			}).play;
-		};
-	}
-
-	pause {
-		if(task.isPlaying){ task.pause };
-	}
-
-	resume {
-		if(task.notNil and: { task.isPlaying.not }, {
-			task.resume;
-		});
-	}
-
-	isPlaying { ^task.isPlaying }
-
 	reset {
-		this.stop;
 		index = -1;
-	}
-
-	clear {
-		this.reset;
-		super.clear;
+		this.next;
 	}
 }
 
@@ -196,10 +111,6 @@ CodexProxier : CodexJIT {
 		this.next;
 	}
 
-	*sectionTemplate { | templater |
-		templater.blank("section0");
-	}
-
 	initCodex {
 		order = this.arrange;
 		index = -1;
@@ -222,9 +133,6 @@ CodexProxier : CodexJIT {
 		} { this.clear };
 	}
 
-	fadeTime { ^modules.proxySpace.fadeTime }
-	fadeTime_{ | dt | modules.proxySpace.fadeTime_(dt) }
-
 	arrange {
 		var keys = modules.keys.asArray.copy;
 		keys.remove(\proxySpace);
@@ -239,82 +147,6 @@ CodexProxier : CodexJIT {
 	reloadScripts {
 		this.clear;
 		super.reloadScripts;
-	}
-}
-
-CodexProxySonata : CodexProxier {
-	var <task, <timeRemaining;
-	var <onLoop, <onLoopEnd;
-	var <>loopDelta = 0.1;
-
-	onLoop_{ | function |
-		if(function.isFunction, { onLoop = function });
-	}
-
-	onLoopEnd_{ | function |
-		if(function.isFunction, { onLoopEnd = function });
-	}
-
-	next {
-		this.stop;
-		index = index + 1;
-		if(wrap){ index = index % order.size };
-		if(index < order.size){
-			this.makeTask(modules[order[index]].value);
-		};
-	}
-
-	previous {
-		this.stop;
-		if(index > 0){
-			index = index - 1;
-			this.makeTask(modules[order[index]].value);
-		} { this.clear };
-	}
-
-	stop {
-		if(task.isPlaying){
-			task.stop;
-		};
-	}
-
-	makeTask { | duration |
-		if(duration.isNumber){
-			task = Task({
-				timeRemaining = duration;
-				while({ timeRemaining > 0 }, {
-					onLoop.value(timeRemaining);
-					timeRemaining = (timeRemaining - loopDelta)
-					.clip(0, duration);
-					loopDelta.wait;
-				});
-				timeRemaining = nil;
-				onLoopEnd.value;
-				fork { this.next };
-			}).play;
-		};
-	}
-
-	pause {
-		if(task.isPlaying){ task.pause };
-	}
-
-	resume {
-		if(task.notNil and: { task.isPlaying.not }, {
-			task.resume;
-		});
-	}
-
-	isPlaying { ^task.isPlaying }
-
-	reset {
-		this.stop;
-		index = -1;
-	}
-
-	clear {
-		this.reset;
-		super.clear;
 	}
 }
 
@@ -373,5 +205,4 @@ CodexSingelton : Codex {
 			this.superPerformList(\doesNotUnderstand, selector, *args);
 		};
 	}
-
 }
