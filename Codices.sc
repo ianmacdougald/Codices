@@ -69,9 +69,9 @@ CodexJIT : Codex {
 
 	tempo {
 		if (this.clock.notNil) {
-			^this.clock.tempo
+			^this.clock.tempo;
 		} /* else */ {
-			"Can't get tempo. No clock found".warn;
+			"Failed to get tempo. No clock found.".warn;
 			^nil;
 		};
 	}
