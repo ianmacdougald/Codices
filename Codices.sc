@@ -1,10 +1,4 @@
-CodexScript : Codex {
-	*makeTemplates { | templater |
-		templater.blank("main");
-	}
-}
-
-CodexScripter : CodexScript {
+CodexSectioner : Codex {
 	var <order, <index = -1, <>wrap = false;
 
 	*makeTemplates { | templater |
@@ -64,7 +58,7 @@ CodexScripter : CodexScript {
 	}
 }
 
-CodexSonata : CodexScripter {
+CodexSonata : CodexSectioner {
 	var <task, <timeRemaining;
 	var <onLoop, <onLoopEnd;
 	var <>loopDelta = 0.1;
@@ -140,7 +134,7 @@ CodexSonata : CodexScripter {
 	}
 }
 
-CodexProxyScript : CodexScript {
+CodexProxySpace : Codex {
 	*preload { | modules |
 		modules.put(\proxySpace, ProxySpace.new);
 	}
@@ -184,9 +178,9 @@ CodexProxyScript : CodexScript {
 	fadeTime { ^this.proxySpace.fadeTime }
 }
 
-CodexLCE : CodexProxyScript { }
+CodexLCE : CodexProxySpace { }
 
-CodexProxier : CodexProxyScript {
+CodexProxier : CodexProxySpace {
 	var <order, <index = -1, <>wrap = false;
 
 	*makeTemplates { | templater |
