@@ -1,5 +1,12 @@
 CodexSectioner : Codex {
 	var <order, <index = -1, <>wrap = false;
+	var freeFunctions;
+
+	initCodex {
+		order = this.arrange;
+		index = -1;
+		freeFunctions = [ ];
+	}
 
 	*makeTemplates { | templater |
 		templater.blank("section0");
@@ -14,11 +21,6 @@ CodexSectioner : Codex {
 	toSection { | newIndex(0) |
 		index = newIndex.clip(0, order.size - 1) - 1;
 		this.next;
-	}
-
-	initCodex {
-		order = this.arrange;
-		index = -1;
 	}
 
 	next {
@@ -45,7 +47,20 @@ CodexSectioner : Codex {
 
 	reset {
 		index = -1;
-		this.next;
+		// this.next;
+	}
+
+	onFree { | function |
+		freeFunctions = freeFunctions.add(function);
+	}
+
+	free { | ... args |
+		freeFunctions.do { | function |
+			function.value(*args);
+		};
+		freeFunctions = [];
+		this.reloadModules;
+		this.reset;
 	}
 }
 
