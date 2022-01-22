@@ -1,8 +1,19 @@
-CodexSectioner : Codex {
+CodexScripter : Codex {
+	initCodex {
+		modules.tagSynthDefs(this.class.name
+			++"__"++this.moduleSet++"__");
+
+		this.initScripter;
+	}
+
+	initScripter { }
+}
+
+CodexSections : CodexScripter {
 	var <order, <index = -1, <>wrap = false;
 	var freeFunctions;
 
-	initCodex {
+	initScripter {
 		order = this.arrange;
 		index = -1;
 		freeFunctions = [ ];
@@ -25,19 +36,19 @@ CodexSectioner : Codex {
 
 	next {
 		index = index + 1;
-		if(wrap){
+		if (wrap) {
 			index = index % order.size;
-		}{
+		} /* else */ {
 			index = index.clip(0.0, order.size - 1);
 		};
 		modules[order[index]].value;
 	}
 
 	previous {
-		if(index > 0){
+		if (index > 0) {
 			index = index - 1;
 			modules[order[index]].value;
-		} { this.reset };
+		} /* else */ { this.reset };
 	}
 
 	arrange {
@@ -64,7 +75,11 @@ CodexSectioner : Codex {
 	}
 }
 
-CodexJIT : Codex {
+CodexJITScripter : CodexScripter {
+	*makeTemplates { | templater |
+		templater.blank("main");
+	}
+
 	*preload { | modules |
 		modules.put(\proxySpace, ProxySpace.new);
 	}
@@ -108,7 +123,7 @@ CodexJIT : Codex {
 	fadeTime { ^this.proxySpace.fadeTime }
 }
 
-CodexProxier : CodexJIT {
+CodexProxier : CodexJITScripter {
 	var <order, <index = -1, <>wrap = false;
 
 	*makeTemplates { | templater |
@@ -133,19 +148,27 @@ CodexProxier : CodexJIT {
 
 	next {
 		index = index + 1;
-		if(wrap){
+		if (wrap) {
 			index = index % order.size;
-		}{
+		} /* else */ {
 			index = index.clip(0.0, order.size - 1);
 		};
-		modules[order[index]].value;
+		this.value;
 	}
 
 	previous {
-		if(index > 0){
+		if (index > 0) {
 			index = index - 1;
+			this.value;
+		} /* else */ {
+			this.clear;
+		};
+	}
+
+	value {
+		this.proxySpace.use({
 			modules[order[index]].value;
-		} { this.clear };
+		});
 	}
 
 	arrange {
@@ -164,6 +187,8 @@ CodexProxier : CodexJIT {
 		super.reloadScripts;
 	}
 }
+
+CodexJITSections : CodexProxier {}
 
 CodexSingelton : Codex {
 	classvar <>object;
@@ -222,3 +247,5 @@ CodexSingelton : Codex {
 		};
 	}
 }
+
+//CodexJITDef : CodexSingelton { }
