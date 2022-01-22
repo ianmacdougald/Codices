@@ -1,7 +1,7 @@
 CodexScripter : Codex {
 	initCodex {
 		modules.tagSynthDefs(this.class.name
-			++"__"++this.moduleSet++"__");
+			++"_"++this.moduleSet++"_");
 
 		this.initScripter;
 	}
@@ -77,7 +77,7 @@ CodexSections : CodexScripter {
 
 CodexJITScripter : CodexScripter {
 	*makeTemplates { | templater |
-		templater.blank("main");
+		templater.blank("setup");
 	}
 
 	*preload { | modules |
@@ -130,6 +130,11 @@ CodexProxier : CodexJITScripter {
 		templater.blank("section0");
 	}
 
+	initScripter {
+		order = this.arrange;
+		index = -1;
+	}
+
 	addSection {
 		this.class.makeTemplates(CodexTemplater(this.moduleFolder));
 		this.modules.compileFolder(this.moduleFolder);
@@ -139,11 +144,6 @@ CodexProxier : CodexJITScripter {
 	toSection { | newIndex(0) |
 		index = newIndex.clip(0, order.size - 1) - 1;
 		this.next;
-	}
-
-	initCodex {
-		order = this.arrange;
-		index = -1;
 	}
 
 	next {
