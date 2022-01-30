@@ -56,11 +56,6 @@ CodexSections : CodexScripter {
 		^keys.sort({ | a, b | a.endNumber < b.endNumber });
 	}
 
-	reset {
-		index = -1;
-		// this.next;
-	}
-
 	onFree { | function |
 		freeFunctions = freeFunctions.add(function);
 	}
@@ -71,8 +66,19 @@ CodexSections : CodexScripter {
 		};
 		freeFunctions = [];
 		this.reloadModules;
-		this.reset;
 	}
+
+	reset {
+		index = -1;
+		this.free;
+		// this.next;
+	}
+
+	moduleSet_{ | newSet, from |
+		this.reset;
+		super.moduleSet_(newSet, from);
+	}
+
 }
 
 CodexJITScripter : CodexScripter {
@@ -117,6 +123,11 @@ CodexJITScripter : CodexScripter {
 	pop { this.proxySpace.pop }
 
 	clear { this.proxySpace.clear }
+
+	moduleSet_{ | newSet, from |
+		this.clear;
+		super.moduleSet_(newSet, from);
+	}
 
 	fadeTime_{ | dt | this.proxySpace.fadeTime_(dt) }
 
