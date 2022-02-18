@@ -83,7 +83,12 @@ CodexSections : CodexScripter {
 
 CodexJITScripter : CodexScripter {
 	*makeTemplates { | templater |
-		templater.blank("setup");
+		templater.function("setup");
+		templater.blank("synthdefs");
+	}
+
+	initScripter {
+		modules.setup;
 	}
 
 	*preload { | modules |
@@ -133,6 +138,8 @@ CodexJITScripter : CodexScripter {
 
 	fadeTime { ^this.proxySpace.fadeTime }
 }
+
+CodexLCE : CodexJITScripter { }
 
 CodexProxier : CodexJITScripter {
 	var <order, <index = -1, <>wrap = false;
@@ -257,6 +264,12 @@ CodexSingelton : Codex {
 			this.superPerformList(\doesNotUnderstand, selector, *args);
 		};
 	}
+}
+
++ Codex {
+	push { modules.push }
+
+	pop { modules.pop }
 }
 
 //CodexJITDef : CodexSingelton { }
