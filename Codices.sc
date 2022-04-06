@@ -19,6 +19,8 @@ CodexSections : CodexScripter {
 		freeFunctions = [ ];
 	}
 
+	initSections { }
+
 	*makeTemplates { | templater |
 		templater.blank("section0");
 	}
@@ -81,15 +83,17 @@ CodexSections : CodexScripter {
 
 }
 
-CodexJITScripter : CodexScripter {
+CodexProxier : CodexScripter {
 	*makeTemplates { | templater |
 		templater.function("setup");
-		templater.blank("synthdefs");
 	}
 
 	initScripter {
 		modules.setup;
+		this.initProxier;
 	}
+
+	initProxier { }
 
 	*preload { | modules |
 		modules.put(\proxySpace, ProxySpace.new);
@@ -97,15 +101,71 @@ CodexJITScripter : CodexScripter {
 
 	proxySpace { ^this.modules[\proxySpace] }
 
+	push { this.proxySpace.push }
+
+	pop { this.proxySpace.pop }
+
+	clear { this.proxySpace.clear }
+
+	moduleSet_{ | newSet, from |
+		this.clear;
+		super.moduleSet_(newSet, from);
+	}
+
+	fadeTime_{ | dt | this.proxySpace.fadeTime_(dt) }
+
+	fadeTime { ^this.proxySpace.fadeTime }
+
+	reloadModules {
+		this.clear;
+		this.pop;
+		super.reloadModules;
+	}
+}
+
+CodexLCE : CodexProxier {
+	var changeFunctions;
+
+	*makeTemplates { | templater |
+		templater.blank("synthdefs");
+		templater.function("setup");
+	}
+
 	clock_{ | newClock |
-		this.proxySpace.clock = newClock;
-		this.quant = newClock.beatsPerBar;
+		if (this.proxySpace == currentEnvironment) {
+			newClock.permanent = true;
+		};
+
+		case
+		{ newClock.isKindOf(Clock) } {
+			this.proxySpace.clock = newClock;
+			this.quant = newClock.beatsPerBar;
+		}
+		{ newClock.isKindOf(Number) } {
+			("Warning: Are you trying to set the tempo? "
+				++"Try using %.tempo_ instead").format(this.class.name).postln;
+		};
+	}
+
+	push {
+		if (this.clock.notNil) {
+			this.clock.permanent = true;
+		};
+		this.proxySpace.push;
+	}
+
+	pop {
+		if (this.clock.notNil) {
+			this.clock.permanent = false;
+		};
+		this.proxySpace.pop;
 	}
 
 	clock { ^this.proxySpace.clock }
 
 	tempo_{ | newTempo |
 		this.clock !? { this.clock.tempo = newTempo };
+		try { this.proxySpace.use { changeFunctions.value } };
 	}
 
 	tempo {
@@ -123,25 +183,13 @@ CodexJITScripter : CodexScripter {
 
 	quant { ^this.proxySpace.quant }
 
-	push { this.proxySpace.push }
-
-	pop { this.proxySpace.pop }
-
-	clear { this.proxySpace.clear }
-
-	moduleSet_{ | newSet, from |
-		this.clear;
-		super.moduleSet_(newSet, from);
+	onTempoChange { | action({}) |
+		changeFunctions = changeFunctions ? FunctionList.new;
+		changeFunctions.addFunc(action);
 	}
-
-	fadeTime_{ | dt | this.proxySpace.fadeTime_(dt) }
-
-	fadeTime { ^this.proxySpace.fadeTime }
 }
 
-CodexLCE : CodexJITScripter { }
-
-CodexProxier : CodexJITScripter {
+CodexJITSections : CodexProxier {
 	var <order, <index = -1, <>wrap = false;
 
 	*makeTemplates { | templater |
@@ -206,7 +254,7 @@ CodexProxier : CodexJITScripter {
 	}
 }
 
-CodexJITSections : CodexProxier {}
+// CodexJITSections : CodexProxier {}
 
 CodexSingelton : Codex {
 	classvar <>object;
