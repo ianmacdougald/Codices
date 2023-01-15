@@ -1,6 +1,6 @@
 # Codices
 
-The Codices quark adds more classes and frameworks for playing with the procedures established by [Codices](https://github.com/ianmacdougald/Codices). For the time being, these additions are largely half-baked and undocumented.
+The Codices quark extends the framework for established by [Codex](https://github.com/ianmacdougald/Codex). For the time being, these additions are largely half-baked and undocumented.
 
 ## Installation
 
