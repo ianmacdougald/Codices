@@ -1,10 +1,10 @@
 # Codices
 
-The Codices quark extends the framework for established by [Codex](https://github.com/ianmacdougald/Codex). For the time being, these additions are largely half-baked and undocumented.
+The Codices quark extends a framework established by [Codex](https://github.com/ianmacdougald/Codex) that embeds scriptable modules within pre-compiled *sclang* classes. For the time being, these additions are largely half-baked and undocumented.
 
 ## Installation
 
-In SuperCollider, evaluate the following: 
+To install the Codices quark, evaluate the following in SuperCollider:
 
 ~~~~
 Quarks.install("https://github.com/ianmacdougald/Codex"); 
