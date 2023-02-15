@@ -181,7 +181,7 @@ CodexLCE : CodexProxier {
 		this.proxySpace.quant = newQuant;
 	}
 
-	quant { ^this.proxySpace.quant }
+	quant { ^(this.proxySpace.quant ? 1) }
 
 	onTempoChange { | action({}) |
 		changeFunctions = changeFunctions ? FunctionList.new;
