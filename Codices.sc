@@ -1,22 +1,13 @@
-CodexScripter : Codex {
-	initCodex {
-		modules.tagSynthDefs(this.class.name
-			++"_"++this.moduleSet++"_");
-
-		this.initScripter;
-	}
-
-	initScripter { }
-}
-
-CodexSections : CodexScripter {
+CodexSections : Codex {
 	var <order, <index = -1, <>wrap = false;
 	var freeFunctions;
 
-	initScripter {
+	initCodex {
 		order = this.arrange;
 		index = -1;
 		freeFunctions = [ ];
+
+		this.initSections;
 	}
 
 	initSections { }
@@ -83,14 +74,14 @@ CodexSections : CodexScripter {
 
 }
 
-CodexProxier : CodexScripter {
+CodexProxier : Codex {
 	var changes;
 
 	*makeTemplates { | templater |
 		templater.function("setup");
 	}
 
-	initScripter {
+	initCodex {
 		modules.setup;
 		this.initProxier;
 	}
