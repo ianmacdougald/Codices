@@ -75,7 +75,6 @@ CodexSections : Codex {
 }
 
 CodexProxier : Codex {
-	var changes;
 
 	*makeTemplates { | templater |
 		templater.function("setup");
@@ -145,14 +144,13 @@ CodexProxier : Codex {
 
 	tempo_{ | newTempo |
 		this.clock !? { this.clock.tempo = newTempo };
-		try { this.proxySpace.use { changes.value } };
 	}
 
 	tempo {
 		if (this.clock.notNil) {
 			^this.clock.tempo;
 		} /* else */ {
-			"Failed to get tempo. No clock found.".warn;
+			// "Failed to get tempo. No clock found.".warn;
 			^nil;
 		};
 	}
@@ -163,12 +161,14 @@ CodexProxier : Codex {
 
 	quant { ^(this.proxySpace.quant ? 1) }
 
-	onTempoChange { | action |
-		changes = changes ? FunctionList.new;
-		changes.addFunc(action);
-	}
+	makeTempoClock { | tempo(1.0), beats, seconds |
+		var clock = this.clock;
 
-	clearChanges { changes = nil }
+		if (clock.isNil || clock.isKindOf(TempoBusClock).not) {
+			this.proxySpace.makeTempoClock(this.tempo ? 1.0, beats, seconds);
+			this.quant = this.clock.beatsPerBar;
+		};
+	}
 }
 
 CodexProxySections : CodexProxier {
