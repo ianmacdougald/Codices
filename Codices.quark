@@ -2,7 +2,7 @@
 name: "Codices", 
 summary: "Extensions for the Codex framework",
 author: "ianmacdougald", 
-version: "0.1.0", 
+version: "0.1.1", 
 copyright: "ianmacdougald", 
 schelp: "Overviews/Codices",
 dependencies: [],
